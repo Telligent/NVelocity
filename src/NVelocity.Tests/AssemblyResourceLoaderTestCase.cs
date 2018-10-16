@@ -23,7 +23,7 @@ namespace NVelocity
 	/// <summary>
 	/// Test cases for the assembly resource loader.
 	/// </summary>
-	[TestFixture]
+	[SetUpFixture]
 	public class AssemblyResourceLoaderTestCase
 	{
 		[Test]

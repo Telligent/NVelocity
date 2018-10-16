@@ -752,8 +752,11 @@ namespace NVelocity.Runtime.Parser
 						{
 							token_source.StateStackPop();
 							token_source.inDirective = false;
-							if (true)
-								return directiveNode;
+                            if (true)
+                            {
+                                directiveNode.DirectiveName = token.Image;
+                                return directiveNode;
+                            }
 						}
 					}
 

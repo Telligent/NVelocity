@@ -56,7 +56,6 @@ namespace NVelocity.Runtime.Parser.Node
 			// normal processing
 			if (directive == null)
 			{
-				writer.Write("#");
 				writer.Write(directiveName);
 			}
 			else

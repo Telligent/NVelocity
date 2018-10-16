@@ -261,7 +261,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				runtimeServices.Error(
 					string.Format("ASTMethod.execute() : exception invoking method '{0}' in {1} : {2}", methodName, o.GetType(), e));
-				throw e;
+				throw;
 			}
 		}
 

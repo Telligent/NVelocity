@@ -44,6 +44,8 @@ namespace NVelocity.Util.Introspection
 	/// <version> $Id: IntrospectorBase.cs,v 1.3 2003/10/27 13:54:12 corts Exp $ </version>
 	public abstract class IntrospectorBase
 	{
+		private readonly Type dynamicType = typeof(System.Dynamic.DynamicObject);
+
 		/// <summary>
 		/// Holds the method maps for the classes we know about, keyed by
 		/// Class object.
@@ -71,11 +73,11 @@ namespace NVelocity.Util.Introspection
 				throw new Exception(string.Format("Introspector.getMethod(): Class method key was null: {0}", name));
 			}
 
-			ClassMap classMap;
+			IClassMap classMap;
 
 			lock(classMethodMaps)
 			{
-				classMap = (ClassMap) classMethodMaps[c];
+				classMap = (IClassMap) classMethodMaps[c];
 
 				// if we don't have this, check to see if we have it
 				// by name.  if so, then we have a classLoader change
@@ -103,11 +105,11 @@ namespace NVelocity.Util.Introspection
 				throw new Exception(string.Format("Introspector.getMethod(): Class method key was null: {0}", name));
 			}
 
-			ClassMap classMap;
+			IClassMap classMap;
 
 			lock(classMethodMaps)
 			{
-				classMap = (ClassMap) classMethodMaps[c];
+				classMap = (IClassMap) classMethodMaps[c];
 
 				// if we don't have this, check to see if we have it
 				// by name.  if so, then we have a classloader change
@@ -127,9 +129,13 @@ namespace NVelocity.Util.Introspection
 		/// cache.  Also adds the qualified name to the name->class map
 		/// for later Classloader change detection.
 		/// </summary>
-		protected internal ClassMap CreateClassMap(Type c)
+		protected internal IClassMap CreateClassMap(Type c)
 		{
-			ClassMap classMap = new ClassMap(c);
+			IClassMap classMap;
+			if (dynamicType.IsAssignableFrom(c))
+				classMap = new DynamicClassMap(c);
+			else
+				classMap = new ClassMap(c);
 
 			classMethodMaps[c] = classMap;
 			cachedClassNames.Add(c.FullName);

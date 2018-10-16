@@ -1,3 +1,8 @@
+1.1.2 (2016-01-01)
+==================
+- Added support for dynamic entities
+- Corrected a rendering issue with double #-prefixed literals
+
 1.1.1 (2010-10-12)
 ==================
 - Included the NET40 (CP) binaries on the release package

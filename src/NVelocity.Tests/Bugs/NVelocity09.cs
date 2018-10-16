@@ -21,7 +21,7 @@ namespace NVelocity.Tests.Bugs
 	using Runtime;
 	using Test;
 
-	[TestFixture, Ignore("Won't fix.")]
+	[SetUpFixture, Ignore("Won't fix.")]
 	public class NVelocity09 : BaseTestCase
 	{
 		[Test]

@@ -35,7 +35,7 @@ namespace NVelocity.Tests.Bugs
 			extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
 			velocityEngine.Init(extendedProperties);
-			
+
 			Assert.Throws<ParseErrorException>(() => velocityEngine.GetTemplate(GetFileName(null, "nv14", TemplateTest.TMPL_FILE_EXT)));
 		}
 	}

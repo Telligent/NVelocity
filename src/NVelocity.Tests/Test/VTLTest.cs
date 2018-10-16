@@ -71,5 +71,20 @@ namespace NVelocity.Test
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(":=t#0ms", sw.ToString());
 		}
-	}
+
+        [Test]
+        public void HashBeforeExplicitVariableDuplication()
+        {
+            VelocityEngine velocityEngine = new VelocityEngine();
+            velocityEngine.Init();
+
+            VelocityContext c = new VelocityContext();
+            c.Put("A", new A());
+
+            StringWriter sw = new StringWriter();
+            Boolean ok = velocityEngine.Evaluate(c, sw, "HashBeforeExplicitVariableDuplication", "#${A.T1}_2");
+            Assert.IsTrue(ok, "Evaluation returned failure");
+            Assert.AreEqual("#0_2", sw.ToString());
+        }
+    }
 }
