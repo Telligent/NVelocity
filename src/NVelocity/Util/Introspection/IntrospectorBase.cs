@@ -45,6 +45,7 @@ namespace NVelocity.Util.Introspection
 	public abstract class IntrospectorBase
 	{
 		private readonly Type dynamicType = typeof(System.Dynamic.DynamicObject);
+		private readonly Type expandoObjectType = typeof(System.Dynamic.ExpandoObject);
 
 		/// <summary>
 		/// Holds the method maps for the classes we know about, keyed by
@@ -132,7 +133,7 @@ namespace NVelocity.Util.Introspection
 		protected internal IClassMap CreateClassMap(Type c)
 		{
 			IClassMap classMap;
-			if (dynamicType.IsAssignableFrom(c))
+			if (dynamicType.IsAssignableFrom(c) || expandoObjectType.IsAssignableFrom(c))
 				classMap = new DynamicClassMap(c);
 			else
 				classMap = new ClassMap(c);

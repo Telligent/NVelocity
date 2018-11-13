@@ -58,6 +58,8 @@ namespace NVelocity.Util.Introspection
 
 		public override object Invoke(object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object[] parameters, System.Globalization.CultureInfo culture)
 		{
+			// only DynamicObjects support methods
+
 			var d = obj as System.Dynamic.DynamicObject;
 			if (d == null)
 				return null;
@@ -185,14 +187,26 @@ namespace NVelocity.Util.Introspection
 		public override object GetValue(object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object[] index, System.Globalization.CultureInfo culture)
 		{
 			var d = obj as System.Dynamic.DynamicObject;
-			if (d == null)
-				return null;
+			if (d != null)
+			{
+				object result;
+				if (!d.TryGetMember(new DynamicGetMemberBinder(_name), out result))
+					return null;
+				else
+					return result;
+			}
 
-			object result;
-			if (!d.TryGetMember(new DynamicGetMemberBinder(_name), out result))
-				return null;
+			var e = obj as System.Dynamic.ExpandoObject;
+			if (e != null)
+			{
+				object result;
+				if (((IDictionary<string, object>)e).TryGetValue(_name, out result))
+					return result;
+				else
+					return null;
+			}
 
-			return result;
+			return null;
 		}
 
 		public override Type PropertyType
