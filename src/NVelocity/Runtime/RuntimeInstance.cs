@@ -406,14 +406,14 @@ namespace NVelocity.Runtime
 
 				try
 				{
-					Type rmType = Type.GetType(rm);
+					Type rmType = Type.GetType(rm.Replace(';', ','));
 					o = Activator.CreateInstance(rmType);
 				}
-				catch(System.Exception)
+				catch(System.Exception ex)
 				{
 					String err = string.Format("The specified class for ResourceManager ({0}) does not exist.", rm);
 					Error(err);
-					throw new System.Exception(err);
+					throw new System.Exception(err, ex);
 				}
 
 				if (!(o is IResourceManager))
