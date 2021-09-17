@@ -240,14 +240,14 @@ namespace NVelocity.Runtime.Parser.Node
 					throw new MethodInvocationException(
 						string.Format("Invocation of method '{0}' in  {1} threw exception {2} : {3}", methodName, o.GetType(),
 						              targetInvocationException.GetBaseException().GetType(),
-						              targetInvocationException.GetBaseException().Message), targetInvocationException.GetBaseException(),
+						              targetInvocationException.GetBaseException().Message), targetInvocationException,
 						methodName);
 				}
 				else
 				{
 					try
 					{
-						return eventCartridge.HandleMethodException(o.GetType(), methodName, targetInvocationException.GetBaseException());
+						return eventCartridge.HandleMethodException(o.GetType(), methodName, targetInvocationException);
 					}
 					catch(Exception e)
 					{
