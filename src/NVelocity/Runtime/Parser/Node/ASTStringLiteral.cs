@@ -406,9 +406,9 @@ namespace NVelocity.Runtime.Parser.Node
 
 				return Evaluate(inlineNode, context);
 			}
-			catch(Exception)
+			catch(Exception ex)
 			{
-				throw new ArgumentException(string.Format("Problem evaluating dictionary entry with content {0}", content));
+				throw new ArgumentException(string.Format("Problem evaluating dictionary entry with content {0}", content), ex);
 			}
 		}
 
