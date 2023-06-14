@@ -21,7 +21,7 @@ limitations under the License.
 ***********************************************************************************************
 -->
 
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<!-- Root Path definition relative for actual build file -->
 	<PropertyGroup>
@@ -33,37 +33,7 @@ limitations under the License.
 	<PropertyGroup>
 		<ProjectName>NVelocity</ProjectName>
 
-		<CLSCompliant>false</CLSCompliant>
-		
-		<!-- Versioning -->
-		<Project_Major>1</Project_Major>
-		<Project_Minor>1</Project_Minor>
-		<Project_Build>1</Project_Build>
-
-		<!-- Project folders -->
-		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
 
 	</PropertyGroup>
-	
-	<ItemGroup>
-		<!-- 
-		Specify additional items to package here, they are added to the package
-		in addition to automatically detected dependencies.
-		The items are resolved relative to $(OutputPath)
-		-->
-	</ItemGroup>
-
-
-	<!-- Import framework version specific settings, like Settings-v3.5 or Settings-v4.0 -->
-	<Import
-		Project="$(RootPath)\Settings-$(TargetFrameworkVersion).proj"
-		Condition="'$(TargetFrameworkVersion)' != '' and Exists('$(RootPath)\Settings-$(TargetFrameworkVersion).proj')"
-		/>
-
-	<!-- Import Silverlight specific settings -->
-	<Import
-		Project="$(RootPath)\Settings-SL.proj"
-		Condition="'$(TargetFrameworkIdentifier)' == 'Silverlight' and Exists('$(RootPath)\Settings-SL.proj')"
-		/>
 
 </Project>

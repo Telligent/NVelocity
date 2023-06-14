@@ -81,9 +81,9 @@ namespace NVelocity.Test
 				testProperties = new ExtendedProperties();
 				testProperties.Load(new FileStream(TemplateTest.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
 			}
-			catch(Exception)
+			catch(Exception ex)
 			{
-				throw new Exception("Cannot setup TemplateTestSuite!");
+				throw new Exception("Cannot setup TemplateTestSuite!", ex);
 			}
 		}
 

@@ -62,22 +62,22 @@ namespace NVelocity.Test
 			sw = new StringWriter();
 
 			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval * $dval)\r\n$total"));
-			Assert.AreEqual("6.36000025272369", sw.GetStringBuilder().ToString());
+			Assert.AreEqual("6.360000252723694", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
 
 			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval - $dval)\r\n$total"));
-			Assert.AreEqual("-4.09999995231628", sw.GetStringBuilder().ToString());
+			Assert.AreEqual("-4.099999952316284", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
 
 			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval % $dval)\r\n$total"));
-			Assert.AreEqual("1.20000004768372", sw.GetStringBuilder().ToString());
+			Assert.AreEqual("1.2000000476837158", sw.GetStringBuilder().ToString());
 
 			sw = new StringWriter();
 
 			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = $fval / $dval)\r\n$total"));
-			Assert.AreEqual("0.22641510333655", sw.GetStringBuilder().ToString());
+			Assert.AreEqual("0.22641510333655016", sw.GetStringBuilder().ToString());
 		}
 
 		[Test]
