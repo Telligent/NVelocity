@@ -16,7 +16,7 @@ namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
+	using System.Collections.Concurrent;
 	using System.Reflection;
 	using System.Text;
 
@@ -37,11 +37,11 @@ namespace NVelocity.Util.Introspection
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private readonly Dictionary<string, MethodInfo> methodCache =
-			new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<string, MethodInfo> methodCache =
+			new ConcurrentDictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
 
-		private readonly Dictionary<string, MemberInfo> propertyCache =
-			new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<string, MemberInfo> propertyCache =
+			new ConcurrentDictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
 
 		private readonly MethodMap methodMap = new MethodMap();
 
