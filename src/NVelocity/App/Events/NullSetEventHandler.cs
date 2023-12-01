@@ -24,7 +24,7 @@ namespace NVelocity.App.Events
 	public class NullSetEventArgs : EventArgs
 	{
 		private Boolean shouldLog = true;
-		private String lhs, rhs;
+		private readonly String lhs, rhs;
 
 		public NullSetEventArgs(String lhs, String rhs)
 		{

@@ -14,12 +14,12 @@
 
 namespace NVelocity.Runtime.Resource
 {
-	using System;
-	using System.Collections;
-	using System.IO;
 	using Commons.Collections;
 	using Loader;
 	using NVelocity.Exception;
+	using System;
+	using System.Collections;
+	using System.IO;
 
 	/// <summary> 
 	/// Class to manage the text resource for the Velocity Runtime.
@@ -56,7 +56,7 @@ namespace NVelocity.Runtime.Resource
 		/// reflects numbering of the properties i.e.
 		/// &lt;loader-id&gt;.resource.loader.&lt;property&gt; = &lt;value&gt;
 		/// </summary>
-		private ArrayList sourceInitializerList;
+		private readonly ArrayList sourceInitializerList;
 
 		/// <summary>
 		/// Each loader needs a configuration object for
@@ -87,9 +87,9 @@ namespace NVelocity.Runtime.Resource
 
 			AssembleResourceLoaderInitializers();
 
-			for(int i = 0; i < sourceInitializerList.Count; i++)
+			for (int i = 0; i < sourceInitializerList.Count; i++)
 			{
-				ExtendedProperties configuration = (ExtendedProperties) sourceInitializerList[i];
+				ExtendedProperties configuration = (ExtendedProperties)sourceInitializerList[i];
 				String loaderClass = configuration.GetString("class");
 
 				if (loaderClass == null)
@@ -121,7 +121,7 @@ namespace NVelocity.Runtime.Resource
 					Type type = Type.GetType(resourceManagerCacheClassName);
 					o = Activator.CreateInstance(type);
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 					String err =
 						string.Format(
@@ -131,7 +131,7 @@ namespace NVelocity.Runtime.Resource
 					o = null;
 				}
 
-				if (!(o is ResourceCache))
+				if (o is not ResourceCache)
 				{
 					String err =
 						string.Format(
@@ -143,12 +143,9 @@ namespace NVelocity.Runtime.Resource
 			}
 
 			// if we didn't get through that, just use the default.
-			if (o == null)
-			{
-				o = new ResourceCacheImpl();
-			}
+			o ??= new ResourceCacheImpl();
 
-			globalCache = (ResourceCache) o;
+			globalCache = (ResourceCache)o;
 			globalCache.initialize(runtimeServices);
 			runtimeServices.Info("Default ResourceManager initialization complete.");
 		}
@@ -169,42 +166,42 @@ namespace NVelocity.Runtime.Resource
 
 			ArrayList resourceLoaderNames = runtimeServices.Configuration.GetVector(RuntimeConstants.RESOURCE_LOADER);
 
-			for(int i = 0; i < resourceLoaderNames.Count; i++)
+			for (int i = 0; i < resourceLoaderNames.Count; i++)
 			{
 				/*
-				 * The loader id might look something like the following:
-				 *
-				 * file.resource.loader
-				 *
-				 * The loader id is the prefix used for all properties
-				 * pertaining to a particular loader.
-				 */
+					* The loader id might look something like the following:
+					*
+					* file.resource.loader
+					*
+					* The loader id is the prefix used for all properties
+					* pertaining to a particular loader.
+					*/
 				String loaderID = string.Format("{0}.{1}", resourceLoaderNames[i], RuntimeConstants.RESOURCE_LOADER);
 
 				ExtendedProperties loaderConfiguration = runtimeServices.Configuration.Subset(loaderID);
 
 				/*
-				 *  we can't really count on ExtendedProperties to give us an empty set
-				 */
+					*  we can't really count on ExtendedProperties to give us an empty set
+					*/
 				if (loaderConfiguration == null)
 				{
 					runtimeServices.Warn(
 						string.Format("ResourceManager : No configuration information for resource loader named '{0}'. Skipping.",
-						              resourceLoaderNames[i]));
+													resourceLoaderNames[i]));
 					continue;
 				}
 
 				/*
-				 *  add the loader name token to the initializer if we need it
-				 *  for reference later. We can't count on the user to fill
-				 *  in the 'name' field
-				 */
+					*  add the loader name token to the initializer if we need it
+					*  for reference later. We can't count on the user to fill
+					*  in the 'name' field
+					*/
 				loaderConfiguration.SetProperty(RESOURCE_LOADER_IDENTIFIER, resourceLoaderNames[i]);
 
 				/*
-				 * Add resources to the list of resource loader
-				 * initializers.
-				 */
+					* Add resources to the list of resource loader
+					* initializers.
+					*/
 				sourceInitializerList.Add(loaderConfiguration);
 			}
 
@@ -253,20 +250,20 @@ namespace NVelocity.Runtime.Resource
 						globalCache.put(resourceName, resource);
 					}
 				}
-				catch(ResourceNotFoundException)
+				catch (ResourceNotFoundException)
 				{
 					runtimeServices.Error(
 						string.Format("ResourceManager : unable to find resource '{0}' in any resource loader.", resourceName));
 
 					throw;
 				}
-				catch(ParseErrorException pee)
+				catch (ParseErrorException pee)
 				{
 					runtimeServices.Error(string.Format("ResourceManager.GetResource() parse exception: {0}", pee));
 
 					throw;
 				}
-				catch(Exception ee)
+				catch (Exception ee)
 				{
 					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception new: {0}", ee));
 
@@ -276,32 +273,32 @@ namespace NVelocity.Runtime.Resource
 			else
 			{
 				/*
-				 *  refresh the resource
-				 */
+					*  refresh the resource
+					*/
 
 				try
 				{
 					RefreshResource(resource, encoding);
 				}
-				catch(ResourceNotFoundException)
+				catch (ResourceNotFoundException)
 				{
 					/*
-					 *  something exceptional happened to that resource
-					 *  this could be on purpose, 
-					 *  so clear the cache and try again
-					 */
+						*  something exceptional happened to that resource
+						*  this could be on purpose, 
+						*  so clear the cache and try again
+						*/
 
 					globalCache.remove(resourceName);
 
 					return GetResource(resourceName, resourceType, encoding);
 				}
-				catch(ParseErrorException parseErrorException)
+				catch (ParseErrorException parseErrorException)
 				{
 					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception: {0}", parseErrorException));
 
 					throw;
 				}
-				catch(Exception exception)
+				catch (Exception exception)
 				{
 					runtimeServices.Error(string.Format("ResourceManager.GetResource() exception: {0}", exception));
 
@@ -337,20 +334,20 @@ namespace NVelocity.Runtime.Resource
 			resource.Encoding = encoding;
 
 			/*
-	    * Now we have to try to find the appropriate
-	    * loader for this resource. We have to cycle through
-	    * the list of available resource loaders and see
-	    * which one gives us a stream that we can use to
-	    * make a resource with.
-	    */
+			* Now we have to try to find the appropriate
+			* loader for this resource. We have to cycle through
+			* the list of available resource loaders and see
+			* which one gives us a stream that we can use to
+			* make a resource with.
+			*/
 
 			long howOldItWas = 0; // Initialize to avoid warnings
 
 			ResourceLoader resourceLoader = null;
 
-			for(int i = 0; i < resourceLoaders.Count; i++)
+			for (int i = 0; i < resourceLoaders.Count; i++)
 			{
-				resourceLoader = (ResourceLoader) resourceLoaders[i];
+				resourceLoader = (ResourceLoader)resourceLoaders[i];
 				resource.ResourceLoader = resourceLoader;
 
 				/*
@@ -381,7 +378,7 @@ namespace NVelocity.Runtime.Resource
 						break;
 					}
 				}
-				catch(ResourceNotFoundException)
+				catch (ResourceNotFoundException)
 				{
 					/*
 					*  that's ok - it's possible to fail in
@@ -431,13 +428,13 @@ namespace NVelocity.Runtime.Resource
 		protected internal void RefreshResource(Resource resource, String encoding)
 		{
 			/*
-	    * The resource knows whether it needs to be checked
-	    * or not, and the resource's loader can check to
-	    * see if the source has been modified. If both
-	    * these conditions are true then we must reload
-	    * the input stream and parse it to make a new
-	    * AST for the resource.
-	    */
+			* The resource knows whether it needs to be checked
+			* or not, and the resource's loader can check to
+			* see if the source has been modified. If both
+			* these conditions are true then we must reload
+			* the input stream and parse it to make a new
+			* AST for the resource.
+			*/
 			if (resource.RequiresChecking())
 			{
 				/*
@@ -449,36 +446,36 @@ namespace NVelocity.Runtime.Resource
 				if (resource.IsSourceModified())
 				{
 					/*
-		    *  now check encoding info.  It's possible that the newly declared
-		    *  encoding is different than the encoding already in the resource
-		    *  this strikes me as bad...
-		    */
+				*  now check encoding info.  It's possible that the newly declared
+				*  encoding is different than the encoding already in the resource
+				*  this strikes me as bad...
+				*/
 
 					if (!resource.Encoding.Equals(encoding))
 					{
 						runtimeServices.Error(
 							string.Format("Declared encoding for template '{0}' is different on reload.  Old = '{1}'  New = '{2}",
-							              resource.Name, resource.Encoding, encoding));
+														resource.Name, resource.Encoding, encoding));
 
 						resource.Encoding = encoding;
 					}
 
 					/*
-		    *  read how old the resource is _before_
-		    *  processing (=>reading) it
-		    */
+				*  read how old the resource is _before_
+				*  processing (=>reading) it
+				*/
 					long howOldItWas = resource.ResourceLoader.GetLastModified(resource);
 
 					/*
-		    *  read in the fresh stream and parse
-		    */
+				*  read in the fresh stream and parse
+				*/
 
 					resource.Process();
 
 					/*
-		    *  now set the modification info and reset
-		    *  the modification check counters
-		    */
+				*  now set the modification info and reset
+				*  the modification check counters
+				*/
 
 					resource.LastModified = howOldItWas;
 				}
@@ -527,11 +524,11 @@ namespace NVelocity.Runtime.Resource
 			ResourceLoader resourceLoader;
 
 			/*
-	    *  loop through our loaders...
-	    */
-			for(int i = 0; i < resourceLoaders.Count; i++)
+			*  loop through our loaders...
+			*/
+			for (int i = 0; i < resourceLoaders.Count; i++)
 			{
-				resourceLoader = (ResourceLoader) resourceLoaders[i];
+				resourceLoader = (ResourceLoader)resourceLoaders[i];
 
 				Stream input = null;
 
@@ -546,7 +543,7 @@ namespace NVelocity.Runtime.Resource
 						return resourceLoader.GetType().ToString();
 					}
 				}
-				catch(ResourceNotFoundException)
+				catch (ResourceNotFoundException)
 				{
 					// this isn't a problem.  keep going
 				}
@@ -560,7 +557,7 @@ namespace NVelocity.Runtime.Resource
 						{
 							input.Close();
 						}
-						catch(IOException)
+						catch (IOException)
 						{
 						}
 					}

@@ -14,12 +14,12 @@
 // 
 namespace NVelocity.Test
 {
+	using App;
+	using NUnit.Framework;
 	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Text;
-	using App;
-	using NUnit.Framework;
 
 	[TestFixture]
 	public class StringInterpolationTestCase
@@ -45,10 +45,10 @@ namespace NVelocity.Test
 		{
 			Assert.AreEqual("2:key1=<> key2=<1:id=<123>>", Eval("%{key1=${siteRoot}, key2=$params}"));
 			Assert.AreEqual("3:key1=<value1> key2=<value2> key3=<value3>",
-			                Eval("%{ key1='value${survey}', key2='value$id', key3='value3' }"));
+											Eval("%{ key1='value${survey}', key2='value$id', key3='value3' }"));
 
 			Assert.AreEqual("2:key1=<value1> key2=<value2>",
-			                Eval("%{ key1='value${survey}', key2='value$id' }"));
+											Eval("%{ key1='value${survey}', key2='value$id' }"));
 
 			Assert.AreEqual("2:key1=<> key2=<2>", Eval("%{key1=${siteRoot}, key2=$id}"));
 		}
@@ -57,22 +57,22 @@ namespace NVelocity.Test
 		public void NestedDicts()
 		{
 			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
-			                Eval("%{controller='area', action='index', params={}}"));
+											Eval("%{controller='area', action='index', params={}}"));
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<1> lastpage=<2>>",
-			                Eval("%{controller='area', action='index', params={id=1, lastpage=$id} }"));
+											Eval("%{controller='area', action='index', params={id=1, lastpage=$id} }"));
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<0>",
-			                Eval("%{params={}, action='index', controller='area'}"));
+											Eval("%{params={}, action='index', controller='area'}"));
 
 			Assert.AreEqual("3:action=<1> controller=<area> params=<0>",
-			                Eval("%{params={}, action=$survey, controller='area'}"));
+											Eval("%{params={}, action=$survey, controller='area'}"));
 
 			Assert.AreEqual("3:action=<index> controller=<area> params=<2:id=<'1'> lastpage=<2>>",
-			                Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
+											Eval("%{params={id=$survey.to_squote, lastpage=$id}, controller='area', action='index'}"));
 
 			Assert.AreEqual("1:url=<3:action=<viewpage> pathinfo=<> querystring=<1:id=<1>>>",
-			                Eval("%{url={action='viewpage',pathinfo=$context.info,querystring={id=1}}}"));
+											Eval("%{url={action='viewpage',pathinfo=$context.info,querystring={id=1}}}"));
 		}
 
 		[Test]
@@ -102,9 +102,11 @@ namespace NVelocity.Test
 
 		public string Eval(string text, bool wrapBetweenQuote)
 		{
-			VelocityContext c = new VelocityContext();
-			Hashtable hash2 = new Hashtable();
-			hash2["id"] = "123";
+			VelocityContext c = new();
+			Hashtable hash2 = new()
+			{
+				["id"] = "123"
+			};
 			c.Put("params", hash2);
 			c.Put("style", "style='color:red'");
 			c.Put("survey", 1);
@@ -113,9 +115,9 @@ namespace NVelocity.Test
 			c.Put("Helper", new Helper());
 			c.Put("DictHelper", new DictHelper());
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
-			VelocityEngine velocityEngine = new VelocityEngine();
+			VelocityEngine velocityEngine = new();
 			velocityEngine.Init();
 
 			string templatePrefix = "$Helper.Dump(";
@@ -138,9 +140,9 @@ namespace NVelocity.Test
 	{
 		public String Dump(IDictionary options)
 		{
-			if (options == null) throw new ArgumentNullException("options");
+			if (options == null) throw new ArgumentNullException(nameof(options));
 
-			StringBuilder stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 
 			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[];
 
@@ -148,13 +150,12 @@ namespace NVelocity.Test
 
 			stringBuilder.Append(options.Count).Append(':');
 
-			foreach(string key in keysSorted)
+			foreach (string key in keysSorted)
 			{
 				object val = options[key];
 
-				IDictionary dictionary = val as IDictionary;
 
-				if (dictionary != null)
+				if (val is IDictionary dictionary)
 				{
 					stringBuilder.Append(key).Append("=<").Append(Dump(dictionary)).Append("> ");
 				}

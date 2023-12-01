@@ -40,10 +40,10 @@ namespace Commons.Collections
 		/// <returns>A String.</returns>
 		public String ReadProperty()
 		{
-			StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new();
 
 
-			while(true)
+			while (true)
 			{
 				String line = ReadLine();
 
@@ -58,7 +58,7 @@ namespace Commons.Collections
 				{
 					if (line.EndsWith(@"\"))
 					{
-						line = line.Substring(0, (line.Length - 1) - (0));
+						line = line[..^1];
 						buffer.Append(line);
 					}
 					else

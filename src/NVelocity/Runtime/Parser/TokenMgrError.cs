@@ -51,13 +51,13 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		protected internal static String AddEscapes(String str)
 		{
-			StringBuilder retval = new StringBuilder();
+			StringBuilder retval = new();
 			char ch;
-			for(int i = 0; i < str.Length; i++)
+			for (int i = 0; i < str.Length; i++)
 			{
-				switch(str[i])
+				switch (str[i])
 				{
-					case (char) (0):
+					case (char)(0):
 						continue;
 
 					case '\b':
@@ -96,7 +96,7 @@ namespace NVelocity.Runtime.Parser
 						if ((ch = str[i]) < 0x20 || ch > 0x7e)
 						{
 							String s = string.Format("0000{0}", Convert.ToString(ch, 16));
-							retval.AppendFormat("\\u{0}", s.Substring(s.Length - 4, (s.Length) - (s.Length - 4)));
+							retval.AppendFormat("\\u{0}", s[^4..]);
 						}
 						else
 						{
@@ -120,14 +120,14 @@ namespace NVelocity.Runtime.Parser
 		/// Note: You can customize the lexical error message by modifying this method.
 		/// </summary>
 		private static string LexicalError(bool EOFSeen, int errorLine, int errorColumn, string errorAfter,
-		                                   char currentCharacter)
+																				char currentCharacter)
 		{
 			return
 				(string.Format("Lexical error at line {0}, column {1}.  Encountered: {2}after : \"{3}\"", errorLine, errorColumn,
-				               (EOFSeen
-				                	? "<EOF> "
-				                	: string.Format("{0} ({1}), ", (string.Format("\"{0}\"", AddEscapes(currentCharacter.ToString()))),
-				                	                (int) currentCharacter)), AddEscapes(errorAfter)));
+												(EOFSeen
+													? "<EOF> "
+													: string.Format("{0} ({1}), ", (string.Format("\"{0}\"", AddEscapes(currentCharacter.ToString()))),
+																					(int)currentCharacter)), AddEscapes(errorAfter)));
 		}
 
 		/// <summary> You can also modify the body of this method to customize your error messages.

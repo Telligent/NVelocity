@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime.Resource
 {
+	using Commons.Collections;
 	using System;
 	using System.Collections;
-	using Commons.Collections;
 
 	/// <summary>
 	/// Default implementation of the resource cache for the default
@@ -70,21 +70,21 @@ namespace NVelocity.Runtime.Resource
 
 		public Resource get(Object key)
 		{
-			return (Resource) cache[key];
+			return (Resource)cache[key];
 		}
 
 		public Resource put(Object key, Resource value)
 		{
 			Object o = cache[key];
 			cache[key] = value;
-			return (Resource) o;
+			return (Resource)o;
 		}
 
 		public Resource remove(Object key)
 		{
 			Object o = cache[key];
 			cache.Remove(key);
-			return (Resource) o;
+			return (Resource)o;
 		}
 
 		public IEnumerator enumerateKeys()

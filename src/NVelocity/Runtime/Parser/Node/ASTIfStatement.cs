@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
 	using System;
 	using System.IO;
-	using Context;
 
 	public class ASTIfStatement : SimpleNode
 	{
@@ -56,7 +56,7 @@ namespace NVelocity.Runtime.Parser.Node
 			// a node evaluates to true then the node will
 			// render itself and this method will return
 			// as there is nothing left to do.
-			for(int i = 2; i < totalNodes; i++)
+			for (int i = 2; i < totalNodes; i++)
 			{
 				if (GetChild(i).Evaluate(context))
 				{

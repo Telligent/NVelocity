@@ -43,13 +43,13 @@ namespace NVelocity.Runtime.Parser
 				}
 				String expected = string.Empty;
 				int maxSize = 0;
-				for(int i = 0; i < expectedTokenSequences.Length; i++)
+				for (int i = 0; i < expectedTokenSequences.Length; i++)
 				{
 					if (maxSize < expectedTokenSequences[i].Length)
 					{
 						maxSize = expectedTokenSequences[i].Length;
 					}
-					for(int j = 0; j < expectedTokenSequences[i].Length; j++)
+					for (int j = 0; j < expectedTokenSequences[i].Length; j++)
 					{
 						expected += string.Format("{0} ", tokenImage[expectedTokenSequences[i][j]]);
 					}
@@ -61,7 +61,7 @@ namespace NVelocity.Runtime.Parser
 				}
 				String retval = "Encountered \"";
 				Token tok = currentToken.Next;
-				for(int i = 0; i < maxSize; i++)
+				for (int i = 0; i < maxSize; i++)
 				{
 					if (i != 0)
 					{
@@ -167,12 +167,12 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		protected internal static String AddEscapes(String str)
 		{
-			StringBuilder retval = new StringBuilder();
-			for(int i = 0; i < str.Length; i++)
+			StringBuilder retval = new();
+			for (int i = 0; i < str.Length; i++)
 			{
-				switch(str[i])
+				switch (str[i])
 				{
-					case (char) (0):
+					case (char)(0):
 						continue;
 
 					case '\b':
@@ -212,7 +212,7 @@ namespace NVelocity.Runtime.Parser
 						if ((character = str[i]) < 0x20 || character > 0x7e)
 						{
 							String s = string.Format("0000{0}", Convert.ToString(character, 16));
-							retval.AppendFormat("\\u{0}", s.Substring(s.Length - 4, (s.Length) - (s.Length - 4)));
+							retval.AppendFormat("\\u{0}", s[^4..]);
 						}
 						else
 						{

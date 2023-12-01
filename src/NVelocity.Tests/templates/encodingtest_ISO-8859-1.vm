@@ -38,8 +38,8 @@ Here's my test code:
    String result=writer.ToString();
 
    //log.Debug("FOUND "+result);
-   Assert.IsTrue(result.IndexOf("айиз") > 0);
-   Assert.IsTrue(result.IndexOf("дшже") > 0);
+   Assert.IsTrue(result.IndexOf("пїЅпїЅпїЅпїЅ") > 0);
+   Assert.IsTrue(result.IndexOf("пїЅпїЅпїЅпїЅ") > 0);
 
 
 
@@ -47,8 +47,8 @@ And this is what's in the "accentedchars.vm" template:
 
 ====================
 TEST ISO-8859-1 ACCENTS
-айиз
-дшже
+пїЅпїЅпїЅпїЅ
+пїЅпїЅпїЅпїЅ
 DONE
 ====================
 

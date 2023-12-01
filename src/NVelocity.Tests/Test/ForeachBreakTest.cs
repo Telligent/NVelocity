@@ -14,90 +14,88 @@
 // 
 namespace NVelocity.Test
 {
-    using System;
-    using System.Collections;
-    using System.IO;
-    using System.Text.RegularExpressions;
-    using App;
-    using NUnit.Framework;
-    using NVelocity.Runtime;
-    using global::Commons.Collections;
+	using App;
+	using global::Commons.Collections;
+	using NUnit.Framework;
+	using NVelocity.Runtime;
+	using System;
+	using System.IO;
 
-    /// <summary>
-    /// Tests to make sure that the VelocityContext is functioning correctly
-    /// </summary>
-    [TestFixture]
-    public class ForeachBreakTest : BaseTestCase
-    {
-        private VelocityEngine engine;
-        private VelocityContext context;
+	/// <summary>
+	/// Tests to make sure that the VelocityContext is functioning correctly
+	/// </summary>
+	[TestFixture]
+	public class ForeachBreakTest : BaseTestCase
+	{
+		private VelocityEngine engine;
+		private VelocityContext context;
 
-        public ForeachBreakTest()
-            : base()
-        {
+		public ForeachBreakTest()
+				: base()
+		{
 
-        }
+		}
 
-        [SetUp]
-        public void SetUp()
-        {
-            engine = new VelocityEngine();
+		[SetUp]
+		public void SetUp()
+		{
+			engine = new VelocityEngine();
 
-            ExtendedProperties extendedProperties = new ExtendedProperties();
+			ExtendedProperties extendedProperties = new();
 
-            extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
-            extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
-            extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
+			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
+			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
+			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
 
-            engine.Init(extendedProperties);
-            context = new VelocityContext();
-        }
+			engine.Init(extendedProperties);
+			context = new VelocityContext();
+		}
 
-        /**
-         * Tests break directive with a couple of iterations.
-         */
-        [Test]
-        public void testConditionalBreakDirective()
-        {
-            assertEvalEquals("1, 2, 3, 4, 5",
-                             @"#foreach($i in [1..10])
+		/**
+							* Tests break directive with a couple of iterations.
+							*/
+		[Test]
+		public void testConditionalBreakDirective()
+		{
+			assertEvalEquals("1, 2, 3, 4, 5",
+												@"#foreach($i in [1..10])
 $i#if($i > 4)#break
 #end, #end");
-        }
+		}
 
-        /**
-         * Tests break directive with immediate break.
-         */
-        [Test]
-        public void testUnconditionalBreakDirective()
-        {
-            assertEvalEquals("1", @"#foreach($i in [1..5])
+		/**
+							* Tests break directive with immediate break.
+							*/
+		[Test]
+		public void testUnconditionalBreakDirective()
+		{
+			assertEvalEquals("1", @"#foreach($i in [1..5])
 $i#break
 #end");
-        }
+		}
 
-        [Test]
-        public void testNestedForeach()
-        {
-            assertEvalEquals("~~~, ~~, ~, ",
-                @"#foreach($i in [1..3])
+		[Test]
+		public void testNestedForeach()
+		{
+			assertEvalEquals("~~~, ~~, ~, ",
+					@"#foreach($i in [1..3])
 #foreach($j in [2..4])
 #if($i*$j >= 8)#break
 #end~#end, #end");
-        }
+		}
 
-        protected void assertEvalEquals(String expected, String template)
-        {
-            String result = evaluate(template);
-            Assert.AreEqual(expected, result);
-        }
+		protected void assertEvalEquals(String expected, String template)
+		{
+			String result = evaluate(template);
+			Assert.AreEqual(expected, result);
+		}
 
-        private String evaluate(String template)
-        {
-            StringWriter writer = new StringWriter();
-            // use template as its own name, since our templates are short
-            engine.Evaluate(context, writer, template, template);
-            return writer.ToString();
-        }
-    }
+		private String evaluate(String template)
+		{
+			StringWriter writer = new();
+			// use template as its own name, since our templates are short
+			engine.Evaluate(context, writer, template, template);
+			return writer.ToString();
+		}
+	}
 }

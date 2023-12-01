@@ -1,9 +1,9 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
-	using System.IO;
 	using Context;
 	using NVelocity.App.Events;
+	using System;
+	using System.IO;
 
 	/// <summary> 
 	/// Node for the #set directive
@@ -25,7 +25,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private ASTReference LeftHandSide
 		{
-			get { return (ASTReference) GetChild(0).GetChild(0).GetChild(0); }
+			get { return (ASTReference)GetChild(0).GetChild(0).GetChild(0); }
 		}
 
 		private INode RightHandSide
@@ -45,8 +45,8 @@ namespace NVelocity.Runtime.Parser.Node
 		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			/*
-	    *  init the tree correctly
-	    */
+			*  init the tree correctly
+			*/
 
 			base.Init(context, data);
 
@@ -56,9 +56,9 @@ namespace NVelocity.Runtime.Parser.Node
 			blather = runtimeServices.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true);
 
 			/*
-	    *  grab this now.  No need to redo each time
-	    */
-			leftReference = left.FirstToken.Image.Substring(1);
+			*  grab this now.  No need to redo each time
+			*/
+			leftReference = left.FirstToken.Image[1..];
 
 			return data;
 		}
@@ -68,14 +68,14 @@ namespace NVelocity.Runtime.Parser.Node
 		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			/*
-	    *  get the RHS node, and it's value
-	    */
+			*  get the RHS node, and it's value
+			*/
 
 			Object value = right.Value(context);
 
 			/*
-	    * it's an error if we don't have a value of some sort
-	    */
+			* it's an error if we don't have a value of some sort
+			*/
 
 			if (value == null)
 			{
@@ -89,8 +89,8 @@ namespace NVelocity.Runtime.Parser.Node
 					bool doIt = true;
 
 					/*
-		    *  if we have an EventCartridge...
-		    */
+				*  if we have an EventCartridge...
+				*/
 					if (eventCartridge != null)
 					{
 						doIt = eventCartridge.ShouldLogOnNullSet(left.Literal, right.Literal);
@@ -100,7 +100,7 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						runtimeServices.Error(
 							string.Format("RHS of #set statement is null. Context will not be modified. {0} [line {1}, column {2}]",
-							              context.CurrentTemplateName, Line, Column));
+														context.CurrentTemplateName, Line, Column));
 					}
 				}
 
@@ -108,10 +108,10 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			/*
-	    *  if the LHS is simple, just punch the value into the context
-	    *  otherwise, use the setValue() method do to it.
-	    *  Maybe we should always use setValue()
-	    */
+			*  if the LHS is simple, just punch the value into the context
+			*  otherwise, use the setValue() method do to it.
+			*  Maybe we should always use setValue()
+			*/
 
 			if (left.ChildrenCount == 0)
 			{

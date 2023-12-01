@@ -14,13 +14,13 @@
 
 namespace NVelocity.Runtime.Directive
 {
-	using System;
-	using System.Collections;
-	using System.IO;
 	using Context;
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Parser.Node;
 	using Parser;
+	using System;
+	using System.Collections;
+	using System.IO;
 	using Visitor;
 
 	/// <summary>
@@ -41,7 +41,7 @@ namespace NVelocity.Runtime.Directive
 		private bool init = false;
 		private String[] callingArgs;
 		private int[] callingArgTypes;
-		private Hashtable proxyArgHash;
+		private readonly Hashtable proxyArgHash;
 
 		public VelocimacroProxy()
 		{
@@ -66,7 +66,7 @@ namespace NVelocity.Runtime.Directive
 			{
 				runtimeServices.Error(
 					string.Format("VM #{0}: error : too {1} arguments to macro. Wanted {2} got {3}", macroName,
-					              ((NumArgs > i) ? "few" : "many"), NumArgs, i));
+												((NumArgs > i) ? "few" : "many"), NumArgs, i));
 
 				return;
 			}
@@ -101,13 +101,13 @@ namespace NVelocity.Runtime.Directive
 					}
 
 					// wrap the current context and add the VMProxyArg objects
-					VMContext vmContext = new VMContext(context, runtimeServices);
+					VMContext vmContext = new(context, runtimeServices);
 
-					for(int i = 1; i < argArray.Length; i++)
+					for (int i = 1; i < argArray.Length; i++)
 					{
 						// we can do this as VMProxyArgs don't change state. They change
 						// the context.
-						VMProxyArg arg = (VMProxyArg) proxyArgHash[argArray[i]];
+						VMProxyArg arg = (VMProxyArg)proxyArgHash[argArray[i]];
 						vmContext.AddVMProxyArg(arg);
 					}
 
@@ -115,7 +115,7 @@ namespace NVelocity.Runtime.Directive
 					nodeTree.Render(vmContext, writer);
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				// if it's a MIE, it came from the render.... throw it...
 				if (e is MethodInvocationException)
@@ -161,9 +161,9 @@ namespace NVelocity.Runtime.Directive
 
 				// we only do this at init time, so it's the overhead
 				// is irrelevant
-				Hashtable hm = new Hashtable();
+				Hashtable hm = new();
 
-				for(int i = 1; i < argArray.Length; i++)
+				for (int i = 1; i < argArray.Length; i++)
 				{
 					String arg = callArgs[i - 1];
 
@@ -178,10 +178,10 @@ namespace NVelocity.Runtime.Directive
 
 				// now make one of our reference-munging visitor, and 
 				// let 'er rip
-				VMReferenceMungeVisitor v = new VMReferenceMungeVisitor(hm);
+				VMReferenceMungeVisitor v = new(hm);
 				nodeTree.Accept(v, null);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeServices.Error(string.Format("VelocimacroManager.parseTree() : exception {0} : {1}", macroName, e));
 			}
@@ -190,9 +190,9 @@ namespace NVelocity.Runtime.Directive
 		private void setupProxyArgs(String[] callArgs, int[] callArgTypes)
 		{
 			// for each of the args, make a ProxyArg
-			for(int i = 1; i < argArray.Length; i++)
+			for (int i = 1; i < argArray.Length; i++)
 			{
-				VMProxyArg arg = new VMProxyArg(runtimeServices, argArray[i], callArgs[i - 1], callArgTypes[i - 1]);
+				VMProxyArg arg = new(runtimeServices, argArray[i], callArgs[i - 1], callArgTypes[i - 1]);
 				proxyArgHash[argArray[i]] = arg;
 			}
 		}
@@ -212,7 +212,7 @@ namespace NVelocity.Runtime.Directive
 			Token t;
 			Token tLast;
 
-			while(i < numArgs)
+			while (i < numArgs)
 			{
 				args[i] = string.Empty;
 
@@ -220,17 +220,17 @@ namespace NVelocity.Runtime.Directive
 				// into macro body.  So for each arg in the use-instance, treat the stringlierals specially...
 				callingArgTypes[i] = node.GetChild(i).Type;
 
-//				if (false && node.GetChild(i).Type == ParserTreeConstants.STRING_LITERAL)
-//				{
-//					args[i] += node.GetChild(i).FirstToken.Image.Substring(1, (node.GetChild(i).FirstToken.Image.Length - 1) - (1));
-//				}
-//				else
+				//				if (false && node.GetChild(i).Type == ParserTreeConstants.STRING_LITERAL)
+				//				{
+				//					args[i] += node.GetChild(i).FirstToken.Image.Substring(1, (node.GetChild(i).FirstToken.Image.Length - 1) - (1));
+				//				}
+				//				else
 				{
 					// just wander down the token list, concatenating everything together
 					t = node.GetChild(i).FirstToken;
 					tLast = node.GetChild(i).LastToken;
 
-					while(t != tLast)
+					while (t != tLast)
 					{
 						args[i] += t.Image;
 						t = t.Next;

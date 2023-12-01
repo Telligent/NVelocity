@@ -14,11 +14,11 @@
 // 
 namespace NVelocity.Test
 {
-	using System;
-	using System.IO;
 	using App;
 	using NUnit.Framework;
 	using Runtime;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// This class tests strange Velocimacro issues.
@@ -28,8 +28,8 @@ namespace NVelocity.Test
 	[TestFixture]
 	public class VelocimacroTestCase
 	{
-		private String template1 = "#macro(fooz $a)$a#end#macro(bar $b)#fooz($b)#end#foreach($i in [1..3])#bar($i)#end";
-		private String result1 = "123";
+		private readonly String template1 = "#macro(fooz $a)$a#end#macro(bar $b)#fooz($b)#end#foreach($i in [1..3])#bar($i)#end";
+		private readonly String result1 = "123";
 
 		public VelocimacroTestCase()
 		{
@@ -38,7 +38,7 @@ namespace NVelocity.Test
 				Velocity.SetProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
 				Velocity.Init();
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				throw new Exception("Cannot setup VelocimacroTestCase!");
 			}
@@ -50,9 +50,9 @@ namespace NVelocity.Test
 		[Test]
 		public virtual void Test_Run()
 		{
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new();
 
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new();
 			Velocity.Evaluate(context, writer, "vm_chain1", template1);
 
 			String output = writer.ToString();

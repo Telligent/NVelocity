@@ -1,8 +1,8 @@
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
 	using System;
 	using System.Text;
-	using Context;
 
 	/// <summary> Utilities for dealing with the AST node structure.
 	/// *
@@ -35,18 +35,18 @@ namespace NVelocity.Runtime.Parser.Node
 
 			Token specialToken = t.SpecialToken;
 
-			while(specialToken.SpecialToken != null)
+			while (specialToken.SpecialToken != null)
 			{
 				specialToken = specialToken.SpecialToken;
 			}
 
-			while(specialToken != null)
+			while (specialToken != null)
 			{
 				String st = specialToken.Image;
 
-				StringBuilder sb = new StringBuilder();
+				StringBuilder sb = new();
 
-				for(int i = 0; i < st.Length; i++)
+				for (int i = 0; i < st.Length; i++)
 				{
 					char c = st[i];
 
@@ -56,10 +56,10 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 
 					/*
-		    *  more dreaded MORE hack :)
-		    * 
-		    *  looking for ("\\")*"$" sequences
-		    */
+				*  more dreaded MORE hack :)
+				* 
+				*  looking for ("\\")*"$" sequences
+				*/
 
 					if (c == '\\')
 					{
@@ -67,7 +67,7 @@ namespace NVelocity.Runtime.Parser.Node
 						bool term = false;
 
 						int j = i;
-						for(ok = true; ok && j < st.Length; j++)
+						for (ok = true; ok && j < st.Length; j++)
 						{
 							char cc = st[j];
 
@@ -97,7 +97,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 						if (term)
 						{
-							String foo = st.Substring(i, (j) - (i));
+							String foo = st[i..j];
 							sb.Append(foo);
 							i = j;
 						}
@@ -133,17 +133,17 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public static String interpolate(String argStr, IContext vars)
 		{
-			StringBuilder argBuf = new StringBuilder();
+			StringBuilder argBuf = new();
 
-			for(int cIdx = 0; cIdx < argStr.Length;)
+			for (int cIdx = 0; cIdx < argStr.Length;)
 			{
 				char ch = argStr[cIdx];
 
-				switch(ch)
+				switch (ch)
 				{
 					case '$':
-						StringBuilder nameBuf = new StringBuilder();
-						for(++cIdx; cIdx < argStr.Length; ++cIdx)
+						StringBuilder nameBuf = new();
+						for (++cIdx; cIdx < argStr.Length; ++cIdx)
 						{
 							ch = argStr[cIdx];
 							if (ch == '_' || ch == '-' || Char.IsLetterOrDigit(ch))
@@ -166,7 +166,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 							if (value == null)
 							{
-								argBuf.Append("$").Append(nameBuf.ToString());
+								argBuf.Append('$').Append(nameBuf.ToString());
 							}
 							else
 							{

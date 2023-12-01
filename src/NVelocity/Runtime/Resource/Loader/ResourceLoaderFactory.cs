@@ -35,13 +35,13 @@ namespace NVelocity.Runtime.Resource.Loader
 				loaderClassName = loaderClassName.Replace(';', ',');
 				Type loaderType = Type.GetType(loaderClassName);
 				Object o = Activator.CreateInstance(loaderType);
-				ResourceLoader loader = (ResourceLoader) o;
+				ResourceLoader loader = (ResourceLoader)o;
 
 				rs.Info(string.Format("Resource Loader Instantiated: {0}", loader.GetType().FullName));
 
 				return loader;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				rs.Error(
 					string.Format(

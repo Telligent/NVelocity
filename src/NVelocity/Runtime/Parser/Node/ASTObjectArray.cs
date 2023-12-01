@@ -1,8 +1,8 @@
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
 	using System;
 	using System.Collections;
-	using Context;
 
 	public class ASTObjectArray : SimpleNode
 	{
@@ -27,9 +27,9 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			int size = ChildrenCount;
 
-			ArrayList objectArray = new ArrayList(size);
+			ArrayList objectArray = new(size);
 
-			for(int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++)
 				objectArray.Add(GetChild(i).Value(context));
 
 			return objectArray;

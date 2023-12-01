@@ -54,7 +54,7 @@ namespace NVelocity.Runtime.Parser
 		private bool currentCharacterAvailable = false;
 
 		public VelocityCharStream(TextReader textReader,
-		                          int startLine, int startColumn, int bufferSize)
+															int startLine, int startColumn, int bufferSize)
 		{
 			inputStream = textReader;
 			line = startLine;
@@ -151,7 +151,7 @@ namespace NVelocity.Runtime.Parser
 			int k;
 			int columnDiff = 0;
 
-			while(i < len && bufferLine[j = start % bufferSize] == bufferLine[k = ++start % bufferSize])
+			while (i < len && bufferLine[j = start % bufferSize] == bufferLine[k = ++start % bufferSize])
 			{
 				bufferLine[j] = newLine;
 				int nextColDiff = columnDiff + bufferColumn[k] - bufferColumn[j];
@@ -165,7 +165,7 @@ namespace NVelocity.Runtime.Parser
 				bufferLine[j] = newLine++;
 				bufferColumn[j] = newCol + columnDiff;
 
-				while(i++ < len)
+				while (i++ < len)
 				{
 					if (bufferLine[j = start % bufferSize] != bufferLine[++start % bufferSize])
 						bufferLine[j] = newLine++;
@@ -264,7 +264,7 @@ namespace NVelocity.Runtime.Parser
 					maxNextCharInd = (bufferPosition -= tokenBegin);
 				}
 			}
-			catch(Exception t)
+			catch (Exception t)
 			{
 				throw new ApplicationException(t.Message);
 			}
@@ -323,7 +323,7 @@ namespace NVelocity.Runtime.Parser
 					return true;
 				}
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				return EndRead();
 			}
@@ -374,7 +374,7 @@ namespace NVelocity.Runtime.Parser
 					line += (column = 1);
 			}
 
-			switch(currentCharacter)
+			switch (currentCharacter)
 			{
 				case '\r':
 					prevCharIsCR = true;

@@ -14,10 +14,10 @@
 // 
 namespace NVelocity.Test.Commons
 {
-	using System;
-	using System.Collections;
 	using global::Commons.Collections;
 	using NUnit.Framework;
+	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Tests for Commons.Collections.KeyedList
@@ -28,7 +28,7 @@ namespace NVelocity.Test.Commons
 		[Test]
 		public void Test()
 		{
-			LRUMap map = new LRUMap(5);
+			LRUMap map = new(5);
 			AssertAddedFirst(map, "One", 1);
 			AssertAddedFirst(map, "Two", 2);
 			AssertAddedFirst(map, "Three", 3);
@@ -54,15 +54,15 @@ namespace NVelocity.Test.Commons
 			Assert.IsTrue(map.Contains("Seven"));
 			Assert.IsTrue(map.Contains("Nine"));
 			Assert.IsTrue(map.Contains("Ten"));
-			Assert.AreEqual("Six", ((ArrayList) map.Keys)[map.Count - 1]);
-			Assert.AreEqual("One", ((ArrayList) map.Keys)[0]);
+			Assert.AreEqual("Six", ((ArrayList)map.Keys)[map.Count - 1]);
+			Assert.AreEqual("One", ((ArrayList)map.Keys)[0]);
 
 			AssertGetIsMostRecent(map, "Six", 6);
 			AssertGetIsMostRecent(map, "Nine", 9);
 			AssertGetIsMostRecent(map, "Seven", 7);
 			AssertGetIsMostRecent(map, "Ten", 10);
 			AssertGetIsMostRecent(map, "One", 1);
-			Assert.AreEqual("Six", ((ArrayList) map.Keys)[map.Count - 1]);
+			Assert.AreEqual("Six", ((ArrayList)map.Keys)[map.Count - 1]);
 
 			AssertSetIsMostRecent(map, "One", "Uno");
 			AssertSetIsMostRecent(map, "Two", "Dos");
@@ -72,16 +72,16 @@ namespace NVelocity.Test.Commons
 		private void AssertAddedFirst(LRUMap map, Object key, Object value)
 		{
 			map.Add(key, value);
-			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
-			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
+			Assert.AreEqual(key, ((ArrayList)map.Keys)[0]);
+			Assert.AreEqual(value, ((ArrayList)map.Values)[0]);
 			Assert.IsTrue(map.Count <= map.MaxSize);
 		}
 
 		private void AssertSetIsMostRecent(LRUMap map, Object key, Object value)
 		{
 			map[key] = value;
-			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
-			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
+			Assert.AreEqual(key, ((ArrayList)map.Keys)[0]);
+			Assert.AreEqual(value, ((ArrayList)map.Values)[0]);
 			Assert.IsTrue(map.Count <= map.MaxSize);
 		}
 
@@ -89,8 +89,8 @@ namespace NVelocity.Test.Commons
 		{
 			Object o = map[key];
 			Assert.AreEqual(value, o);
-			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
-			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
+			Assert.AreEqual(key, ((ArrayList)map.Keys)[0]);
+			Assert.AreEqual(value, ((ArrayList)map.Values)[0]);
 		}
 	}
 }

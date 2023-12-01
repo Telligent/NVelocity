@@ -15,7 +15,6 @@
 namespace NVelocity.Exception
 {
 	using System;
-	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// Application-level exception thrown when a reference method is
@@ -41,24 +40,6 @@ namespace NVelocity.Exception
 		{
 			this.methodName = methodName;
 		}
-
-		#region Serialization Support
-
-		protected MethodInvocationException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-			methodName = info.GetString("methodName");
-			referenceName = info.GetString("referenceName");
-		}
-
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue("methodName", methodName);
-			info.AddValue("referenceName", referenceName);
-			base.GetObjectData(info, context);
-		}
-
-		#endregion
 
 		public String MethodName
 		{

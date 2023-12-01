@@ -24,19 +24,19 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public abstract class AbstractExecutor
 	{
-		protected internal IRuntimeLogger runtimeLogger = null;
+		protected IRuntimeLogger runtimeLogger = null;
 
 		/// <summary>
 		/// Method to be executed.
 		/// </summary>
-		protected internal MethodInfo method = null;
-
-		protected internal PropertyInfo property = null;
+		protected Func<object, object[], object> invoker = null;
+		protected MethodInfo method;
+		protected PropertyInfo property;
 
 		/// <summary>
 		/// Value (probably from enum).
 		/// </summary>
-		protected internal object value;
+		protected object value;
 
 		/// <summary>
 		/// Execute method against context.
@@ -45,7 +45,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public bool IsAlive
 		{
-			get { return (method != null || property != null || value != null); }
+			get { return (invoker != null || value != null); }
 		}
 
 		public MethodInfo Method

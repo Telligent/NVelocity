@@ -78,7 +78,7 @@ namespace NVelocity.Runtime.Log
 			// we might have a list, or not - so check
 			if (obj is IList)
 			{
-				classes = (IList) obj;
+				classes = (IList)obj;
 			}
 			else if (obj is String)
 			{
@@ -88,7 +88,7 @@ namespace NVelocity.Runtime.Log
 			// now run through the list, trying each.  It's ok to
 			// fail with a class not found, as we do this to also
 			// search out a default simple file logger
-			foreach(String className in classes)
+			foreach (String className in classes)
 			{
 				if (className != null && className.Length > 0)
 				{
@@ -112,11 +112,11 @@ namespace NVelocity.Runtime.Log
 							return logSystem;
 						}
 					}
-					catch(ApplicationException applicationException)
+					catch (ApplicationException applicationException)
 					{
 						runtimeServices.Debug(
 							string.Format("Couldn't find class {0} or necessary supporting classes in classpath. Exception : {1}", className,
-							              applicationException));
+														applicationException));
 					}
 				}
 			}
@@ -133,7 +133,7 @@ namespace NVelocity.Runtime.Log
 				logSystem = new NullLogSystem();
 				logSystem.Init(runtimeServices);
 			}
-			catch(ApplicationException applicationException)
+			catch (ApplicationException applicationException)
 			{
 				String error =
 					string.Format(

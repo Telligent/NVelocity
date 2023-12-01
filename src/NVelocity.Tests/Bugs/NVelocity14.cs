@@ -14,8 +14,6 @@
 // 
 namespace NVelocity.Tests.Bugs
 {
-	using System;
-	using System.IO;
 	using App;
 	using Commons.Collections;
 	using Exception;
@@ -31,7 +29,7 @@ namespace NVelocity.Tests.Bugs
 		{
 			var velocityEngine = new VelocityEngine();
 
-			ExtendedProperties extendedProperties = new ExtendedProperties();
+			ExtendedProperties extendedProperties = new();
 			extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
 			velocityEngine.Init(extendedProperties);

@@ -14,9 +14,9 @@
 
 namespace NVelocity
 {
+	using Context;
 	using System;
 	using System.Collections;
-	using Context;
 
 	/// <summary>
 	/// General purpose implementation of the application Context
@@ -34,7 +34,7 @@ namespace NVelocity
 		/// <summary>
 		/// Storage for key/value pairs.
 		/// </summary>
-		private Hashtable context = null;
+		private readonly Hashtable context = null;
 
 		/// <summary>
 		/// Creates a new instance (with no inner context).

@@ -43,13 +43,13 @@ namespace NVelocity.Runtime.Directive
 
 				try
 				{
-					while(!(filenameStack.Count == 0))
+					while (!(filenameStack.Count == 0))
 					{
-						returnStr += (String) filenameStack.Pop();
+						returnStr += (String)filenameStack.Pop();
 						returnStr += " -> ";
 					}
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 				}
 
@@ -59,7 +59,7 @@ namespace NVelocity.Runtime.Directive
 
 		//UPGRADE_NOTE: The initialization of  'filenameStack' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Stack filenameStack;
-		private String msg = string.Empty;
+		private readonly String msg = string.Empty;
 		private readonly int depthCount = 0;
 
 		/// <summary> Constructor
@@ -79,7 +79,6 @@ namespace NVelocity.Runtime.Directive
 		{
 			Object temp_object;
 			temp_object = s;
-			Object generatedAux = temp_object;
 			filenameStack.Push(temp_object);
 		}
 	}

@@ -22,16 +22,16 @@ namespace NVelocity.Test
 	{
 		public String LinkToRemote(String name, String url, IDictionary options)
 		{
-			if (options == null) throw new ArgumentNullException("options");
+			if (options == null) throw new ArgumentNullException(nameof(options));
 
-			StringBuilder sb = new StringBuilder(name + " " + url + " ");
+			StringBuilder sb = new(name + " " + url + " ");
 
 
 			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[];
 
 			Array.Sort(keysSorted);
 
-			foreach(string key in keysSorted)
+			foreach (string key in keysSorted)
 			{
 				sb.Append(key).Append("=<").Append(options[key]).Append("> ");
 			}
@@ -43,7 +43,7 @@ namespace NVelocity.Test
 
 		public String LinkToRemote(String name, String url, string options)
 		{
-			if (options == null) throw new ArgumentNullException("options");
+			if (options == null) throw new ArgumentNullException(nameof(options));
 
 			return name + " " + url + " " + options;
 		}

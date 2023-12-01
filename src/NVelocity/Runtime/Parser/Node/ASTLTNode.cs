@@ -14,8 +14,8 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using Context;
+	using System;
 
 	public class ASTLTNode : SimpleNode
 	{
@@ -56,7 +56,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				return ObjectComparer.CompareObjects(left, right) == ObjectComparer.Smaller;
 			}
-			catch(ArgumentException argumentException)
+			catch (ArgumentException argumentException)
 			{
 				runtimeServices.Error(argumentException.Message);
 

@@ -1,5 +1,4 @@
-﻿using System;
-namespace NVelocity.Util.Introspection
+﻿namespace NVelocity.Util.Introspection
 {
 	public interface IClassMap
 	{

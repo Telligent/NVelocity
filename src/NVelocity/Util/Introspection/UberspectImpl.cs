@@ -14,12 +14,12 @@
 
 namespace NVelocity.Util.Introspection
 {
+	using NVelocity.Runtime.Parser.Node;
+	using Runtime;
 	using System;
 	using System.Collections;
 	using System.Reflection;
 	using System.Text;
-	using NVelocity.Runtime.Parser.Node;
-	using Runtime;
 
 	/// <summary>  Implementation of Uberspect to provide the default introspective
 	/// functionality of Velocity
@@ -128,7 +128,7 @@ namespace NVelocity.Util.Introspection
 				*  first, we introspect for the set<identifier> setter method
 				*/
 
-				Object[] parameters = new Object[] {arg};
+				Object[] parameters = new Object[] { arg };
 
 				try
 				{
@@ -139,9 +139,9 @@ namespace NVelocity.Util.Introspection
 						throw new MethodAccessException();
 					}
 				}
-				catch(MethodAccessException)
+				catch (MethodAccessException)
 				{
-					StringBuilder sb = new StringBuilder("set");
+					StringBuilder sb = new("set");
 					sb.Append(identifier);
 
 					if (Char.IsLower(sb[3]))
@@ -159,12 +159,12 @@ namespace NVelocity.Util.Introspection
 						throw;
 				}
 			}
-			catch(MethodAccessException)
+			catch (MethodAccessException)
 			{
 				// right now, we only support the IDictionary interface
 				if (typeof(IDictionary).IsAssignableFrom(type))
 				{
-					Object[] parameters = new Object[] {new Object(), new Object()};
+					Object[] parameters = new Object[] { new(), new() };
 
 					method = GetMethod(obj, "Add", parameters, i);
 
@@ -186,6 +186,7 @@ namespace NVelocity.Util.Introspection
 			public VelMethodImpl(MethodInfo methodInfo)
 			{
 				method = methodInfo;
+				invoker = Invoker.GetFunc(method);
 			}
 
 			public bool Cacheable
@@ -203,11 +204,15 @@ namespace NVelocity.Util.Introspection
 				get { return method.ReturnType; }
 			}
 
-			internal MethodInfo method = null;
+			MethodInfo method = null;
+			Func<object, object[], object> invoker = null;
 
 			public Object Invoke(Object o, Object[] parameters)
 			{
-				return method.Invoke(o, parameters);
+				if (invoker == null)
+					return null;
+
+				return invoker(o, parameters);
 			}
 		}
 
@@ -280,7 +285,7 @@ namespace NVelocity.Util.Introspection
 
 			public Object Invoke(Object o, Object value)
 			{
-				ArrayList al = new ArrayList();
+				ArrayList al = new();
 
 				if (putKey != null)
 				{

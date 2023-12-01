@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
 	using System;
 	using System.Collections;
-	using Context;
 
 	public class ASTIntegerRange : SimpleNode
 	{
@@ -59,32 +59,32 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			// if not an Integer, not much we can do either
-			if (!(left is Int32) || !(right is Int32))
+			if (left is not Int32 || right is not Int32)
 			{
 				runtimeServices.Error(
 					string.Format(
 						"{0} side of range operator is not a valid type. Currently only integers (1,2,3...) and Integer type is supported. {1} [line {2}, column {3}]",
-						(!(left is Int32) ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
+						(left is not Int32 ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
 
 				return null;
 			}
 
 			// get the two integer values of the ends of the range
-			int l = ((Int32) left);
-			int r = ((Int32) right);
+			int l = ((Int32)left);
+			int r = ((Int32)right);
 
 			// find out how many there are
 			int num = Math.Abs(l - r);
 			num += 1;
 
 			// see if your increment is Pos or Neg
-			int delta = (l >= r) ? - 1 : 1;
+			int delta = (l >= r) ? -1 : 1;
 
 			// make the vector and fill it
-			ArrayList foo = new ArrayList(num);
+			ArrayList foo = new(num);
 			int val = l;
 
-			for(int i = 0; i < num; i++)
+			for (int i = 0; i < num; i++)
 			{
 				foo.Add(val);
 				val += delta;

@@ -15,7 +15,6 @@
 namespace NVelocity.Runtime
 {
 	using System;
-	using System.Runtime.Serialization;
 
 	[Serializable]
 	public class RuntimeException : System.Exception
@@ -25,10 +24,6 @@ namespace NVelocity.Runtime
 		}
 
 		public RuntimeException(string message, System.Exception innerException) : base(message, innerException)
-		{
-		}
-
-		public RuntimeException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

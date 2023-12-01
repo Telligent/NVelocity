@@ -14,12 +14,12 @@
 // 
 namespace NVelocity.Test
 {
+	using App;
+	using NUnit.Framework;
 	using System;
 	using System.Collections;
 	using System.Globalization;
 	using System.IO;
-	using App;
-	using NUnit.Framework;
 
 	/// <summary>
 	/// Test Velocity processing
@@ -32,14 +32,14 @@ namespace NVelocity.Test
 		{
 			System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new();
 
 			context.Put("fval", 1.2f);
 			context.Put("dval", 5.3);
 
 			Velocity.Init();
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			Assert.IsTrue(Velocity.Evaluate(context, sw, string.Empty, "#set($total = 1 + 1)\r\n$total"));
 			Assert.AreEqual("2", sw.GetStringBuilder().ToString());
@@ -83,28 +83,34 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_Evaluate()
 		{
-			VelocityContext c = new VelocityContext();
+			VelocityContext c = new();
 			c.Put("key", "value");
 			c.Put("firstName", "Cort");
 			c.Put("lastName", "Schaefer");
-			Hashtable h = new Hashtable();
-			h.Add("foo", "bar");
+			Hashtable h = new()
+			{
+					{ "foo", "bar" }
+			};
 			c.Put("hashtable", h);
 			c.Put("EnumData", typeof(EnumData));
 			c.Put("enumValue", EnumData.Value2);
 
-			AddressData address = new AddressData();
-			address.Address1 = "9339 Grand Teton Drive";
-			address.Address2 = "Office in the back";
+			AddressData address = new()
+			{
+				Address1 = "9339 Grand Teton Drive",
+				Address2 = "Office in the back"
+			};
 			c.Put("address", address);
 
-			ContactData contact = new ContactData();
-			contact.Name = "Cort";
-			contact.Address = address;
+			ContactData contact = new()
+			{
+				Name = "Cort",
+				Address = address
+			};
 			c.Put("contact", contact);
 
 			// test simple objects (no nesting)
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 			bool ok = Velocity.Evaluate(c, sw, string.Empty, "$firstName is my first name, my last name is $lastName");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			String s = sw.ToString();
@@ -168,7 +174,7 @@ namespace NVelocity.Test
 		public class ContactData
 		{
 			private String name = String.Empty;
-			private AddressData address = new AddressData();
+			private AddressData address = new();
 
 			public String Name
 			{

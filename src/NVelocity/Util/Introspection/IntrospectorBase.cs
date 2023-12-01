@@ -51,7 +51,7 @@ namespace NVelocity.Util.Introspection
 		/// Holds the method maps for the classes we know about, keyed by
 		/// Class object.
 		/// </summary>
-		protected internal Hashtable classMethodMaps = new Hashtable();
+		protected internal Hashtable classMethodMaps = new();
 
 		/// <summary>
 		/// Holds the qualified class names for the classes
@@ -76,17 +76,14 @@ namespace NVelocity.Util.Introspection
 
 			IClassMap classMap;
 
-			lock(classMethodMaps)
+			lock (classMethodMaps)
 			{
-				classMap = (IClassMap) classMethodMaps[c];
+				classMap = (IClassMap)classMethodMaps[c];
 
 				// if we don't have this, check to see if we have it
 				// by name.  if so, then we have a classLoader change
 				// so dump our caches.
-				if (classMap == null)
-				{
-					classMap = CreateClassMap(c);
-				}
+				classMap ??= CreateClassMap(c);
 			}
 
 			return classMap.FindMethod(name, parameters);
@@ -108,18 +105,15 @@ namespace NVelocity.Util.Introspection
 
 			IClassMap classMap;
 
-			lock(classMethodMaps)
+			lock (classMethodMaps)
 			{
-				classMap = (IClassMap) classMethodMaps[c];
+				classMap = (IClassMap)classMethodMaps[c];
 
 				// if we don't have this, check to see if we have it
 				// by name.  if so, then we have a classloader change
 				// so dump our caches.
 
-				if (classMap == null)
-				{
-					classMap = CreateClassMap(c);
-				}
+				classMap ??= CreateClassMap(c);
 			}
 
 			return classMap.FindProperty(name);

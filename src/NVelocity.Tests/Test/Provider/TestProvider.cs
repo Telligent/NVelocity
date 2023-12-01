@@ -42,18 +42,15 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				Stack stack = new Stack();
+				Stack stack = new();
 				Object temp_object;
 				temp_object = "stack element 1";
-				Object generatedAux = temp_object;
 				stack.Push(temp_object);
 				Object temp_object2;
 				temp_object2 = "stack element 2";
-				Object generatedAux2 = temp_object2;
 				stack.Push(temp_object2);
 				Object temp_object3;
 				temp_object3 = "stack element 3";
-				Object generatedAux3 = temp_object3;
 				stack.Push(temp_object3);
 				return stack;
 			}
@@ -72,10 +69,12 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				IList list = new ArrayList();
-				list.Add("list element 1");
-				list.Add("list element 2");
-				list.Add("list element 3");
+				IList list = new ArrayList
+				{
+						"list element 1",
+						"list element 2",
+						"list element 3"
+				};
 
 				return list;
 			}
@@ -85,15 +84,19 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				Hashtable h = new Hashtable();
-				h.Add("Text", "this is some text");
-				h.Add("EscText", "this is escaped text");
-				h.Add("Title", "this is the title");
-				h.Add("Index", "this is the index");
-				h.Add("URL", "http://periapt.com");
+				Hashtable h = new()
+				{
+						{ "Text", "this is some text" },
+						{ "EscText", "this is escaped text" },
+						{ "Title", "this is the title" },
+						{ "Index", "this is the index" },
+						{ "URL", "http://periapt.com" }
+				};
 
-				ArrayList al = new ArrayList();
-				al.Add(h);
+				ArrayList al = new()
+				{
+						h
+				};
 
 				h.Add("RelatedLinks", al);
 
@@ -105,7 +108,7 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				Hashtable h = new Hashtable();
+				Hashtable h = new();
 				SupportClass.PutElement(h, "key0", "value0");
 				SupportClass.PutElement(h, "key1", "value1");
 				SupportClass.PutElement(h, "key2", "value2");
@@ -118,8 +121,10 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				ArrayList al = new ArrayList();
-				al.Add(Search);
+				ArrayList al = new()
+				{
+						Search
+				};
 
 				return al;
 			}
@@ -138,9 +143,9 @@ namespace NVelocity.Test.Provider
 			{
 				//ArrayList al = new ArrayList();
 				Object[] menu = new Object[3];
-				for(int i = 0; i < 3; i++)
+				for (int i = 0; i < 3; i++)
 				{
-					Hashtable item = new Hashtable();
+					Hashtable item = new();
 					SupportClass.PutElement(item, "id", "item" + Convert.ToString(i + 1));
 					SupportClass.PutElement(item, "name", "name" + Convert.ToString(i + 1));
 					SupportClass.PutElement(item, "label", "label" + Convert.ToString(i + 1));
@@ -163,12 +168,13 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				ArrayList list = new ArrayList();
-
-				list.Add("ArrayList element 1");
-				list.Add("ArrayList element 2");
-				list.Add("ArrayList element 3");
-				list.Add("ArrayList element 4");
+				ArrayList list = new()
+				{
+						"ArrayList element 1",
+						"ArrayList element 2",
+						"ArrayList element 3",
+						"ArrayList element 4"
+				};
 
 				return list;
 			}
@@ -178,12 +184,13 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				ArrayList list = new ArrayList();
-
-				list.Add(new TestProvider());
-				list.Add(new TestProvider());
-				list.Add(new TestProvider());
-				list.Add(new TestProvider());
+				ArrayList list = new()
+				{
+						new TestProvider(),
+						new TestProvider(),
+						new TestProvider(),
+						new TestProvider()
+				};
 
 				return list;
 			}
@@ -193,10 +200,11 @@ namespace NVelocity.Test.Provider
 		{
 			get
 			{
-				ArrayList list = new ArrayList();
-
-				list.Add("vector element 1");
-				list.Add("vector element 2");
+				ArrayList list = new()
+				{
+						"vector element 1",
+						"vector element 2"
+				};
 
 				return list;
 			}
@@ -295,11 +303,11 @@ namespace NVelocity.Test.Provider
 
 		public virtual String concat(Object[] strings)
 		{
-			StringBuilder result = new StringBuilder();
+			StringBuilder result = new();
 
-			for(int i = 0; i < strings.Length; i++)
+			for (int i = 0; i < strings.Length; i++)
 			{
-				result.Append((String) strings[i]).Append(' ');
+				result.Append((String)strings[i]).Append(' ');
 			}
 
 			return result.ToString();
@@ -307,11 +315,11 @@ namespace NVelocity.Test.Provider
 
 		public virtual String concat(IList strings)
 		{
-			StringBuilder result = new StringBuilder();
+			StringBuilder result = new();
 
-			for(int i = 0; i < strings.Count; i++)
+			for (int i = 0; i < strings.Count; i++)
 			{
-				result.Append((String) strings[i]).Append(' ');
+				result.Append((String)strings[i]).Append(' ');
 			}
 
 			return result.ToString();
@@ -319,9 +327,9 @@ namespace NVelocity.Test.Provider
 
 		public virtual String objConcat(IList objects)
 		{
-			StringBuilder result = new StringBuilder();
+			StringBuilder result = new();
 
-			for(int i = 0; i < objects.Count; i++)
+			for (int i = 0; i < objects.Count; i++)
 			{
 				result.Append(objects[i]).Append(' ');
 			}
@@ -360,14 +368,14 @@ namespace NVelocity.Test.Provider
 		/// </returns>
 		public virtual String chop(String str, int i)
 		{
-			return (str.Substring(0, (str.Length - i) - (0)));
+			return (str[..^i]);
 		}
 
 		public virtual bool allEmpty(Object[] list)
 		{
 			int size = list.Length;
 
-			for(int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++)
 			{
 				//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 				if (list[i].ToString().Length > 0)

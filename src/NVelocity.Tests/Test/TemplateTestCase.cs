@@ -14,18 +14,18 @@
 // 
 
 namespace NVelocity.Test
-	{
-		using System;
-		using System.Collections;
-		using System.IO;
-		using App;
-		using global::Commons.Collections;
-		using NUnit.Framework;
-		using Provider;
-		using Runtime;
+{
+	using App;
+	using global::Commons.Collections;
+	using NUnit.Framework;
+	using Provider;
+	using Runtime;
+	using System;
+	using System.Collections;
+	using System.IO;
 
 
-		/// <summary>
+	/// <summary>
 	/// Easily add test cases which evaluate templates and check their output.
 	///
 	/// NOTE:
@@ -48,7 +48,7 @@ namespace NVelocity.Test
 	[TestFixture]
 	public class TemplateTestCase : BaseTestCase
 	{
-		private ExtendedProperties testProperties;
+		private readonly ExtendedProperties testProperties;
 
 		private TestProvider provider;
 		private ArrayList al;
@@ -58,7 +58,7 @@ namespace NVelocity.Test
 		private VelocityContext context2;
 		private ArrayList vec;
 
-		private VelocityEngine velocityEngine;
+		private readonly VelocityEngine velocityEngine;
 
 		/// <summary>
 		/// Creates a new instance.
@@ -69,7 +69,7 @@ namespace NVelocity.Test
 			{
 				velocityEngine = new VelocityEngine();
 
-				ExtendedProperties extendedProperties = new ExtendedProperties();
+				ExtendedProperties extendedProperties = new();
 				extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
 				extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
@@ -81,7 +81,7 @@ namespace NVelocity.Test
 				testProperties = new ExtendedProperties();
 				testProperties.Load(new FileStream(TemplateTest.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				throw new Exception("Cannot setup TemplateTestSuite!", ex);
 			}
@@ -104,10 +104,11 @@ namespace NVelocity.Test
 			*  lets set up a vector of objects to test late introspection. See ASTMethod.java
 			*/
 
-			vec = new ArrayList();
-
-			vec.Add(new String("string1".ToCharArray()));
-			vec.Add(new String("string2".ToCharArray()));
+			vec = new ArrayList
+			{
+					new String("string1".ToCharArray()),
+					new String("string2".ToCharArray())
+			};
 
 			/*
 			*  set up 3 chained contexts, and add our data 
@@ -136,12 +137,12 @@ namespace NVelocity.Test
 			context.Put("boolobj", new BoolObj());
 
 			/*
-	    *  we want to make sure we test all types of iterative objects
-	    *  in #foreach()
-	    */
+			*  we want to make sure we test all types of iterative objects
+			*  in #foreach()
+			*/
 
-			Object[] oarr = new Object[] {"a", "b", "c", "d"};
-			int[] intarr = new int[] {10, 20, 30, 40, 50};
+			Object[] oarr = new Object[] { "a", "b", "c", "d" };
+			int[] intarr = new int[] { 10, 20, 30, 40, 50 };
 
 			context.Put("collection", vec);
 			context2.Put("iterator", vec.GetEnumerator());
@@ -154,7 +155,7 @@ namespace NVelocity.Test
 		[Test]
 		public void CacheProblems()
 		{
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new();
 
 			context.Put("AjaxHelper2", new AjaxHelper2());
 			context.Put("DictHelper", new DictHelper());
@@ -162,7 +163,7 @@ namespace NVelocity.Test
 			Template template = velocityEngine.GetTemplate(
 				GetFileName(null, "dicthelper", TemplateTest.TMPL_FILE_EXT));
 
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new();
 
 			template.Merge(context, writer);
 
@@ -191,7 +192,7 @@ namespace NVelocity.Test
 			String template;
 			Boolean allpass = true;
 			Int32 failures = 0;
-			for(int i = 1;; i++)
+			for (int i = 1; ; i++)
 			{
 				template = testProperties.GetString(getTemplateTestKey(i));
 
@@ -245,9 +246,9 @@ namespace NVelocity.Test
 
 				/* get the file to write to */
 				FileStream fos =
-					new FileStream(GetFileName(TemplateTest.RESULT_DIR, baseFileName, TemplateTest.RESULT_FILE_EXT), FileMode.Create);
+					new(GetFileName(TemplateTest.RESULT_DIR, baseFileName, TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 
-				StreamWriter writer = new StreamWriter(fos);
+				StreamWriter writer = new(fos);
 
 				/* process the template */
 				template.Merge(context, writer);
@@ -257,13 +258,13 @@ namespace NVelocity.Test
 				writer.Close();
 
 				if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, baseFileName,
-				             TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
+											TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 				{
 					//Fail("Processed template did not match expected output");
 					return false;
 				}
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				Console.WriteLine("Test {0} failed", baseFileName);
 

@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime.Resource.Loader
 {
+	using Commons.Collections;
 	using System;
 	using System.IO;
-	using Commons.Collections;
 
 	/// <summary>
 	/// This is abstract class the all text resource loaders should extend.

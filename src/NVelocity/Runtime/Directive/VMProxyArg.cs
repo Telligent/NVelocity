@@ -14,12 +14,12 @@
 
 namespace NVelocity.Runtime.Directive
 {
-	using System;
-	using System.IO;
 	using Context;
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Parser.Node;
 	using Parser;
+	using System;
+	using System.IO;
 
 	/// <summary>  
 	/// The function of this class is to proxy for the calling parameter to the VM.
@@ -84,7 +84,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>not used in this impl : carries the appropriate user context
 		/// </summary>
-		private IInternalContextAdapter userContext = null;
+		private readonly IInternalContextAdapter userContext = null;
 
 		/// <summary>number of children in our tree if a reference
 		/// </summary>
@@ -108,7 +108,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>in the event our type is switched - we don't care really what it is
 		/// </summary>
-		private const int GENERALSTATIC = - 1;
+		private const int GENERALSTATIC = -1;
 
 		private readonly IRuntimeServices runtimeServices = null;
 
@@ -153,7 +153,7 @@ namespace NVelocity.Runtime.Directive
 				if (numTreeChildren == 0)
 				{
 					// do this properly and use the Reference node
-					singleLevelRef = ((ASTReference) nodeTree).RootString;
+					singleLevelRef = ((ASTReference)nodeTree).RootString;
 				}
 			}
 		}
@@ -208,23 +208,23 @@ namespace NVelocity.Runtime.Directive
 		public Object setObject(IInternalContextAdapter context, Object o)
 		{
 			/*
-	    *  if we are a reference, we could be updating a property
-	    */
+			*  if we are a reference, we could be updating a property
+			*/
 
 			if (type == ParserTreeConstants.REFERENCE)
 			{
 				if (numTreeChildren > 0)
 				{
 					/*
-		    *  we are a property, and being updated such as
-		    *  #foo( $bar.BangStart) 
-		    */
+				*  we are a property, and being updated such as
+				*  #foo( $bar.BangStart) 
+				*/
 
 					try
 					{
-						((ASTReference) nodeTree).SetValue(context, o);
+						((ASTReference)nodeTree).SetValue(context, o);
 					}
-					catch(MethodInvocationException methodInvocationException)
+					catch (MethodInvocationException methodInvocationException)
 					{
 						runtimeServices.Error(
 							string.Format("VMProxyArg.getObject() : method invocation error setting value : {0}", methodInvocationException));
@@ -233,9 +233,9 @@ namespace NVelocity.Runtime.Directive
 				else
 				{
 					/*
-		    *  we are a 'single level' reference like $foo, so we can set
-		    *  out context directly
-		    */
+				*  we are a 'single level' reference like $foo, so we can set
+				*  out context directly
+				*/
 
 					context.Put(singleLevelRef, o);
 
@@ -256,7 +256,7 @@ namespace NVelocity.Runtime.Directive
 
 				runtimeServices.Error(
 					string.Format("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : {0} / {1}",
-					              contextReference, callerReference));
+												contextReference, callerReference));
 			}
 
 			return null;
@@ -286,8 +286,8 @@ namespace NVelocity.Runtime.Directive
 				if (type == ParserTreeConstants.REFERENCE)
 				{
 					/*
-		    *  two cases :  scalar reference ($foo) or multi-level ($foo.bar....)
-		    */
+				*  two cases :  scalar reference ($foo) or multi-level ($foo.bar....)
+				*/
 
 					if (numTreeChildren == 0)
 					{
@@ -333,17 +333,17 @@ namespace NVelocity.Runtime.Directive
 				else if (type == ParserTreeConstants.TEXT)
 				{
 					/*
-		    *  this really shouldn't happen.  text is just a throwaway arg for #foreach()
-		    */
+				*  this really shouldn't happen.  text is just a throwaway arg for #foreach()
+				*/
 
 					try
 					{
-						StringWriter writer = new StringWriter();
+						StringWriter writer = new();
 						nodeTree.Render(context, writer);
 
 						retObject = writer;
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						runtimeServices.Error(string.Format("VMProxyArg.getObject() : error rendering reference : {0}", e));
 					}
@@ -360,7 +360,7 @@ namespace NVelocity.Runtime.Directive
 
 				return retObject;
 			}
-			catch(MethodInvocationException mie)
+			catch (MethodInvocationException mie)
 			{
 				/*
 		*  not ideal, but otherwise we propagate out to the 
@@ -381,7 +381,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private void setup()
 		{
-			switch(type)
+			switch (type)
 			{
 				case ParserTreeConstants.INTEGER_RANGE:
 				case ParserTreeConstants.REFERENCE:
@@ -398,11 +398,11 @@ namespace NVelocity.Runtime.Directive
 						try
 						{
 							/*
-			    *  fakie : wrap in  directive to get the parser to treat our args as args
-			    *   it doesn't matter that #include() can't take all these types, because we 
-			    *   just want the parser to consider our arg as a Directive/VM arg rather than
-			    *   as if inline in schmoo
-			    */
+					*  fakie : wrap in  directive to get the parser to treat our args as args
+					*   it doesn't matter that #include() can't take all these types, because we 
+					*   just want the parser to consider our arg as a Directive/VM arg rather than
+					*   as if inline in schmoo
+					*/
 
 							String buff = string.Format("#include({0} ) ", callerReference);
 
@@ -414,14 +414,14 @@ namespace NVelocity.Runtime.Directive
 							nodeTree = runtimeServices.Parse(br, string.Format("VMProxyArg:{0}", callerReference), true);
 
 							/*
-			    *  now, our tree really is the first DirectiveArg(), and only one
-			    */
+					*  now, our tree really is the first DirectiveArg(), and only one
+					*/
 
-							nodeTree = (SimpleNode) nodeTree.GetChild(0).GetChild(0);
+							nodeTree = (SimpleNode)nodeTree.GetChild(0).GetChild(0);
 
 							/*
-			    * sanity check
-			    */
+					* sanity check
+					*/
 
 							if (nodeTree != null && nodeTree.Type != type)
 							{
@@ -429,12 +429,12 @@ namespace NVelocity.Runtime.Directive
 							}
 
 							/*
-			    *  init.  We can do this as they are only references
-			    */
+					*  init.  We can do this as they are only references
+					*/
 
 							nodeTree.Init(null, runtimeServices);
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
 							runtimeServices.Error(string.Format("VMProxyArg.setup() : exception {0} : {1}", callerReference, e));
 						}
@@ -518,9 +518,9 @@ namespace NVelocity.Runtime.Directive
 				if (numTreeChildren == 0)
 				{
 					/*
-		    *  use the reference node to do this...
-		    */
-					singleLevelRef = ((ASTReference) nodeTree).RootString;
+				*  use the reference node to do this...
+				*/
+					singleLevelRef = ((ASTReference)nodeTree).RootString;
 				}
 			}
 		}

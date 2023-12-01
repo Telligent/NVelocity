@@ -14,12 +14,12 @@
 // 
 namespace NVelocity.Test
 {
+	using App;
+	using NUnit.Framework;
 	using System;
 	using System.Globalization;
 	using System.IO;
 	using System.Threading;
-	using App;
-	using NUnit.Framework;
 
 	[TestFixture]
 	public class AmbiguousExceptionTestCase
@@ -34,21 +34,21 @@ namespace NVelocity.Test
 		[Test]
 		public void DecimalToString()
 		{
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
-			VelocityContext c = new VelocityContext();
-			c.Put("x", (decimal) 1.2);
+			VelocityContext c = new();
+			c.Put("x", (decimal)1.2);
 			c.Put("model", new ModelClass());
 
-			VelocityEngine velocityEngine = new VelocityEngine();
+			VelocityEngine velocityEngine = new();
 			velocityEngine.Init();
 
 			bool ok = velocityEngine.Evaluate(c, sw,
-			                                  "ContextTest.CaseInsensitive",
-			                                  "$model.Amount.ToString() \r\n" +
-			                                  "$model.Amount.ToString('#0.00') \r\n" +
-			                                  "$x.ToString() \r\n" +
-			                                  "$x.ToString('#0.00') \r\n");
+																				"ContextTest.CaseInsensitive",
+																				"$model.Amount.ToString() \r\n" +
+																				"$model.Amount.ToString('#0.00') \r\n" +
+																				"$x.ToString() \r\n" +
+																				"$x.ToString('#0.00') \r\n");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("1.2 \r\n1.20 \r\n1.2 \r\n1.20 \r\n", sw.ToString());
@@ -57,17 +57,17 @@ namespace NVelocity.Test
 		[Test]
 		public void DuplicateMethodNames()
 		{
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
-			VelocityContext c = new VelocityContext();
+			VelocityContext c = new();
 			c.Put("model", new ModelClass());
 
-			VelocityEngine velocityEngine = new VelocityEngine();
+			VelocityEngine velocityEngine = new();
 			velocityEngine.Init();
 
 			bool ok = velocityEngine.Evaluate(c, sw,
-			                                  "ContextTest.CaseInsensitive",
-			                                  "$model.DoSome('y') $model.DoSome(2) ");
+																				"ContextTest.CaseInsensitive",
+																				"$model.DoSome('y') $model.DoSome(2) ");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("x:y 4 ", sw.ToString());
@@ -83,7 +83,7 @@ namespace NVelocity.Test
 
 	public class ModelClass : ISomething
 	{
-		private decimal amount = (decimal) 1.2;
+		private decimal amount = (decimal)1.2;
 
 		public decimal Amount
 		{

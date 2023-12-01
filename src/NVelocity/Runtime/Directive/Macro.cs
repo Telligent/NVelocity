@@ -14,13 +14,13 @@
 
 namespace NVelocity.Runtime.Directive
 {
+	using Context;
+	using NVelocity.Runtime.Parser.Node;
+	using Parser;
 	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Text;
-	using Context;
-	using NVelocity.Runtime.Parser.Node;
-	using Parser;
 
 	/// <summary>
 	/// Macro implements the macro definition directive of VTL.
@@ -98,9 +98,9 @@ namespace NVelocity.Runtime.Directive
 			IList macroArray = getASTAsStringArray(node.GetChild(numArgs - 1));
 
 			// make a big string out of our macro
-			StringBuilder temp = new StringBuilder();
+			StringBuilder temp = new();
 
-			for(int i = 0; i < macroArray.Count; i++)
+			for (int i = 0; i < macroArray.Count; i++)
 			{
 				temp.Append(macroArray[i]);
 			}
@@ -129,7 +129,7 @@ namespace NVelocity.Runtime.Directive
 			int i = 0;
 
 			//  eat the args
-			while(i < numArgs)
+			while (i < numArgs)
 			{
 				argArray[i] = node.GetChild(i).FirstToken.Image;
 
@@ -140,23 +140,23 @@ namespace NVelocity.Runtime.Directive
 				{
 					if (argArray[i].StartsWith("$"))
 					{
-						argArray[i] = argArray[i].Substring(1, (argArray[i].Length) - (1));
+						argArray[i] = argArray[i][1..];
 					}
 				}
 
 				i++;
 			}
 
-//			if (debugMode)
-//			{
-//				Console.Out.WriteLine("Macro.getArgArray() : #args = " + numArgs);
-//				Console.Out.Write(argArray[0] + "(");
-//
-//				for (i = 1; i < numArgs; i++)
-//					Console.Out.Write(" " + argArray[i]);
-//
-//				Console.Out.WriteLine(" )");
-//			}
+			//			if (debugMode)
+			//			{
+			//				Console.Out.WriteLine("Macro.getArgArray() : #args = " + numArgs);
+			//				Console.Out.Write(argArray[0] + "(");
+			//
+			//				for (i = 1; i < numArgs; i++)
+			//					Console.Out.Write(" " + argArray[i]);
+			//
+			//				Console.Out.WriteLine(" )");
+			//			}
 
 			return argArray;
 		}
@@ -172,11 +172,11 @@ namespace NVelocity.Runtime.Directive
 
 			// now, run down the part of the tree bounded by
 			// our first and last tokens
-			ArrayList list = new ArrayList();
+			ArrayList list = new();
 
 			Token t = rootNode.FirstToken;
 
-			while(t != tLast)
+			while (t != tLast)
 			{
 				list.Add(NodeUtils.tokenLiteral(t));
 				t = t.Next;

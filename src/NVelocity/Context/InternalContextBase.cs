@@ -14,12 +14,12 @@
 
 namespace NVelocity.Context
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using NVelocity.App.Events;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.Specialized;
 
 	/// <summary>  class to encapsulate the 'stuff' for internal operation of velocity.
 	/// We use the context as a thread-safe storage : we take advantage of the
@@ -116,7 +116,7 @@ namespace NVelocity.Context
 
 		public IntrospectionCacheData ICacheGet(Object key)
 		{
-			return (IntrospectionCacheData) introspectionCache[key];
+			return (IntrospectionCacheData)introspectionCache[key];
 		}
 
 		public void ICachePut(Object key, IntrospectionCacheData o)

@@ -14,8 +14,8 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using NVelocity.Util.Introspection;
+	using System;
 
 	/// <summary>
 	/// Returned the value of object property when executed.

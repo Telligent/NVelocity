@@ -14,12 +14,12 @@
 
 namespace NVelocity.Runtime
 {
-	using System;
-	using System.IO;
 	using Commons.Collections;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util.Introspection;
 	using Resource;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// This is the Runtime system for Velocity. It is the
@@ -71,7 +71,7 @@ namespace NVelocity.Runtime
 	/// </version>
 	public class RuntimeSingleton
 	{
-		private static RuntimeInstance ri = new RuntimeInstance();
+		private static readonly RuntimeInstance ri = new();
 
 		/// <summary>
 		/// This is the primary initialization method in the Velocity
@@ -88,7 +88,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public static void Init()
 		{
-			lock(typeof(RuntimeSingleton))
+			lock (typeof(RuntimeSingleton))
 			{
 				ri.Init();
 			}

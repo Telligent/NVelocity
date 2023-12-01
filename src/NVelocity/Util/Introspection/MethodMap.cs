@@ -55,7 +55,7 @@ namespace NVelocity.Util.Introspection
 		/// <returns> List list of methods</returns>
 		public IList Get(String key)
 		{
-			return (IList) methodByNameMap[key];
+			return (IList)methodByNameMap[key];
 		}
 
 		/// <summary>
@@ -93,13 +93,13 @@ namespace NVelocity.Util.Introspection
 			int l = args.Length;
 			Type[] classes = new Type[l];
 
-			for(int i = 0; i < l; ++i)
+			for (int i = 0; i < l; ++i)
 			{
 				Object arg = args[i];
 
 				// if we are careful down below, a null argument goes in there
 				// so we can know that the null was passed to the method
-				classes[i] = arg == null ? null : arg.GetType();
+				classes[i] = arg?.GetType();
 			}
 
 			return GetMostSpecific(methodList, classes);
@@ -116,22 +116,22 @@ namespace NVelocity.Util.Introspection
 
 			if (applicables.Count == 1)
 			{
-				return (MethodInfo) applicables[0];
+				return (MethodInfo)applicables[0];
 			}
 
 			// This list will contain the maximally specific methods. Hopefully at
 			// the end of the below loop, the list will contain exactly one method,
 			// (the most specific method) otherwise we have ambiguity.
-			ArrayList maximals = new ArrayList();
+			ArrayList maximals = new();
 
-			foreach(MethodInfo app in applicables)
+			foreach (MethodInfo app in applicables)
 			{
 				ParameterInfo[] appArgs = app.GetParameters();
 				bool lessSpecific = false;
 
-				foreach(MethodInfo max in maximals.ToArray())
+				foreach (MethodInfo max in maximals.ToArray())
 				{
-					switch(IsMoreSpecific(appArgs, max.GetParameters()))
+					switch (IsMoreSpecific(appArgs, max.GetParameters()))
 					{
 						case MORE_SPECIFIC:
 							{
@@ -164,9 +164,9 @@ namespace NVelocity.Util.Introspection
 			// the methods found for interfaces
 			if (maximals.Count > 1)
 			{
-				ArrayList newList = new ArrayList();
+				ArrayList newList = new();
 
-				foreach(MethodInfo method in maximals)
+				foreach (MethodInfo method in maximals)
 				{
 					if (method.DeclaringType.IsInterface) continue;
 
@@ -182,7 +182,7 @@ namespace NVelocity.Util.Introspection
 				throw new AmbiguousException(CreateDescriptiveAmbiguousErrorMessage(maximals, classes));
 			}
 
-			return (MethodInfo) maximals[0];
+			return (MethodInfo)maximals[0];
 		}
 
 		/// <summary> Determines which method signature (represented by a class array) is more
@@ -201,7 +201,7 @@ namespace NVelocity.Util.Introspection
 			bool c1MoreSpecific = false;
 			bool c2MoreSpecific = false;
 
-			for(int i = 0; i < c1.Length; ++i)
+			for (int i = 0; i < c1.Length; ++i)
 			{
 				if (c1[i] != c2[i])
 				{
@@ -247,9 +247,9 @@ namespace NVelocity.Util.Introspection
 		/// TODO: this used to return a LinkedList -- changed to an ArrayList for now until I can figure out what is really needed
 		private static ArrayList GetApplicables(IList methods, Type[] classes)
 		{
-			ArrayList list = new ArrayList();
+			ArrayList list = new();
 
-			foreach(MethodInfo method in methods)
+			foreach (MethodInfo method in methods)
 			{
 				if (IsApplicable(method, classes))
 					list.Add(method);
@@ -267,7 +267,7 @@ namespace NVelocity.Util.Introspection
 
 			int indexOfParamArray = Int32.MaxValue;
 
-			for(int i = 0; i < methodArgs.Length; ++i)
+			for (int i = 0; i < methodArgs.Length; ++i)
 			{
 				ParameterInfo paramInfo = methodArgs[i];
 
@@ -283,7 +283,7 @@ namespace NVelocity.Util.Introspection
 				return false;
 			}
 
-			for(int i = 0; i < classes.Length; ++i)
+			for (int i = 0; i < classes.Length; ++i)
 			{
 				ParameterInfo paramInfo;
 				if (i < indexOfParamArray)
@@ -363,18 +363,18 @@ namespace NVelocity.Util.Introspection
 					return true;
 				}
 				if (underlyingType == typeof(Int32) &&
-				    (actual == typeof(Int32) || actual == typeof(Int16) || actual == typeof(Byte)))
+						(actual == typeof(Int32) || actual == typeof(Int16) || actual == typeof(Byte)))
 					return true;
 				if (underlyingType == typeof(Int64) &&
-				    (actual == typeof(Int64) || actual == typeof(Int32) || actual == typeof(Int16) || actual == typeof(Byte)))
+						(actual == typeof(Int64) || actual == typeof(Int32) || actual == typeof(Int16) || actual == typeof(Byte)))
 					return true;
 				if (underlyingType == typeof(Single) &&
-				    (actual == typeof(Single) || actual == typeof(Int64) || actual == typeof(Int32) || actual == typeof(Int16) ||
-				     actual == typeof(Byte)))
+						(actual == typeof(Single) || actual == typeof(Int64) || actual == typeof(Int32) || actual == typeof(Int16) ||
+							actual == typeof(Byte)))
 					return true;
 				if (underlyingType == typeof(Double) &&
-				    (actual == typeof(Double) || actual == typeof(Single) || actual == typeof(Int64) || actual == typeof(Int32) ||
-				     actual == typeof(Int16) || actual == typeof(Byte)))
+						(actual == typeof(Double) || actual == typeof(Single) || actual == typeof(Int64) || actual == typeof(Int32) ||
+							actual == typeof(Int16) || actual == typeof(Byte)))
 					return true;
 			}
 
@@ -417,20 +417,20 @@ namespace NVelocity.Util.Introspection
 					return true;
 				}
 				if (formal.ParameterType == typeof(Int32) &&
-				    (actual.ParameterType == typeof(Int16) || actual.ParameterType == typeof(Byte)))
+						(actual.ParameterType == typeof(Int16) || actual.ParameterType == typeof(Byte)))
 					return true;
 				if (formal.ParameterType == typeof(Int64) &&
-				    (actual.ParameterType == typeof(Int32) || actual.ParameterType == typeof(Int16) ||
-				     actual.ParameterType == typeof(Byte)))
+						(actual.ParameterType == typeof(Int32) || actual.ParameterType == typeof(Int16) ||
+							actual.ParameterType == typeof(Byte)))
 					return true;
 				if (formal.ParameterType == typeof(Single) &&
-				    (actual.ParameterType == typeof(Int64) || actual.ParameterType == typeof(Int32) ||
-				     actual.ParameterType == typeof(Int16) || actual.ParameterType == typeof(Byte)))
+						(actual.ParameterType == typeof(Int64) || actual.ParameterType == typeof(Int32) ||
+							actual.ParameterType == typeof(Int16) || actual.ParameterType == typeof(Byte)))
 					return true;
 				if (formal.ParameterType == typeof(Double) &&
-				    (actual.ParameterType == typeof(Single) || actual.ParameterType == typeof(Int64) ||
-				     actual.ParameterType == typeof(Int32) || actual.ParameterType == typeof(Int16) ||
-				     actual.ParameterType == typeof(Byte)))
+						(actual.ParameterType == typeof(Single) || actual.ParameterType == typeof(Int64) ||
+							actual.ParameterType == typeof(Int32) || actual.ParameterType == typeof(Int16) ||
+							actual.ParameterType == typeof(Byte)))
 					return true;
 			}
 
@@ -439,11 +439,11 @@ namespace NVelocity.Util.Introspection
 
 		private static string CreateDescriptiveAmbiguousErrorMessage(IList list, Type[] classes)
 		{
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new();
 
 			sb.Append("There are two or more methods that can be bound given the parameters types (");
 
-			foreach(Type paramType in classes)
+			foreach (Type paramType in classes)
 			{
 				if (paramType == null)
 				{
@@ -454,15 +454,15 @@ namespace NVelocity.Util.Introspection
 					sb.Append(paramType.Name);
 				}
 
-				sb.Append(" ");
+				sb.Append(' ');
 			}
 
 			sb.Append(") Methods: ");
 
-			foreach(MethodInfo method in list)
+			foreach (MethodInfo method in list)
 			{
 				sb.AppendFormat(" {0}.{1}({2}) ", method.DeclaringType.Name, method.Name,
-				                CreateParametersDescription(method.GetParameters()));
+												CreateParametersDescription(method.GetParameters()));
 			}
 
 			return sb.ToString();
@@ -472,7 +472,7 @@ namespace NVelocity.Util.Introspection
 		{
 			String message = String.Empty;
 
-			foreach(ParameterInfo param in parameters)
+			foreach (ParameterInfo param in parameters)
 			{
 				if (message != String.Empty)
 				{

@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using Context;
+	using System;
 
 	/// <summary>
 	/// Please look at the Parser.jjt file which is
@@ -53,7 +53,7 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				runtimeServices.Error(
 					string.Format("{0} side of '&&' operation is null. Operation not possible. {1} [line {2}, column {3}]",
-					              (left == null ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
+												(left == null ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
 				return false;
 			}
 

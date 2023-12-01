@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NVelocity.Util.Introspection
 {
 	public class DynamicClassMap : IClassMap
 	{
-		ClassMap _classMap;
-		Type _type;
+		readonly ClassMap _classMap;
+		readonly Type _type;
 
 		public DynamicClassMap(Type t)
 		{
@@ -41,8 +39,8 @@ namespace NVelocity.Util.Introspection
 
 	public class DynamicMethodInfo : System.Reflection.MethodInfo
 	{
-		string _name;
-		Type _type;
+		readonly string _name;
+		readonly Type _type;
 
 		public DynamicMethodInfo(Type type, string name)
 			: base()
@@ -60,12 +58,10 @@ namespace NVelocity.Util.Introspection
 		{
 			// only DynamicObjects support methods
 
-			var d = obj as System.Dynamic.DynamicObject;
-			if (d == null)
+			if (obj is not System.Dynamic.DynamicObject d)
 				return null;
 
-			object result;
-			if (!d.TryInvokeMember(new DynamicInvokeMemberBinder(_name, new System.Dynamic.CallInfo(parameters == null ? parameters.Length : 0, new string[0])), parameters, out result))
+			if (!d.TryInvokeMember(new DynamicInvokeMemberBinder(_name, new System.Dynamic.CallInfo(parameters == null ? parameters.Length : 0, Array.Empty<string>())), parameters, out object result))
 				return null;
 
 			return result;
@@ -88,12 +84,12 @@ namespace NVelocity.Util.Introspection
 
 		public override System.Reflection.MethodImplAttributes GetMethodImplementationFlags()
 		{
-			return  System.Reflection.MethodImplAttributes.Managed;
+			return System.Reflection.MethodImplAttributes.Managed;
 		}
 
 		public override System.Reflection.ParameterInfo[] GetParameters()
 		{
-			return new System.Reflection.ParameterInfo[0];
+			return Array.Empty<System.Reflection.ParameterInfo>();
 		}
 
 		public override RuntimeMethodHandle MethodHandle
@@ -108,12 +104,12 @@ namespace NVelocity.Util.Introspection
 
 		public override object[] GetCustomAttributes(Type attributeType, bool inherit)
 		{
-			return new object[0];
+			return Array.Empty<object>();
 		}
 
 		public override object[] GetCustomAttributes(bool inherit)
 		{
-			return new object[0];
+			return Array.Empty<object>();
 		}
 
 		public override bool IsDefined(Type attributeType, bool inherit)
@@ -134,8 +130,8 @@ namespace NVelocity.Util.Introspection
 
 	public class DynamicPropertyInfo : System.Reflection.PropertyInfo
 	{
-		string _name;
-		Type _type;
+		readonly string _name;
+		readonly Type _type;
 
 		public DynamicPropertyInfo(Type type, string name)
 			: base()
@@ -166,7 +162,7 @@ namespace NVelocity.Util.Introspection
 
 		public override System.Reflection.MethodInfo[] GetAccessors(bool nonPublic)
 		{
-			return new System.Reflection.MethodInfo[0];
+			return Array.Empty<System.Reflection.MethodInfo>();
 		}
 
 		public override System.Reflection.MethodInfo GetGetMethod(bool nonPublic)
@@ -176,7 +172,7 @@ namespace NVelocity.Util.Introspection
 
 		public override System.Reflection.ParameterInfo[] GetIndexParameters()
 		{
-			return new System.Reflection.ParameterInfo[0];
+			return Array.Empty<System.Reflection.ParameterInfo>();
 		}
 
 		public override System.Reflection.MethodInfo GetSetMethod(bool nonPublic)
@@ -186,21 +182,17 @@ namespace NVelocity.Util.Introspection
 
 		public override object GetValue(object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object[] index, System.Globalization.CultureInfo culture)
 		{
-			var d = obj as System.Dynamic.DynamicObject;
-			if (d != null)
+			if (obj is System.Dynamic.DynamicObject d)
 			{
-				object result;
-				if (!d.TryGetMember(new DynamicGetMemberBinder(_name), out result))
+				if (!d.TryGetMember(new DynamicGetMemberBinder(_name), out object result))
 					return null;
 				else
 					return result;
 			}
 
-			var e = obj as System.Dynamic.ExpandoObject;
-			if (e != null)
+			if (obj is System.Dynamic.ExpandoObject e)
 			{
-				object result;
-				if (((IDictionary<string, object>)e).TryGetValue(_name, out result))
+				if (((IDictionary<string, object>)e).TryGetValue(_name, out object result))
 					return result;
 				else
 					return null;
@@ -216,8 +208,7 @@ namespace NVelocity.Util.Introspection
 
 		public override void SetValue(object obj, object value, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object[] index, System.Globalization.CultureInfo culture)
 		{
-			var d = obj as System.Dynamic.DynamicObject;
-			if (d == null)
+			if (obj is not System.Dynamic.DynamicObject d)
 				return;
 
 			d.TrySetMember(new DynamicSetMemberBinder(_name), value);
@@ -230,12 +221,12 @@ namespace NVelocity.Util.Introspection
 
 		public override object[] GetCustomAttributes(Type attributeType, bool inherit)
 		{
-			return new object[0];
+			return Array.Empty<object>();
 		}
 
 		public override object[] GetCustomAttributes(bool inherit)
 		{
-			return new object[0];
+			return Array.Empty<object>();
 		}
 
 		public override bool IsDefined(Type attributeType, bool inherit)

@@ -16,8 +16,6 @@ namespace NVelocity
 {
 	using System;
 	using System.Collections;
-	using System.Data;
-	using System.Data.OleDb;
 	using System.Globalization;
 	using System.IO;
 	using System.Reflection;
@@ -27,8 +25,8 @@ namespace NVelocity
 		public static sbyte[] ToSByteArray(byte[] byteArray)
 		{
 			sbyte[] sbyteArray = new sbyte[byteArray.Length];
-			for(int index = 0; index < byteArray.Length; index++)
-				sbyteArray[index] = (sbyte) byteArray[index];
+			for (int index = 0; index < byteArray.Length; index++)
+				sbyteArray[index] = (sbyte)byteArray[index];
 			return sbyteArray;
 		}
 
@@ -37,8 +35,8 @@ namespace NVelocity
 		public static byte[] ToByteArray(sbyte[] sbyteArray)
 		{
 			byte[] byteArray = new byte[sbyteArray.Length];
-			for(int index = 0; index < sbyteArray.Length; index++)
-				byteArray[index] = (byte) sbyteArray[index];
+			for (int index = 0; index < sbyteArray.Length; index++)
+				byteArray[index] = (byte)sbyteArray[index];
 			return byteArray;
 		}
 
@@ -74,7 +72,7 @@ namespace NVelocity
 		public class TextNumberFormat
 		{
 			// Declaration of fields
-			private NumberFormatInfo numberFormat;
+			private readonly NumberFormatInfo numberFormat;
 
 			private enum formatTypes
 			{
@@ -82,74 +80,74 @@ namespace NVelocity
 				Number,
 				Currency,
 				Percent
-			} ;
+			};
 
-			private int numberFormatType;
+			private readonly int numberFormatType;
 			private bool groupingActivated;
-			private string separator;
+			private readonly string separator;
 			private int digits;
 
 			// CONSTRUCTORS
 			public TextNumberFormat()
 			{
 				numberFormat = new NumberFormatInfo();
-				numberFormatType = (int) formatTypes.General;
+				numberFormatType = (int)formatTypes.General;
 				groupingActivated = true;
-				separator = GetSeparator((int) formatTypes.General);
+				separator = GetSeparator((int)formatTypes.General);
 				digits = 3;
 			}
 
 			private TextNumberFormat(formatTypes theType, int digits)
 			{
 				numberFormat = NumberFormatInfo.CurrentInfo;
-				numberFormatType = (int) theType;
+				numberFormatType = (int)theType;
 				groupingActivated = true;
-				separator = GetSeparator((int) theType);
+				separator = GetSeparator((int)theType);
 				this.digits = digits;
 			}
 
 			private TextNumberFormat(formatTypes theType, CultureInfo cultureNumberFormat, int digits)
 			{
 				numberFormat = cultureNumberFormat.NumberFormat;
-				numberFormatType = (int) theType;
+				numberFormatType = (int)theType;
 				groupingActivated = true;
-				separator = GetSeparator((int) theType);
+				separator = GetSeparator((int)theType);
 				this.digits = digits;
 			}
 
 			public static TextNumberFormat GetTextNumberInstance()
 			{
-				TextNumberFormat instance = new TextNumberFormat(formatTypes.Number, 3);
+				TextNumberFormat instance = new(formatTypes.Number, 3);
 				return instance;
 			}
 
 			public static TextNumberFormat GetTextNumberCurrencyInstance()
 			{
-				TextNumberFormat instance = new TextNumberFormat(formatTypes.Currency, 3);
+				TextNumberFormat instance = new(formatTypes.Currency, 3);
 				return instance;
 			}
 
 			public static TextNumberFormat GetTextNumberPercentInstance()
 			{
-				TextNumberFormat instance = new TextNumberFormat(formatTypes.Percent, 3);
+				TextNumberFormat instance = new(formatTypes.Percent, 3);
 				return instance;
 			}
 
 			public static TextNumberFormat GetTextNumberInstance(CultureInfo culture)
 			{
-				TextNumberFormat instance = new TextNumberFormat(formatTypes.Number, culture, 3);
+				TextNumberFormat instance = new(formatTypes.Number, culture, 3);
 				return instance;
 			}
 
 			public static TextNumberFormat GetTextNumberCurrencyInstance(CultureInfo culture)
 			{
-				TextNumberFormat instance = new TextNumberFormat(formatTypes.Currency, culture, 3);
+				TextNumberFormat instance = new(formatTypes.Currency, culture, 3);
 				return instance;
 			}
 
 			public static TextNumberFormat GetTextNumberPercentInstance(CultureInfo culture)
 			{
-				TextNumberFormat instance = new TextNumberFormat(formatTypes.Percent, culture, 3);
+				TextNumberFormat instance = new(formatTypes.Percent, culture, 3);
 				return instance;
 			}
 
@@ -157,7 +155,7 @@ namespace NVelocity
 
 			public override bool Equals(Object textNumberObject)
 			{
-				return Equals((Object) this, textNumberObject);
+				return Equals((Object)this, textNumberObject);
 			}
 
 			public string FormatDouble(double number)
@@ -197,21 +195,21 @@ namespace NVelocity
 			private string GetCurrentFormatString()
 			{
 				string currentFormatString = "n"; //Default value
-				switch(numberFormatType)
+				switch (numberFormatType)
 				{
-					case (int) formatTypes.Currency:
+					case (int)formatTypes.Currency:
 						currentFormatString = "c";
 						break;
 
-					case (int) formatTypes.General:
+					case (int)formatTypes.General:
 						currentFormatString = string.Format("n{0}", numberFormat.NumberDecimalDigits);
 						break;
 
-					case (int) formatTypes.Number:
+					case (int)formatTypes.Number:
 						currentFormatString = string.Format("n{0}", numberFormat.NumberDecimalDigits);
 						break;
 
-					case (int) formatTypes.Percent:
+					case (int)formatTypes.Percent:
 						currentFormatString = "p";
 						break;
 				}
@@ -222,21 +220,21 @@ namespace NVelocity
 			{
 				string separatorItem = " "; //Default Separator
 
-				switch(numberFormatType)
+				switch (numberFormatType)
 				{
-					case (int) formatTypes.Currency:
+					case (int)formatTypes.Currency:
 						separatorItem = numberFormat.CurrencyGroupSeparator;
 						break;
 
-					case (int) formatTypes.General:
+					case (int)formatTypes.General:
 						separatorItem = numberFormat.NumberGroupSeparator;
 						break;
 
-					case (int) formatTypes.Number:
+					case (int)formatTypes.Number:
 						separatorItem = numberFormat.NumberGroupSeparator;
 						break;
 
-					case (int) formatTypes.Percent:
+					case (int)formatTypes.Percent:
 						separatorItem = numberFormat.PercentGroupSeparator;
 						break;
 				}
@@ -260,18 +258,20 @@ namespace NVelocity
 
 		public class DateTimeFormatManager
 		{
-			public static DateTimeFormatHashTable manager = new DateTimeFormatHashTable();
+			public static DateTimeFormatHashTable manager = new();
 
 			public class DateTimeFormatHashTable : Hashtable
 			{
 				public void SetDateFormatPattern(DateTimeFormatInfo format, String newPattern)
 				{
 					if (this[format] != null)
-						((DateTimeFormatProperties) this[format]).DateFormatPattern = newPattern;
+						((DateTimeFormatProperties)this[format]).DateFormatPattern = newPattern;
 					else
 					{
-						DateTimeFormatProperties tempProps = new DateTimeFormatProperties();
-						tempProps.DateFormatPattern = newPattern;
+						DateTimeFormatProperties tempProps = new()
+						{
+							DateFormatPattern = newPattern
+						};
 						Add(format, tempProps);
 					}
 				}
@@ -281,17 +281,19 @@ namespace NVelocity
 					if (this[format] == null)
 						return "d-MMM-yy";
 					else
-						return ((DateTimeFormatProperties) this[format]).DateFormatPattern;
+						return ((DateTimeFormatProperties)this[format]).DateFormatPattern;
 				}
 
 				public void SetTimeFormatPattern(DateTimeFormatInfo format, String newPattern)
 				{
 					if (this[format] != null)
-						((DateTimeFormatProperties) this[format]).TimeFormatPattern = newPattern;
+						((DateTimeFormatProperties)this[format]).TimeFormatPattern = newPattern;
 					else
 					{
-						DateTimeFormatProperties tempProps = new DateTimeFormatProperties();
-						tempProps.TimeFormatPattern = newPattern;
+						DateTimeFormatProperties tempProps = new()
+						{
+							TimeFormatPattern = newPattern
+						};
 						Add(format, tempProps);
 					}
 				}
@@ -301,7 +303,7 @@ namespace NVelocity
 					if (this[format] == null)
 						return "h:mm:ss tt";
 					else
-						return ((DateTimeFormatProperties) this[format]).TimeFormatPattern;
+						return ((DateTimeFormatProperties)this[format]).TimeFormatPattern;
 				}
 
 				private class DateTimeFormatProperties
@@ -327,7 +329,7 @@ namespace NVelocity
 		{
 			DateTimeFormatInfo format = culture.DateTimeFormat;
 
-			switch(timeStyle)
+			switch (timeStyle)
 			{
 				case -1:
 					DateTimeFormatManager.manager.SetTimeFormatPattern(format, string.Empty);
@@ -350,7 +352,7 @@ namespace NVelocity
 					break;
 			}
 
-			switch(dateStyle)
+			switch (dateStyle)
 			{
 				case -1:
 					DateTimeFormatManager.manager.SetDateFormatPattern(format, string.Empty);
@@ -394,10 +396,10 @@ namespace NVelocity
 			int countParams = firstConstructor.Length;
 
 			Type[] constructor = new Type[countParams];
-			for(int i = 0; i < countParams; i++)
+			for (int i = 0; i < countParams; i++)
 				constructor[i] = firstConstructor[i].ParameterType;
 
-			return classType.GetConstructor(constructor).Invoke(new Object[] {});
+			return classType.GetConstructor(constructor).Invoke(Array.Empty<object>());
 		}
 	}
 }

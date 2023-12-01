@@ -14,10 +14,10 @@
 
 namespace NVelocity.Runtime.Directive
 {
-	using System;
-	using System.IO;
 	using Context;
 	using NVelocity.Runtime.Parser.Node;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// Directive Types
@@ -45,9 +45,9 @@ namespace NVelocity.Runtime.Directive
 		{
 			runtimeServices = rs;
 
-//			int i, k = node.jjtGetNumChildren();
-//			for (i = 0; i < k; i++)
-//				node.jjtGetChild(i).init(context, rs);
+			//			int i, k = node.jjtGetNumChildren();
+			//			for (i = 0; i < k; i++)
+			//				node.jjtGetChild(i).init(context, rs);
 		}
 
 		public virtual bool SupportsNestedDirective(String name)

@@ -23,19 +23,19 @@ namespace NVelocity.Util
 	public sealed class SimplePool<T> where T : class
 	{
 		/*
-	     * Where the objects are held.
-	     */
-		private T[] pool;
+				* Where the objects are held.
+				*/
+		private readonly T[] pool;
 
 		/// <summary>  max amount of objects to be managed
 		/// set via CTOR
 		/// </summary>
-		private int maximum;
+		private readonly int maximum;
 
 		/// <summary>  index of previous to next
 		/// free slot
 		/// </summary>
-		private int current = - 1;
+		private int current = -1;
 
 		public SimplePool(int max)
 		{
@@ -48,9 +48,9 @@ namespace NVelocity.Util
 		/// </summary>
 		public void put(T o)
 		{
-			int idx = - 1;
+			int idx = -1;
 
-			lock(this)
+			lock (this)
 			{
 				if (current < maximum - 1)
 				{
@@ -69,7 +69,7 @@ namespace NVelocity.Util
 		/// </summary>
 		public Object get()
 		{
-			lock(this)
+			lock (this)
 			{
 				if (current >= 0)
 				{

@@ -14,11 +14,11 @@
 // 
 namespace NVelocity.Tests.Bugs
 {
-	using System.IO;
 	using App;
 	using Commons.Collections;
 	using NUnit.Framework;
 	using Runtime;
+	using System.IO;
 	using Test;
 
 	[SetUpFixture, Ignore("Won't fix.")]
@@ -29,17 +29,17 @@ namespace NVelocity.Tests.Bugs
 		{
 			var velocityEngine = new VelocityEngine();
 
-			ExtendedProperties extendedProperties = new ExtendedProperties();
+			ExtendedProperties extendedProperties = new();
 			extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
 			velocityEngine.Init(extendedProperties);
 
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new();
 
 			Template template = velocityEngine.GetTemplate(
 				GetFileName(null, "nv09", TemplateTest.TMPL_FILE_EXT));
 
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new();
 
 			template.Merge(context, writer);
 		}

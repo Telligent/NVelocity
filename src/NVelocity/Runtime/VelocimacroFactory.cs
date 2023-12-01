@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime
 {
+	using Directive;
 	using System;
 	using System.Collections;
-	using Directive;
 
 	/// <summary>  VelocimacroFactory.java
 	/// *
@@ -32,12 +32,12 @@ namespace NVelocity.Runtime
 	{
 		/// <summary>  runtime services for this instance
 		/// </summary>
-		private IRuntimeServices runtimeServices = null;
+		private readonly IRuntimeServices runtimeServices = null;
 
 		/// <summary>  VMManager : deal with namespace management
 		/// and actually keeps all the VM definitions
 		/// </summary>
-		private VelocimacroManager velocimacroManager = null;
+		private readonly VelocimacroManager velocimacroManager = null;
 
 		/// <summary>  determines if replacement of global VMs are allowed
 		/// controlled by  VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL
@@ -71,7 +71,7 @@ namespace NVelocity.Runtime
 		/// <summary>  map of the library Template objects
 		/// used for reload determination
 		/// </summary>
-		private Hashtable libModMap;
+		private readonly Hashtable libModMap;
 
 		/// <summary>  CTOR : requires a runtime services from now
 		/// on
@@ -98,8 +98,6 @@ namespace NVelocity.Runtime
 		{
 			set
 			{
-				bool b = addNewAllowed;
-
 				addNewAllowed = value;
 				// TODO: looks like original code must have returned the value that was replaced
 				//return b;
@@ -110,7 +108,6 @@ namespace NVelocity.Runtime
 		{
 			set
 			{
-				bool b = replaceAllowed;
 				replaceAllowed = value;
 				// TODO: looks like original code must have returned the value that was replaced
 				//return b;
@@ -137,9 +134,9 @@ namespace NVelocity.Runtime
 		public void InitVelocimacro()
 		{
 			/*
-	    *  maybe I'm just paranoid...
-	    */
-			lock(this)
+			*  maybe I'm just paranoid...
+			*/
+			lock (this)
 			{
 				/*
 		*   allow replacements while we add the libraries, if exist
@@ -166,17 +163,19 @@ namespace NVelocity.Runtime
 				{
 					if (libraryFiles is ArrayList)
 					{
-						macroLibVec = (ArrayList) libraryFiles;
+						macroLibVec = (ArrayList)libraryFiles;
 					}
 					else if (libraryFiles is String)
 					{
-						macroLibVec = new ArrayList();
-						macroLibVec.Add(libraryFiles);
+						macroLibVec = new ArrayList
+						{
+								libraryFiles
+						};
 					}
 
-					for(int i = 0; i < macroLibVec.Count; i++)
+					for (int i = 0; i < macroLibVec.Count; i++)
 					{
-						String lib = (String) macroLibVec[i];
+						String lib = (String)macroLibVec[i];
 
 						/*
 			* only if it's a non-empty string do we bother
@@ -184,9 +183,9 @@ namespace NVelocity.Runtime
 						if (lib != null && !lib.Equals(string.Empty))
 						{
 							/*
-			    *  let the VMManager know that the following is coming
-			    *  from libraries - need to know for auto-load
-			    */
+					*  let the VMManager know that the following is coming
+					*  from libraries - need to know for auto-load
+					*/
 							velocimacroManager.RegisterFromLib = true;
 
 							LogVMMessageInfo(string.Format("Velocimacro : adding VMs from VM library template : {0}", lib));
@@ -200,12 +199,14 @@ namespace NVelocity.Runtime
 				*  that the Template object won't change - currently
 				*  this is how the Resource manager works
 				*/
-								Twonk twonk = new Twonk(this);
-								twonk.template = template;
-								twonk.modificationTime = template.LastModified;
+								Twonk twonk = new(this)
+								{
+									template = template,
+									modificationTime = template.LastModified
+								};
 								libModMap[lib] = twonk;
 							}
-							catch(System.Exception e)
+							catch (System.Exception e)
 							{
 								LogVMMessageInfo(string.Format("Velocimacro : error using  VM library template {0} : {1}", lib, e));
 							}
@@ -323,11 +324,11 @@ namespace NVelocity.Runtime
 		public bool AddVelocimacro(String name, String macroBody, String[] argArray, String sourceTemplate)
 		{
 			/*
-	    * maybe we should throw an exception, maybe just tell 
-	    * the caller like this...
-	    * 
-	    * I hate this : maybe exceptions are in order here...
-	    */
+			* maybe we should throw an exception, maybe just tell 
+			* the caller like this...
+			* 
+			* I hate this : maybe exceptions are in order here...
+			*/
 			if (name == null || macroBody == null || argArray == null || sourceTemplate == null)
 			{
 				LogVMMessageWarn("Velocimacro : VM addition rejected : programmer error : arg null");
@@ -336,8 +337,8 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    *  see if the current ruleset allows this addition
-	    */
+			*  see if the current ruleset allows this addition
+			*/
 
 			if (!CanAddVelocimacro(name, sourceTemplate))
 			{
@@ -345,22 +346,22 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    *  seems like all is good.  Lets do it.
-	    */
-			lock(this)
+			*  seems like all is good.  Lets do it.
+			*/
+			lock (this)
 			{
 				velocimacroManager.AddVM(name, macroBody, argArray, sourceTemplate);
 			}
 
 			/*
-	    *  if we are to blather, blather...
-	    */
+			*  if we are to blather, blather...
+			*/
 			if (blather)
 			{
 				String s = string.Format("#{0}", argArray[0]);
 				s += "(";
 
-				for(int i = 1; i < argArray.Length; i++)
+				for (int i = 1; i < argArray.Length; i++)
 				{
 					s += " ";
 					s += argArray[i];
@@ -389,9 +390,9 @@ namespace NVelocity.Runtime
 		private bool CanAddVelocimacro(String name, String sourceTemplate)
 		{
 			/*
-	    *  short circuit and do it if autoloader is on, and the
-	    *  template is one of the library templates
-	    */
+			*  short circuit and do it if autoloader is on, and the
+			*  template is one of the library templates
+			*/
 
 			if (Autoload)
 			{
@@ -399,9 +400,9 @@ namespace NVelocity.Runtime
 		*  see if this is a library template
 		*/
 
-				for(int i = 0; i < macroLibVec.Count; i++)
+				for (int i = 0; i < macroLibVec.Count; i++)
 				{
-					String lib = (String) macroLibVec[i];
+					String lib = (String)macroLibVec[i];
 
 					if (lib.Equals(sourceTemplate))
 					{
@@ -412,10 +413,10 @@ namespace NVelocity.Runtime
 
 
 			/*
-	    * maybe the rules should be in manager?  I don't. It's to manage 
-	    * the namespace issues first, are we allowed to add VMs at all? 
-	    * This trumps all.
-	    */
+			* maybe the rules should be in manager?  I don't. It's to manage 
+			* the namespace issues first, are we allowed to add VMs at all? 
+			* This trumps all.
+			*/
 			if (!addNewAllowed)
 			{
 				LogVMMessageWarn(string.Format("Velocimacro : VM addition rejected : {0} : inline VMs not allowed.", name));
@@ -424,8 +425,8 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    *  are they local in scope?  Then it is ok to add.
-	    */
+			*  are they local in scope?  Then it is ok to add.
+			*/
 			if (!templateLocal)
 			{
 				/*
@@ -467,7 +468,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public bool IsVelocimacro(String vm, String sourceTemplate)
 		{
-			lock(this)
+			lock (this)
 			{
 				/*
 		* first we check the locals to see if we have 
@@ -487,7 +488,7 @@ namespace NVelocity.Runtime
 		{
 			VelocimacroProxy velocimacroProxy = null;
 
-			lock(this)
+			lock (this)
 			{
 				/*
 		*  don't ask - do
@@ -503,9 +504,9 @@ namespace NVelocity.Runtime
 				if (velocimacroProxy != null && Autoload)
 				{
 					/*
-		    *  see if this VM came from a library.  Need to pass sourceTemplate
-		    *  in the event namespaces are set, as it could be masked by local
-		    */
+				*  see if this VM came from a library.  Need to pass sourceTemplate
+				*  in the event namespaces are set, as it could be masked by local
+				*/
 
 					String lib = velocimacroManager.GetLibraryName(vmName, sourceTemplate);
 
@@ -514,10 +515,10 @@ namespace NVelocity.Runtime
 						try
 						{
 							/*
-			    *  get the template from our map
-			    */
+					*  get the template from our map
+					*/
 
-							Twonk twonk = (Twonk) libModMap[lib];
+							Twonk twonk = (Twonk)libModMap[lib];
 
 							if (twonk != null)
 							{
@@ -539,12 +540,12 @@ namespace NVelocity.Runtime
 									LogVMMessageInfo(string.Format("Velocimacro : autoload reload for VMs from VM library template : {0}", lib));
 
 									/*
-				    *  when there are VMs in a library that invoke each other,
-				    *  there are calls into getVelocimacro() from the init() 
-				    *  process of the VM directive.  To stop the infinite loop
-				    *  we save the current time reported by the resource loader
-				    *  and then be honest when the reload is complete
-				    */
+						*  when there are VMs in a library that invoke each other,
+						*  there are calls into getVelocimacro() from the init() 
+						*  process of the VM directive.  To stop the infinite loop
+						*  we save the current time reported by the resource loader
+						*  and then be honest when the reload is complete
+						*/
 
 									twonk.modificationTime = ft;
 
@@ -552,21 +553,21 @@ namespace NVelocity.Runtime
 										;
 
 									/*
-				    * and now we be honest
-				    */
+						* and now we be honest
+						*/
 
 									twonk.template = template;
 									twonk.modificationTime = template.LastModified;
 
 									/*
-				    *  note that we don't need to put this twonk back 
-				    *  into the map, as we can just use the same reference
-				    *  and this block is synchronized
-				    */
+						*  note that we don't need to put this twonk back 
+						*  into the map, as we can just use the same reference
+						*  and this block is synchronized
+						*/
 								}
 							}
 						}
-						catch(System.Exception e)
+						catch (System.Exception e)
 						{
 							LogVMMessageInfo(string.Format("Velocimacro : error using  VM library template {0} : {1}", lib, e));
 						}

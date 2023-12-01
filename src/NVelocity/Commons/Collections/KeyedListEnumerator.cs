@@ -20,7 +20,7 @@ namespace Commons.Collections
 	public class KeyedListEnumerator : IDictionaryEnumerator
 	{
 		private int index = -1;
-		private ArrayList objs;
+		private readonly ArrayList objs;
 
 		internal KeyedListEnumerator(ArrayList list)
 		{
@@ -55,7 +55,7 @@ namespace Commons.Collections
 
 		public DictionaryEntry Entry
 		{
-			get { return (DictionaryEntry) Current; }
+			get { return (DictionaryEntry)Current; }
 		}
 
 		public object Key

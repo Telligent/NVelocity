@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using NVelocity.Util.Introspection;
+	using System;
 
 	/// <summary>  Handles discovery and valuation of a
 	/// boolean object property, of the
@@ -30,7 +30,7 @@ namespace NVelocity.Runtime.Parser.Node
 				}
 
 				// now the convenience, flip the 1st character
-				propertyName = propertyName.Substring(0, 1).ToUpper() + propertyName.Substring(1);
+				propertyName = propertyName[..1].ToUpper() + propertyName[1..];
 				property = introspector.GetProperty(type, propertyName);
 				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
 				{
@@ -39,7 +39,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				property = null;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeLogger.Error(string.Format("PROGRAMMER ERROR : BooleanPropertyExecutor() : {0}", e));
 			}

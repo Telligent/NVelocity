@@ -14,11 +14,11 @@
 // 
 namespace NVelocity
 {
+	using App;
+	using NUnit.Framework;
 	using System;
 	using System.IO;
 	using System.Text;
-	using App;
-	using NUnit.Framework;
 
 	#region Ducks
 
@@ -38,7 +38,7 @@ namespace NVelocity
 		{
 			String arguments = string.Empty;
 
-			foreach(object arg in args)
+			foreach (object arg in args)
 			{
 				arguments += arg + " ";
 			}
@@ -49,7 +49,7 @@ namespace NVelocity
 
 	public class Duck2 : IDuck
 	{
-		private StringBuilder sb = new StringBuilder();
+		private readonly StringBuilder sb = new();
 
 		public void SetInvoke(string propName, object value)
 		{
@@ -83,7 +83,7 @@ namespace NVelocity
 	public class Test1
 	{
 		private string name;
-		private decimal amount = (decimal) 0.2200;
+		private readonly decimal amount = (decimal)0.2200;
 
 		public decimal Amount
 		{
@@ -124,7 +124,7 @@ namespace NVelocity
 
 			Evaluate("$duck2.style.border");
 
-			StringBuilder expected = new StringBuilder();
+			StringBuilder expected = new();
 			expected.Append("get invoked style" + Environment.NewLine);
 			expected.Append("get invoked border" + Environment.NewLine);
 
@@ -136,7 +136,7 @@ namespace NVelocity
 		{
 			Evaluate("#set($duck2.Name = 'aaa')");
 
-			StringBuilder expected = new StringBuilder();
+			StringBuilder expected = new();
 			expected.Append("set invoked Name aaa" + Environment.NewLine);
 
 			Assert.AreEqual(expected.ToString(), duck2.ToString());
@@ -150,7 +150,7 @@ namespace NVelocity
 			Assert.AreEqual("invoked some ", Evaluate("$duck1.some()"));
 			Evaluate("$duck2.set()");
 
-			StringBuilder expected = new StringBuilder();
+			StringBuilder expected = new();
 			expected.Append("invoked set_0" + Environment.NewLine);
 
 			Assert.AreEqual(expected.ToString(), duck2.ToString());
@@ -165,7 +165,7 @@ namespace NVelocity
 		[Test]
 		public void Quoting()
 		{
-			decimal amount = (decimal) 0.2200;
+			decimal amount = (decimal)0.2200;
 			Assert.AreEqual("invoked some '" + amount + "' ", Evaluate("$duck1.some($test.Amount.to_squote)"));
 			Assert.AreEqual("invoked some \"" + amount + "\" ", Evaluate("$duck1.some($test.Amount.to_quote)"));
 			Assert.AreEqual("invoked some \"" + amount + "\" ", Evaluate("$duck1.some($test.Amount.to_quote)"));
@@ -175,9 +175,9 @@ namespace NVelocity
 
 		private string Evaluate(string toEvaluate)
 		{
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
-			VelocityContext c = new VelocityContext();
+			VelocityContext c = new();
 
 			c.Put("duck1", duck1);
 			c.Put("duck2", duck2);

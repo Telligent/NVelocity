@@ -1,10 +1,10 @@
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
+	using Exception;
 	using System;
 	using System.IO;
 	using System.Text;
-	using Context;
-	using Exception;
 
 	public class SimpleNode : INode
 	{
@@ -129,7 +129,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			if (children != null)
 			{
-				for(int i = 0; i < children.Length; ++i)
+				for (int i = 0; i < children.Length; ++i)
 				{
 					children[i].Accept(visitor, data);
 				}
@@ -138,10 +138,10 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 		/* You can override these two methods in subclasses of SimpleNode to
-	    customize the way the node appears when the tree is dumped.  If
-	    your output uses more than one line you should override
-	    toString(String), otherwise overriding toString() is probably all
-	    you need to do. */
+			customize the way the node appears when the tree is dumped.  If
+			your output uses more than one line you should override
+			toString(String), otherwise overriding toString() is probably all
+			you need to do. */
 
 		//    public String toString()
 		// {
@@ -160,13 +160,10 @@ namespace NVelocity.Runtime.Parser.Node
 			Console.Out.WriteLine(ToString(prefix));
 			if (children != null)
 			{
-				for(int i = 0; i < children.Length; ++i)
+				for (int i = 0; i < children.Length; ++i)
 				{
-					SimpleNode n = (SimpleNode) children[i];
-					if (n != null)
-					{
-						n.Dump(string.Format("{0} ", prefix));
-					}
+					SimpleNode n = (SimpleNode)children[i];
+					n?.Dump(string.Format("{0} ", prefix));
 				}
 			}
 		}
@@ -178,9 +175,9 @@ namespace NVelocity.Runtime.Parser.Node
 			get
 			{
 				Token t = first;
-				StringBuilder sb = new StringBuilder(t.Image);
+				StringBuilder sb = new(t.Image);
 
-				while(t != last)
+				while (t != last)
 				{
 					t = t.Next;
 					sb.Append(t.Image);
@@ -193,20 +190,20 @@ namespace NVelocity.Runtime.Parser.Node
 		public virtual Object Init(IInternalContextAdapter context, Object data)
 		{
 			/*
-	    * hold onto the RuntimeServices
-	    */
+			* hold onto the RuntimeServices
+			*/
 
-			runtimeServices = (IRuntimeServices) data;
+			runtimeServices = (IRuntimeServices)data;
 
 			int i, k = ChildrenCount;
 
-			for(i = 0; i < k; i++)
+			for (i = 0; i < k; i++)
 			{
 				try
 				{
 					GetChild(i).Init(context, data);
 				}
-				catch(ReferenceException re)
+				catch (ReferenceException re)
 				{
 					runtimeServices.Error(re);
 				}
@@ -229,7 +226,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			int i, k = ChildrenCount;
 
-			for(i = 0; i < k; i++)
+			for (i = 0; i < k; i++)
 			{
 				GetChild(i).Render(context, writer);
 			}

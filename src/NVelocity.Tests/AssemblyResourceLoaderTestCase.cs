@@ -14,11 +14,11 @@
 // 
 namespace NVelocity
 {
-	using System.Collections.Generic;
 	using App;
 	using Commons.Collections;
 	using Exception;
 	using NUnit.Framework;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Test cases for the assembly resource loader.
@@ -65,7 +65,7 @@ namespace NVelocity
 
 		private static ExtendedProperties GetBasicProperties()
 		{
-			ExtendedProperties properties = new ExtendedProperties();
+			ExtendedProperties properties = new();
 			properties.AddProperty("resource.loader", "assembly");
 			properties.AddProperty("assembly.resource.loader.class",
 				"NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader, NVelocity");

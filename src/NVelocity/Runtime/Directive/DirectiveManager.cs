@@ -26,27 +26,21 @@ namespace NVelocity.Runtime.Directive
 		{
 			directiveTypeName = directiveTypeName.Replace(';', ',');
 
-			Type type = Type.GetType(directiveTypeName, false, false);
-
-			if (type == null)
-			{
-				throw new Exception(string.Format("Could not resolve type {0}", directiveTypeName));
-			}
-
-			Directive directive = (Directive) Activator.CreateInstance(type);
+			Type type = Type.GetType(directiveTypeName, false, false) ?? throw new Exception(string.Format("Could not resolve type {0}", directiveTypeName));
+			Directive directive = (Directive)Activator.CreateInstance(type);
 
 			name2Type[directive.Name] = type;
 		}
 
 		public virtual Directive Create(String name, Stack directiveStack)
 		{
-			Type type = (Type) name2Type[name];
+			Type type = (Type)name2Type[name];
 
 			if (type == null)
 			{
 				if (directiveStack.Count != 0)
 				{
-					Directive parent = (Directive) directiveStack.Peek();
+					Directive parent = (Directive)directiveStack.Peek();
 
 					if (parent.SupportsNestedDirective(name))
 					{
@@ -56,7 +50,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			else
 			{
-				return (Directive) Activator.CreateInstance(type);
+				return (Directive)Activator.CreateInstance(type);
 			}
 
 			return null;

@@ -19,9 +19,10 @@ namespace NVelocity.App.Events
 
 	public class ReferenceInsertionEventArgs : EventArgs
 	{
-		private Stack referenceStack;
-		private Object originalValue, newValue;
-		private String rootString;
+		private readonly Stack referenceStack;
+		private readonly object originalValue;
+		private object newValue;
+		private readonly String rootString;
 
 		public ReferenceInsertionEventArgs(Stack referenceStack, String rootString, Object value)
 		{
@@ -32,7 +33,7 @@ namespace NVelocity.App.Events
 
 		public Stack GetCopyOfReferenceStack()
 		{
-			return (Stack) referenceStack.Clone();
+			return (Stack)referenceStack.Clone();
 		}
 
 		public String RootString

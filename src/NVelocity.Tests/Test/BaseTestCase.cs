@@ -14,13 +14,12 @@
 // 
 namespace NVelocity.Test
 {
-	using System;
-	using System.Collections;
-	using System.Configuration;
-	using System.IO;
-	using System.Text;
 	using NUnit.Framework;
 	using Runtime;
+	using System;
+	using System.Collections;
+	using System.IO;
+	using System.Text;
 	using Util;
 
 	/// <summary>
@@ -90,7 +89,7 @@ namespace NVelocity.Test
 		/// </returns>
 		protected internal static String GetFileName(String dir, String baseDir, String ext)
 		{
-			StringBuilder buf = new StringBuilder();
+			StringBuilder buf = new();
 			if (dir != null)
 				buf.Append(dir).Append('/');
 			buf.Append(baseDir).Append('.').Append(ext);
@@ -103,7 +102,7 @@ namespace NVelocity.Test
 		/// </summary>
 		protected internal static void AssureResultsDirectoryExists(String resultsDirectory)
 		{
-			FileInfo dir = new FileInfo(resultsDirectory);
+			FileInfo dir = new(resultsDirectory);
 			bool tmpBool;
 			if (File.Exists(dir.FullName))
 				tmpBool = true;
@@ -117,7 +116,7 @@ namespace NVelocity.Test
 				{
 					Directory.CreateDirectory(dir.FullName);
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 					ok = false;
 				}
@@ -160,7 +159,7 @@ namespace NVelocity.Test
 		/// of the comparison file.
 		/// </returns>
 		protected internal virtual bool IsMatch(String resultsDir, String compareDir, String baseFileName, String resultExt,
-		                                        String compareExt)
+																						String compareExt)
 		{
 			Boolean SHOW_RESULTS = true;
 
@@ -179,7 +178,7 @@ namespace NVelocity.Test
 				IEnumerator cmpi = cmp.GetEnumerator();
 				IEnumerator resi = res.GetEnumerator();
 				Int32 line = 0;
-				while(cmpi.MoveNext() && resi.MoveNext())
+				while (cmpi.MoveNext() && resi.MoveNext())
 				{
 					line++;
 					if (!cmpi.Current.Equals(resi.Current))
@@ -204,9 +203,9 @@ namespace NVelocity.Test
 		/// </returns>
 		protected internal static String GetTestCaseName(String s)
 		{
-			StringBuilder name = new StringBuilder();
+			StringBuilder name = new();
 			name.Append(Char.ToUpper(s[0]));
-			name.Append(s.Substring(1, (s.Length) - (1)).ToLower());
+			name.Append(s[1..].ToLower());
 			return name.ToString();
 		}
 	}

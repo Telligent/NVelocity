@@ -14,13 +14,13 @@
 
 namespace NVelocity.Runtime.Directive
 {
-	using System;
-	using System.IO;
-	using System.Text;
 	using Context;
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Parser.Node;
 	using Resource;
+	using System;
+	using System.IO;
+	using System.Text;
 
 	/// <summary>
 	/// Pluggable directive that handles the #parse() statement in VTL.
@@ -73,8 +73,7 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// does it have a value?  If you have a null reference, then no.
-			Object value;
-			if (!AssertNodeHasValue(node, context, out value))
+			if (!AssertNodeHasValue(node, context, out object value))
 			{
 				return false;
 			}
@@ -92,17 +91,14 @@ namespace NVelocity.Runtime.Directive
 
 			if (current == null)
 			{
-				encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
+				encoding = (String)runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
 			else
 			{
 				encoding = current.Encoding;
 			}
-
 			// now use the Runtime resource loader to get the template
-			Template t = null;
-
-			t = GetTemplate(arg, encoding, context);
+			Template t = GetTemplate(arg, encoding, context);
 			if (t == null)
 			{
 				return false;
@@ -153,11 +149,11 @@ namespace NVelocity.Runtime.Directive
 
 			if (templateStack.Length >= runtimeServices.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
 			{
-				StringBuilder path = new StringBuilder();
+				StringBuilder path = new();
 
-				for(int i = 0; i < templateStack.Length; ++i)
+				for (int i = 0; i < templateStack.Length; ++i)
 				{
-					path.AppendFormat(" > {0}", (object[]) templateStack[i]);
+					path.AppendFormat(" > {0}", (object[])templateStack[i]);
 				}
 
 				runtimeServices.Error(string.Format("Max recursion depth reached ({0}) File stack:{1}", templateStack.Length, path));
@@ -174,25 +170,25 @@ namespace NVelocity.Runtime.Directive
 			{
 				result = runtimeServices.GetTemplate(arg, encoding);
 			}
-			catch(ResourceNotFoundException)
+			catch (ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
 				runtimeServices.Error(
 					string.Format("#parse(): cannot find template '{0}', called from template {1} at ({2}, {3})", arg,
-					              context.CurrentTemplateName, Line, Column));
+												context.CurrentTemplateName, Line, Column));
 				throw;
 			}
-			catch(ParseErrorException)
+			catch (ParseErrorException)
 			{
 				// the arg was found, but didn't parse - syntax error
 				// note it and throw
 				runtimeServices.Error(
 					string.Format("#parse(): syntax error in #parse()-ed template '{0}', called from template {1} at ({2}, {3})", arg,
-					              context.CurrentTemplateName, Line, Column));
+												context.CurrentTemplateName, Line, Column));
 
 				throw;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeServices.Error(string.Format("#parse() : arg = {0}.  Exception : {1}", arg, e));
 				result = null;
@@ -206,9 +202,9 @@ namespace NVelocity.Runtime.Directive
 			try
 			{
 				context.PushCurrentTemplateName(arg);
-				((SimpleNode) template.Data).Render(context, writer);
+				((SimpleNode)template.Data).Render(context, writer);
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				// if it's a MIE, it came from the render.... throw it...
 				// if (e is MethodInvocationException)

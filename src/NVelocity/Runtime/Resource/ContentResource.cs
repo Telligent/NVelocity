@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime.Resource
 {
+	using NVelocity.Exception;
 	using System;
 	using System.IO;
-	using NVelocity.Exception;
 
 	/// <summary> 
 	/// This class represent a general text resource that
@@ -53,7 +53,7 @@ namespace NVelocity.Runtime.Resource
 
 			try
 			{
-				StringWriter sw = new StringWriter();
+				StringWriter sw = new();
 
 				reader = new StreamReader(
 					new StreamReader(
@@ -64,7 +64,7 @@ namespace NVelocity.Runtime.Resource
 				int len = 0;
 
 				// -1 in java, 0 in .Net
-				while((len = reader.Read(buf, 0, 1024)) > 0)
+				while ((len = reader.Read(buf, 0, 1024)) > 0)
 				{
 					sw.Write(buf, 0, len);
 				}
@@ -73,13 +73,13 @@ namespace NVelocity.Runtime.Resource
 
 				return true;
 			}
-			catch(ResourceNotFoundException e)
+			catch (ResourceNotFoundException)
 			{
 				// Tell the ContentManager to continue to look through any
 				// remaining configured ResourceLoaders.
-				throw e;
+				throw;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeServices.Error(string.Format("Cannot process content resource : {0}", e.ToString()));
 				return false;
@@ -92,7 +92,7 @@ namespace NVelocity.Runtime.Resource
 					{
 						reader.Close();
 					}
-					catch(Exception)
+					catch (Exception)
 					{
 					}
 				}

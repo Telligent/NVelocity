@@ -15,7 +15,6 @@
 namespace NVelocity.Exception
 {
 	using System;
-	using System.Runtime.Serialization;
 
 	/// <summary>  
 	/// Application-level exception thrown when a resource of any type
@@ -33,10 +32,6 @@ namespace NVelocity.Exception
 		}
 
 		public ResourceNotFoundException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
-
-		public ResourceNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

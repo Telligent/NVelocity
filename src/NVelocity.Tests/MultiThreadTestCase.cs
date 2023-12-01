@@ -14,32 +14,33 @@
 // 
 namespace NVelocity
 {
+	using App;
+	using NUnit.Framework;
 	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Text.RegularExpressions;
 	using System.Threading;
-	using App;
-	using NUnit.Framework;
 	using Test;
 
 	[TestFixture, Explicit]
 	public class MultiThreadTestCase
 	{
-		private ManualResetEvent startEvent = new ManualResetEvent(false);
-		private ManualResetEvent stopEvent = new ManualResetEvent(false);
+		private readonly ManualResetEvent startEvent = new(false);
+		private readonly ManualResetEvent stopEvent = new(false);
 		private ArrayList items;
 		private VelocityEngine velocityEngine;
 
 		[SetUp]
 		public void Setup()
 		{
-			items = new ArrayList();
-
-			items.Add("a");
-			items.Add("b");
-			items.Add("c");
-			items.Add("d");
+			items = new ArrayList
+			{
+					"a",
+					"b",
+					"c",
+					"d"
+			};
 
 			velocityEngine = new VelocityEngine();
 			velocityEngine.Init();
@@ -52,7 +53,7 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for(int i = 0; i < threadCount; i++)
+			for (int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(ExecuteMethodUntilSignal3);
 				threads[i].Start();
@@ -72,7 +73,7 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for(int i = 0; i < threadCount; i++)
+			for (int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(ExecuteMethodUntilSignal1);
 				threads[i].Start();
@@ -92,7 +93,7 @@ namespace NVelocity
 
 			Thread[] threads = new Thread[threadCount];
 
-			for(int i = 0; i < threadCount; i++)
+			for (int i = 0; i < threadCount; i++)
 			{
 				threads[i] = new Thread(ExecuteMethodUntilSignal2);
 				threads[i].Start();
@@ -112,20 +113,20 @@ namespace NVelocity
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while(!stopEvent.WaitOne(0, false))
+			while (!stopEvent.WaitOne(0, false))
 			{
-				VelocityEngine velocityEngine = new VelocityEngine();
+				VelocityEngine velocityEngine = new();
 				velocityEngine.Init();
 
-				StringWriter sw = new StringWriter();
+				StringWriter sw = new();
 
-				VelocityContext c = new VelocityContext();
+				VelocityContext c = new();
 				c.Put("x", new Something());
 				c.Put("items", items);
 
 				bool ok = velocityEngine.Evaluate(c, sw,
-				                                  "ContextTest.CaseInsensitive",
-				                                  @"
+																					"ContextTest.CaseInsensitive",
+																					@"
 					#foreach( $item in $items )
 						$item,
 					#end
@@ -143,17 +144,17 @@ namespace NVelocity
 		{
 			startEvent.WaitOne(int.MaxValue, false);
 
-			while(!stopEvent.WaitOne(0, false))
+			while (!stopEvent.WaitOne(0, false))
 			{
-				StringWriter sw = new StringWriter();
+				StringWriter sw = new();
 
-				VelocityContext c = new VelocityContext();
+				VelocityContext c = new();
 				c.Put("x", new Something());
 				c.Put("items", items);
 
 				bool ok = velocityEngine.Evaluate(c, sw,
-				                                  "ContextTest.CaseInsensitive",
-				                                  @"
+																					"ContextTest.CaseInsensitive",
+																					@"
 					#foreach($item in $items)
 						$item,
 					#end
@@ -172,22 +173,22 @@ namespace NVelocity
 
 			try
 			{
-				while(!stopEvent.WaitOne(0, false))
+				while (!stopEvent.WaitOne(0, false))
 				{
-					StringWriter sw = new StringWriter();
+					StringWriter sw = new();
 
-					VelocityContext c = new VelocityContext();
+					VelocityContext c = new();
 					c.Put("x", new Urlhelper());
 
 					bool ok = velocityEngine.Evaluate(c, sw, string.Empty,
-					                                  "#foreach($i in [1..3000]) \r\n" +
-					                                  "#set($temp = $x.For(\"%{controller='Test',id=$i}\")) \r\n" +
-					                                  "#end \r\n");
+																						"#foreach($i in [1..3000]) \r\n" +
+																						"#set($temp = $x.For(\"%{controller='Test',id=$i}\")) \r\n" +
+																						"#end \r\n");
 
 					Assert.IsTrue(ok, "Evaluation returned failure");
 				}
 			}
-			catch(System.Exception ex)
+			catch (System.Exception ex)
 			{
 				Console.WriteLine(ex.ToString());
 			}
@@ -204,20 +205,20 @@ namespace NVelocity
 			{
 				if (parameters == null)
 				{
-					throw new ArgumentNullException("parameters", "parameters cannot be null");
+					throw new ArgumentNullException(nameof(parameters), "parameters cannot be null");
 				}
 
 				try
 				{
-					string controller = (string) parameters["controller"];
-					int id = (int) parameters["id"];
+					string controller = (string)parameters["controller"];
+					int id = (int)parameters["id"];
 
 					parameters.Remove("controller");
 					parameters.Remove("id");
 
 					return controller + " " + id;
 				}
-				catch(System.Exception ex)
+				catch (System.Exception ex)
 				{
 					Console.WriteLine(ex.ToString());
 					throw;

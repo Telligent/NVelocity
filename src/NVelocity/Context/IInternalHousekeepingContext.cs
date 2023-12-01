@@ -1,8 +1,8 @@
 namespace NVelocity.Context
 {
-	using System;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
+	using System;
 
 	/// <summary>
 	/// interface to encapsulate the 'stuff' for internal operation of velocity.

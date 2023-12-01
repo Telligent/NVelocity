@@ -53,8 +53,8 @@ namespace NVelocity.Util
 		/// </returns>
 		public static String FirstLetterCaps(String data)
 		{
-			String firstLetter = data.Substring(0, (1) - (0)).ToUpper();
-			String restLetters = data.Substring(1).ToLower();
+			String firstLetter = data[..1].ToUpper();
+			String restLetters = data[1..].ToLower();
 			return firstLetter + restLetters;
 		}
 
@@ -71,7 +71,7 @@ namespace NVelocity.Util
 		{
 			String contents = string.Empty;
 
-			FileInfo f = new FileInfo(file);
+			FileInfo f = new(file);
 
 			bool tmpBool;
 			if (File.Exists(f.FullName))
@@ -86,13 +86,13 @@ namespace NVelocity.Util
 			{
 				try
 				{
-					StreamReader fr = new StreamReader(f.FullName);
-					char[] template = new char[(int) SupportClass.FileLength(f)];
-					fr.Read((Char[]) template, 0, template.Length);
+					StreamReader fr = new(f.FullName);
+					char[] template = new char[(int)SupportClass.FileLength(f)];
+					fr.Read((Char[])template, 0, template.Length);
 					contents = new String(template);
 					fr.Close();
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					Console.Out.WriteLine(e);
 					SupportClass.WriteStackTrace(e, Console.Error);
@@ -129,34 +129,34 @@ namespace NVelocity.Util
 			}
 
 			// Resolve occurrences of "//" in the normalized path
-			while(true)
+			while (true)
 			{
 				int index = normalized.IndexOf("//");
 				if (index < 0) break;
-				normalized = normalized.Substring(0, (index) - (0)) + normalized.Substring(index + 1);
+				normalized = normalized[..index] + normalized[(index + 1)..];
 			}
 
 			// Resolve occurrences of "%20" in the normalized path
-			while(true)
+			while (true)
 			{
 				int index = normalized.IndexOf("%20");
 				if (index < 0) break;
-				normalized = string.Format("{0} {1}", normalized.Substring(0, (index) - (0)), normalized.Substring(index + 3));
+				normalized = string.Format("{0} {1}", normalized[..index], normalized[(index + 3)..]);
 			}
 
 			// Resolve occurrences of "/./" in the normalized path
-			while(true)
+			while (true)
 			{
 				int index = normalized.IndexOf("/./");
 				if (index < 0)
 				{
 					break;
 				}
-				normalized = normalized.Substring(0, (index) - (0)) + normalized.Substring(index + 2);
+				normalized = normalized[..index] + normalized[(index + 2)..];
 			}
 
 			// Resolve occurrences of "/../" in the normalized path
-			while(true)
+			while (true)
 			{
 				int index = normalized.IndexOf("/../");
 				if (index < 0)
@@ -168,8 +168,8 @@ namespace NVelocity.Util
 					return (null);
 				}
 				// Trying to go outside our context
-				int index2 = normalized.LastIndexOf((Char) '/', index - 1);
-				normalized = normalized.Substring(0, (index2) - (0)) + normalized.Substring(index + 3);
+				int index2 = normalized.LastIndexOf((Char)'/', index - 1);
+				normalized = normalized[..index2] + normalized[(index + 3)..];
 			}
 
 			// Return the normalized path that we have completed

@@ -14,10 +14,10 @@
 
 namespace NVelocity.Runtime.Visitor
 {
-	using System;
-	using System.IO;
 	using Context;
 	using NVelocity.Runtime.Parser.Node;
+	using System;
+	using System.IO;
 
 	/// <summary> This is the base class for all visitors.
 	/// For each AST node, this class will provide

@@ -14,12 +14,12 @@
 
 namespace NVelocity.Runtime
 {
-	using System;
-	using System.Collections;
-	using System.IO;
 	using Context;
 	using Directive;
 	using NVelocity.Runtime.Parser.Node;
+	using System;
+	using System.Collections;
+	using System.IO;
 
 	/// <summary> 
 	/// Manages VMs in namespaces.  Currently, two namespace modes are
@@ -40,8 +40,8 @@ namespace NVelocity.Runtime
 	/// </author>
 	public class VelocimacroManager
 	{
-		private IRuntimeServices runtimeServices = null;
-		private static String GLOBAL_NAMESPACE = string.Empty;
+		private readonly IRuntimeServices runtimeServices = null;
+		private static readonly String GLOBAL_NAMESPACE = string.Empty;
 
 		private bool registerFromLib = false;
 
@@ -103,16 +103,17 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public bool AddVM(String vmName, String macroBody, String[] argArray, String ns)
 		{
-			MacroEntry me = new MacroEntry(this, this, vmName, macroBody, argArray, ns);
-
-			me.FromLibrary = registerFromLib;
+			MacroEntry me = new(this, this, vmName, macroBody, argArray, ns)
+			{
+				FromLibrary = registerFromLib
+			};
 
 			/*
-	    *  the client (VMFactory) will signal to us via
-	    *  registerFromLib that we are in startup mode registering
-	    *  new VMs from libraries.  Therefore, we want to
-	    *  addto the library map for subsequent auto reloads
-	    */
+			*  the client (VMFactory) will signal to us via
+			*  registerFromLib that we are in startup mode registering
+			*  new VMs from libraries.  Therefore, we want to
+			*  addto the library map for subsequent auto reloads
+			*/
 
 			bool isLib = true;
 
@@ -123,12 +124,12 @@ namespace NVelocity.Runtime
 			else
 			{
 				/*
-				 *  now, we first want to check to see if this namespace (template)
-				 *  is actually a library - if so, we need to use the global namespace
-				 *  we don't have to do this when registering, as namespaces should
-				 *  be shut off. If not, the default value is true, so we still go
-				 *  global
-				 */
+					*  now, we first want to check to see if this namespace (template)
+					*  is actually a library - if so, we need to use the global namespace
+					*  we don't have to do this when registering, as namespaces should
+					*  be shut off. If not, the default value is true, so we still go
+					*  global
+					*/
 
 				isLib = libraryMap.ContainsKey(ns);
 			}
@@ -136,9 +137,9 @@ namespace NVelocity.Runtime
 			if (!isLib && UsingNamespaces(ns))
 			{
 				/*
-				 *  first, do we have a namespace hash already for this namespace?
-				 *  if not, add it to the namespaces, and add the VM
-				 */
+					*  first, do we have a namespace hash already for this namespace?
+					*  if not, add it to the namespaces, and add the VM
+					*/
 
 				Hashtable local = GetNamespace(ns, true);
 				SupportClass.PutElement(local, vmName, me);
@@ -148,11 +149,11 @@ namespace NVelocity.Runtime
 			else
 			{
 				/*
-				 *  otherwise, add to global template.  First, check if we
-				 *  already have it to preserve some of the autoload information
-				 */
+					*  otherwise, add to global template.  First, check if we
+					*  already have it to preserve some of the autoload information
+					*/
 
-				MacroEntry exist = (MacroEntry) GetNamespace(GLOBAL_NAMESPACE)[vmName];
+				MacroEntry exist = (MacroEntry)GetNamespace(GLOBAL_NAMESPACE)[vmName];
 
 				if (exist != null)
 				{
@@ -160,8 +161,8 @@ namespace NVelocity.Runtime
 				}
 
 				/*
-				 *  now add it
-				 */
+					*  now add it
+					*/
 
 				SupportClass.PutElement(GetNamespace(GLOBAL_NAMESPACE), vmName, me);
 
@@ -179,12 +180,12 @@ namespace NVelocity.Runtime
 				Hashtable local = GetNamespace(ns, false);
 
 				/*
-				 *  if we have macros defined for this template
-				 */
+					*  if we have macros defined for this template
+					*/
 
 				if (local != null)
 				{
-					MacroEntry me = (MacroEntry) local[vmName];
+					MacroEntry me = (MacroEntry)local[vmName];
 
 					if (me != null)
 					{
@@ -194,12 +195,12 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    * if we didn't return from there, we need to simply see 
-	    * if it's in the global namespace
-	    */
+			* if we didn't return from there, we need to simply see 
+			* if it's in the global namespace
+			*/
 
 			//UPGRADE_NOTE: Variable me was renamed because block definition does not hide it. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1008"'
-			MacroEntry me2 = (MacroEntry) GetNamespace(GLOBAL_NAMESPACE)[vmName];
+			MacroEntry me2 = (MacroEntry)GetNamespace(GLOBAL_NAMESPACE)[vmName];
 
 			if (me2 != null)
 			{
@@ -220,7 +221,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public bool DumpNamespace(String ns)
 		{
-			lock(this)
+			lock (this)
 			{
 				if (UsingNamespaces(ns))
 				{
@@ -228,7 +229,7 @@ namespace NVelocity.Runtime
 					Hashtable temp_hashtable;
 					temp_key = ns;
 					temp_hashtable = namespaceHash;
-					Hashtable h = (Hashtable) temp_hashtable[temp_key];
+					Hashtable h = (Hashtable)temp_hashtable[temp_key];
 					temp_hashtable.Remove(temp_key);
 
 					if (h == null)
@@ -267,7 +268,7 @@ namespace NVelocity.Runtime
 		/// <returns>namespace Hashtable of VMs or null if doesn't exist</returns>
 		private Hashtable GetNamespace(String ns, bool addIfNew)
 		{
-			Hashtable h = (Hashtable) namespaceHash[ns];
+			Hashtable h = (Hashtable)namespaceHash[ns];
 
 			if (h == null && addIfNew)
 			{
@@ -282,23 +283,23 @@ namespace NVelocity.Runtime
 		/// <returns>Hash added to namespaces, ready for use</returns>
 		private Hashtable AddNamespace(String ns)
 		{
-			Hashtable h = new Hashtable();
+			Hashtable h = new();
 			Object oh;
 
 			if ((oh = SupportClass.PutElement(namespaceHash, ns, h)) != null)
 			{
 				/*
-				 * There was already an entry on the table, restore it!
-				 * This condition should never occur, given the code
-				 * and the fact that this method is private.
-				 * But just in case, this way of testing for it is much
-				 * more efficient than testing before hand using get().
-				 */
+					* There was already an entry on the table, restore it!
+					* This condition should never occur, given the code
+					* and the fact that this method is private.
+					* But just in case, this way of testing for it is much
+					* more efficient than testing before hand using get().
+					*/
 				SupportClass.PutElement(namespaceHash, ns, oh);
 				/*
-				 * Should't we be returning the old entry (oh)?
-				 * The previous code was just returning null in this case.
-				 */
+					* Should't we be returning the old entry (oh)?
+					* The previous code was just returning null in this case.
+					*/
 				return null;
 			}
 
@@ -311,8 +312,8 @@ namespace NVelocity.Runtime
 		private bool UsingNamespaces(String ns)
 		{
 			/*
-	    *  if the big switch turns of namespaces, then ignore the rules
-	    */
+			*  if the big switch turns of namespaces, then ignore the rules
+			*/
 
 			if (!namespacesOn)
 			{
@@ -320,8 +321,8 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    *  currently, we only support the local template namespace idea
-	    */
+			*  currently, we only support the local template namespace idea
+			*/
 
 			if (inlineLocalMode)
 			{
@@ -338,14 +339,14 @@ namespace NVelocity.Runtime
 				Hashtable local = GetNamespace(ns, false);
 
 				/*
-				 *  if we have this macro defined in this namespace, then
-				 *  it is masking the global, library-based one, so 
-				 *  just return null
-				 */
+					*  if we have this macro defined in this namespace, then
+					*  it is masking the global, library-based one, so 
+					*  just return null
+					*/
 
 				if (local != null)
 				{
-					MacroEntry me = (MacroEntry) local[vmName];
+					MacroEntry me = (MacroEntry)local[vmName];
 
 					if (me != null)
 					{
@@ -355,12 +356,12 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    * if we didn't return from there, we need to simply see 
-	    * if it's in the global namespace
-	    */
+			* if we didn't return from there, we need to simply see 
+			* if it's in the global namespace
+			*/
 
 			//UPGRADE_NOTE: Variable me was renamed because block definition does not hide it. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1008"'
-			MacroEntry me2 = (MacroEntry) GetNamespace(GLOBAL_NAMESPACE)[vmName];
+			MacroEntry me2 = (MacroEntry)GetNamespace(GLOBAL_NAMESPACE)[vmName];
 
 			if (me2 != null)
 			{
@@ -414,8 +415,8 @@ namespace NVelocity.Runtime
 			internal bool fromLibrary = false;
 
 			internal MacroEntry(VelocimacroManager enclosingInstance, VelocimacroManager velocimacroManager, String vmName,
-			                    String macroBody,
-			                    String[] argArray, String sourceTemplate)
+													String macroBody,
+													String[] argArray, String sourceTemplate)
 			{
 				InitBlock(enclosingInstance);
 				macroName = vmName;
@@ -428,20 +429,22 @@ namespace NVelocity.Runtime
 
 			internal VelocimacroProxy CreateVelocimacro(String ns)
 			{
-				VelocimacroProxy velocimacroProxy = new VelocimacroProxy();
-				velocimacroProxy.Name = macroName;
-				velocimacroProxy.ArgArray = argumentArray;
-				velocimacroProxy.MacroBody = macroBody;
-				velocimacroProxy.NodeTree = nodeTree;
-				velocimacroProxy.Namespace = ns;
+				VelocimacroProxy velocimacroProxy = new()
+				{
+					Name = macroName,
+					ArgArray = argumentArray,
+					MacroBody = macroBody,
+					NodeTree = nodeTree,
+					Namespace = ns
+				};
 				return velocimacroProxy;
 			}
 
 			internal void setup(IInternalContextAdapter internalContextAdapter)
 			{
 				/*
-				 *  if not parsed yet, parse!
-				 */
+					*  if not parsed yet, parse!
+					*/
 
 				if (nodeTree == null)
 					parseTree(internalContextAdapter);
@@ -457,7 +460,7 @@ namespace NVelocity.Runtime
 					nodeTree = Enclosing_Instance.runtimeServices.Parse(br, string.Format("VM:{0}", macroName), true);
 					nodeTree.Init(internalContextAdapter, null);
 				}
-				catch(System.Exception e)
+				catch (System.Exception e)
 				{
 					Enclosing_Instance.runtimeServices.Error(
 						string.Format("VelocimacroManager.parseTree() : exception {0} : {1}", macroName, e));

@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using NVelocity.Util.Introspection;
+	using System;
 
 	/// <summary>
 	/// Executor that simply tries to execute a get(key)
@@ -20,7 +20,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Container to hold the 'key' part of get(key).
 		/// </summary>
-		private Object[] arguments = new Object[1];
+		private readonly Object[] arguments = new Object[1];
 
 		/// <summary>
 		/// Default constructor.
@@ -41,6 +41,9 @@ namespace NVelocity.Runtime.Parser.Node
 					method = i.GetMethod(c, "get", arguments);
 				}
 			}
+
+			if (method != null)
+				invoker = Invoker.GetFunc(method);
 		}
 
 		/// <summary>
@@ -48,10 +51,10 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Execute(Object o)
 		{
-			if (method == null)
+			if (invoker == null)
 				return null;
 
-			return method.Invoke(o, arguments);
+			return invoker(o, arguments);
 		}
 	}
 }

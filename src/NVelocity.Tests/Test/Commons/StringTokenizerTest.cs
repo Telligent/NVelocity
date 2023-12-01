@@ -24,7 +24,7 @@ namespace NVelocity.Test.Commons
 		public void StringIsTokenizedWithDefaultDelimiters()
 		{
 			const string toTokenize = "First\tSecond\tThird";
-			StringTokenizer tokenizer = new StringTokenizer(toTokenize);
+			StringTokenizer tokenizer = new(toTokenize);
 
 			Assert.IsTrue(tokenizer.HasMoreTokens());
 			Assert.AreEqual("First", tokenizer.NextToken());
@@ -42,7 +42,7 @@ namespace NVelocity.Test.Commons
 		public void StringIsTokenizedWithSpecifiedDelimiters()
 		{
 			const string toTokenize = "First,Second,Third";
-			StringTokenizer tokenizer = new StringTokenizer(toTokenize, ",");
+			StringTokenizer tokenizer = new(toTokenize, ",");
 
 			Assert.IsTrue(tokenizer.HasMoreTokens());
 			Assert.AreEqual("First", tokenizer.NextToken());
@@ -60,7 +60,7 @@ namespace NVelocity.Test.Commons
 		public void RepeatedStringIsTokenizedCorrectly()
 		{
 			const string toTokenize = "First\tFirstly\tThird";
-			StringTokenizer tokenizer = new StringTokenizer(toTokenize);
+			StringTokenizer tokenizer = new(toTokenize);
 
 			Assert.IsTrue(tokenizer.HasMoreTokens());
 			Assert.AreEqual("First", tokenizer.NextToken());
@@ -78,7 +78,7 @@ namespace NVelocity.Test.Commons
 		public void ChangingDelimitersIsHandledCorrectly()
 		{
 			const string toTokenize = "First,more\tSecond,Third";
-			StringTokenizer tokenizer = new StringTokenizer(toTokenize);
+			StringTokenizer tokenizer = new(toTokenize);
 
 			Assert.IsTrue(tokenizer.HasMoreTokens());
 			Assert.AreEqual("First,more", tokenizer.NextToken());
@@ -96,7 +96,7 @@ namespace NVelocity.Test.Commons
 		public void CountIsCorrect()
 		{
 			const string toTokenize = "First\tSecond\tThird";
-			StringTokenizer tokenizer = new StringTokenizer(toTokenize);
+			StringTokenizer tokenizer = new(toTokenize);
 
 			Assert.AreEqual(3, tokenizer.Count);
 

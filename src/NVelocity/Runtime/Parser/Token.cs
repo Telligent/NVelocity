@@ -86,7 +86,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public static Token NewToken(int ofKind)
 		{
-			switch(ofKind)
+			switch (ofKind)
 			{
 				default:
 					return new Token();

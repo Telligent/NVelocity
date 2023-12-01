@@ -14,8 +14,8 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using Context;
+	using System;
 
 	public class ASTNotNode : SimpleNode
 	{
@@ -45,7 +45,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public override Object Value(IInternalContextAdapter context)
 		{
-			return (Evaluate(context) ? false : true);
+			return (!Evaluate(context));
 		}
 	}
 }

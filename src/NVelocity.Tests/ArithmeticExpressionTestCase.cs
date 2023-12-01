@@ -14,9 +14,9 @@
 // 
 namespace NVelocity
 {
-	using System.IO;
 	using App;
 	using NUnit.Framework;
+	using System.IO;
 
 	/// <summary>
 	/// Tests to make sure that the parser executes arithmetic expressions correctly.
@@ -66,7 +66,7 @@ namespace NVelocity
 
 		private string Eval(string template)
 		{
-			using (StringWriter sw = new StringWriter())
+			using (StringWriter sw = new())
 			{
 				bool ok = velocityEngine.Evaluate(context, sw, "", template);
 

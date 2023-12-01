@@ -17,13 +17,13 @@
 
 namespace NVelocity.Runtime.Parser
 {
-	using System.Collections.Generic;
 	using Node;
+	using System.Collections.Generic;
 
 	internal class ParserState
 	{
-		private Stack<INode> nodes;
-		private Stack<int> marks;
+		private readonly Stack<INode> nodes;
+		private readonly Stack<int> marks;
 
 		private int mark; // current mark
 		private bool nodeCreated;
@@ -102,7 +102,7 @@ namespace NVelocity.Runtime.Parser
 
 		internal void ClearNodeScope(INode n)
 		{
-			while(nodes.Count > mark)
+			while (nodes.Count > mark)
 			{
 				PopNode();
 			}
@@ -127,7 +127,7 @@ namespace NVelocity.Runtime.Parser
 		internal void CloseNodeScope(INode parentNode, int num)
 		{
 			mark = marks.Pop();
-			while(num-- > 0)
+			while (num-- > 0)
 			{
 				INode node = PopNode();
 				node.Parent = parentNode;
@@ -152,7 +152,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				int arity = NodeArity();
 				mark = marks.Pop();
-				while(arity-- > 0)
+				while (arity-- > 0)
 				{
 					INode node = PopNode();
 					node.Parent = n;

@@ -30,7 +30,7 @@ namespace NVelocity.Util.Introspection
 		private static readonly MethodInfo CACHE_MISS =
 			typeof(ClassMap).GetMethod("MethodMiss", BindingFlags.Static | BindingFlags.NonPublic);
 
-		private static readonly Object OBJECT = new Object();
+		private static readonly Object OBJECT = new();
 
 		private readonly Type type;
 
@@ -38,12 +38,12 @@ namespace NVelocity.Util.Introspection
 		/// name and actual arguments used to find it.
 		/// </summary>
 		private readonly Dictionary<string, MethodInfo> methodCache =
-			new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+			new(StringComparer.OrdinalIgnoreCase);
 
 		private readonly Dictionary<string, MemberInfo> propertyCache =
-			new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+			new(StringComparer.OrdinalIgnoreCase);
 
-		private readonly MethodMap methodMap = new MethodMap();
+		private readonly MethodMap methodMap = new();
 
 		/// <summary> Standard constructor
 		/// </summary>
@@ -85,9 +85,8 @@ namespace NVelocity.Util.Introspection
 		public MethodInfo FindMethod(String name, Object[] parameters)
 		{
 			String methodKey = MakeMethodKey(name, parameters);
-			MethodInfo cacheEntry;
 
-			if (methodCache.TryGetValue(methodKey, out cacheEntry))
+			if (methodCache.TryGetValue(methodKey, out MethodInfo cacheEntry))
 			{
 				if (cacheEntry == CACHE_MISS)
 				{
@@ -100,7 +99,7 @@ namespace NVelocity.Util.Introspection
 				{
 					cacheEntry = methodMap.Find(name, parameters);
 				}
-				catch(AmbiguousException)
+				catch (AmbiguousException)
 				{
 					// that's a miss :)
 					methodCache[methodKey] = CACHE_MISS;
@@ -129,9 +128,8 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public PropertyInfo FindProperty(String name)
 		{
-			MemberInfo cacheEntry;
 
-			if (propertyCache.TryGetValue(name, out cacheEntry))
+			if (propertyCache.TryGetValue(name, out MemberInfo cacheEntry))
 			{
 				if (cacheEntry == CACHE_MISS)
 				{
@@ -140,7 +138,7 @@ namespace NVelocity.Util.Introspection
 			}
 
 			// Yes, this might just be null.
-			return (PropertyInfo) cacheEntry;
+			return (PropertyInfo)cacheEntry;
 		}
 
 		/// <summary>
@@ -154,7 +152,7 @@ namespace NVelocity.Util.Introspection
 			MethodInfo[] methods = GetAccessibleMethods(type);
 
 			// map and cache them
-			foreach(MethodInfo method in methods)
+			foreach (MethodInfo method in methods)
 			{
 				methodMap.Add(method);
 				methodCache[MakeMethodKey(method)] = method;
@@ -167,7 +165,7 @@ namespace NVelocity.Util.Introspection
 			PropertyInfo[] properties = GetAccessibleProperties(type);
 
 			// map and cache them
-			foreach(PropertyInfo property in properties)
+			foreach (PropertyInfo property in properties)
 			{
 				//propertyMap.add(publicProperty);
 				propertyCache[property.Name] = property;
@@ -181,9 +179,9 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		private static String MakeMethodKey(MethodInfo method)
 		{
-			StringBuilder methodKey = new StringBuilder(method.Name);
+			StringBuilder methodKey = new(method.Name);
 
-			foreach(ParameterInfo p in method.GetParameters())
+			foreach (ParameterInfo p in method.GetParameters())
 			{
 				methodKey.Append(p.ParameterType.FullName);
 			}
@@ -193,15 +191,15 @@ namespace NVelocity.Util.Introspection
 
 		private static String MakeMethodKey(String method, Object[] parameters)
 		{
-			StringBuilder methodKey = new StringBuilder(method);
+			StringBuilder methodKey = new(method);
 
 			if (parameters != null)
 			{
-				for(int j = 0; j < parameters.Length; j++)
+				for (int j = 0; j < parameters.Length; j++)
 				{
 					Object arg = parameters[j];
 
-					if (arg == null) arg = OBJECT;
+					arg ??= OBJECT;
 
 					methodKey.Append(arg.GetType().FullName);
 				}
@@ -215,30 +213,30 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		private static MethodInfo[] GetAccessibleMethods(Type type)
 		{
-			ArrayList methods = new ArrayList();
+			ArrayList methods = new();
 
-			foreach(Type interfaceType in type.GetInterfaces())
+			foreach (Type interfaceType in type.GetInterfaces())
 			{
 				methods.AddRange(interfaceType.GetMethods());
 			}
 
 			methods.AddRange(type.GetMethods());
 
-			return (MethodInfo[]) methods.ToArray(typeof(MethodInfo));
+			return (MethodInfo[])methods.ToArray(typeof(MethodInfo));
 		}
 
 		private static PropertyInfo[] GetAccessibleProperties(Type type)
 		{
-			ArrayList props = new ArrayList();
+			ArrayList props = new();
 
-			foreach(Type interfaceType in type.GetInterfaces())
+			foreach (Type interfaceType in type.GetInterfaces())
 			{
 				props.AddRange(interfaceType.GetProperties());
 			}
 
 			props.AddRange(type.GetProperties());
 
-			return (PropertyInfo[]) props.ToArray(typeof(PropertyInfo));
+			return (PropertyInfo[])props.ToArray(typeof(PropertyInfo));
 		}
 	}
 }

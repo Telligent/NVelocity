@@ -14,10 +14,10 @@
 // 
 namespace NVelocity.Test
 {
-	using System;
-	using System.IO;
 	using App;
 	using NUnit.Framework;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// Test Velocity processing
@@ -37,30 +37,30 @@ namespace NVelocity.Test
 		[Ignore("Known issues from version 1.3x and will be resolved with next parser port")]
 		public void VTLTest1()
 		{
-//	    VelocityCharStream vcs = new VelocityCharStream(new StringReader(":=t#${A.T1}ms"), 1, 1);
-//	    Parser p = new Parser(vcs);
-//	    SimpleNode root = p.process();
-//
-//	    String nodes = String.Empty;
-//	    if (root != null) {
-//		Token t = root.FirstToken;
-//		nodes += t.kind.ToString();
-//		while (t != root.LastToken) {
-//		    t = t.next;
-//		    nodes += "," + t.kind.ToString();
-//		}
-//	    }
-//
-//	    throw new System.Exception(nodes);
+			//	    VelocityCharStream vcs = new VelocityCharStream(new StringReader(":=t#${A.T1}ms"), 1, 1);
+			//	    Parser p = new Parser(vcs);
+			//	    SimpleNode root = p.process();
+			//
+			//	    String nodes = String.Empty;
+			//	    if (root != null) {
+			//		Token t = root.FirstToken;
+			//		nodes += t.kind.ToString();
+			//		while (t != root.LastToken) {
+			//		    t = t.next;
+			//		    nodes += "," + t.kind.ToString();
+			//		}
+			//	    }
+			//
+			//	    throw new System.Exception(nodes);
 
-			VelocityEngine velocityEngine = new VelocityEngine();
+			VelocityEngine velocityEngine = new();
 			velocityEngine.Init();
 
-			VelocityContext c = new VelocityContext();
+			VelocityContext c = new();
 			c.Put("A", new A());
 
 			// modified version so Bernhard could continue
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 			Boolean ok = velocityEngine.Evaluate(c, sw, "VTLTest1", "#set($hash = \"#\"):=t${hash}${A.T1}ms");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(":=t#0ms", sw.ToString());
@@ -72,19 +72,19 @@ namespace NVelocity.Test
 			Assert.AreEqual(":=t#0ms", sw.ToString());
 		}
 
-        [Test]
-        public void HashBeforeExplicitVariableDuplication()
-        {
-            VelocityEngine velocityEngine = new VelocityEngine();
-            velocityEngine.Init();
+		[Test]
+		public void HashBeforeExplicitVariableDuplication()
+		{
+			VelocityEngine velocityEngine = new();
+			velocityEngine.Init();
 
-            VelocityContext c = new VelocityContext();
-            c.Put("A", new A());
+			VelocityContext c = new();
+			c.Put("A", new A());
 
-            StringWriter sw = new StringWriter();
-            Boolean ok = velocityEngine.Evaluate(c, sw, "HashBeforeExplicitVariableDuplication", "#${A.T1}_2");
-            Assert.IsTrue(ok, "Evaluation returned failure");
-            Assert.AreEqual("#0_2", sw.ToString());
-        }
-    }
+			StringWriter sw = new();
+			Boolean ok = velocityEngine.Evaluate(c, sw, "HashBeforeExplicitVariableDuplication", "#${A.T1}_2");
+			Assert.IsTrue(ok, "Evaluation returned failure");
+			Assert.AreEqual("#0_2", sw.ToString());
+		}
+	}
 }

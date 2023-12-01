@@ -14,8 +14,8 @@
 
 namespace NVelocity.Runtime.Resource
 {
-	using System;
 	using NVelocity.Exception;
+	using System;
 
 	/// <summary> 
 	/// Class to manage the text resource for the Velocity

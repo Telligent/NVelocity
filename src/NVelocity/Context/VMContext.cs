@@ -14,13 +14,13 @@
 
 namespace NVelocity.Context
 {
-	using System;
-	using System.Collections;
 	using NVelocity.App.Events;
 	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
 	using Runtime;
+	using System;
+	using System.Collections;
 
 	/// <summary>  This is a special, internal-use-only context implementation to be
 	/// used for the new Velocimacro implementation.
@@ -138,7 +138,7 @@ namespace NVelocity.Context
 
 		/// <summary>support for local context scope feature, where all references are local
 		/// </summary>
-		private bool localContextScope = false;
+		private readonly bool localContextScope = false;
 
 		/// <summary>  CTOR, wraps an ICA
 		/// </summary>
@@ -166,9 +166,9 @@ namespace NVelocity.Context
 		public void AddVMProxyArg(VMProxyArg vmpa)
 		{
 			/*
-	    *  ask if it's a constant : if so, get the value and put into the
-	    *  local context, otherwise, put the vmpa in our vmProxyHash
-	    */
+			*  ask if it's a constant : if so, get the value and put into the
+			*  local context, otherwise, put the vmpa in our vmProxyHash
+			*/
 
 			String key = vmpa.ContextReference;
 
@@ -195,27 +195,27 @@ namespace NVelocity.Context
 		public Object Put(String key, Object value)
 		{
 			/*
-	    *  first see if this is a vmpa
-	    */
+			*  first see if this is a vmpa
+			*/
 
-			VMProxyArg vmProxyArg = (VMProxyArg) vmProxyHash[key];
+			VMProxyArg vmProxyArg = (VMProxyArg)vmProxyHash[key];
 
 			if (vmProxyArg == null)
 			{
 				if (localContextScope)
 				{
 					/*
-		    *  if we have localContextScope mode, then just 
-		    *  put in the local context
-		    */
+				*  if we have localContextScope mode, then just 
+				*  put in the local context
+				*/
 
 					return localContext[key] = value;
 				}
 				else
 				{
 					/*
-		    *  ok, how about the local context?
-		    */
+				*  ok, how about the local context?
+				*/
 
 					if (localContext.ContainsKey(key))
 					{
@@ -248,40 +248,37 @@ namespace NVelocity.Context
 		public Object Get(String key)
 		{
 			/*
-	    * first, see if it's a VMPA
-	    */
+			* first, see if it's a VMPA
+			*/
 
 			Object o;
 
-			VMProxyArg vmProxyArg = (VMProxyArg) vmProxyHash[key];
+			VMProxyArg vmProxyArg = (VMProxyArg)vmProxyHash[key];
 
 			if (vmProxyArg == null)
 			{
 				if (localContextScope)
 				{
 					/*
-		    * if we have localContextScope mode, then just 
-		    * put in the local context
-		    */
+				* if we have localContextScope mode, then just 
+				* put in the local context
+				*/
 
 					o = localContext[key];
 				}
 				else
 				{
 					/*
-		    *  try the local context
-		    */
+				*  try the local context
+				*/
 
 					o = localContext[key];
 
-					if (o == null)
-					{
-						/*
-						* last chance
-						*/
+					/*
+* last chance
+*/
 
-						o = innerContext.Get(key);
-					}
+					o ??= innerContext.Get(key);
 				}
 			}
 			else

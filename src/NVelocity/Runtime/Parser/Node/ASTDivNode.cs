@@ -14,11 +14,11 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using Context;
+	using System;
 
 	/// <summary>
-    /// Handles integer division of nodes
+	/// Handles integer division of nodes
 	/// 
 	/// Please look at the Parser.jjt file which is
 	/// what controls the generation of this class.

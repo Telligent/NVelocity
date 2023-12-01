@@ -1,14 +1,14 @@
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
+	using Exception;
+	using NVelocity.App.Events;
+	using NVelocity.Exception;
 	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
-	using Context;
-	using Exception;
-	using NVelocity.App.Events;
-	using NVelocity.Exception;
 
 	/// <summary>
 	/// Reference types
@@ -69,10 +69,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public void SetLiteral(String value)
 		{
-			if (literal == null)
-			{
-				literal = value;
-			}
+			literal ??= value;
 		}
 
 		public override String Literal
@@ -149,14 +146,11 @@ namespace NVelocity.Runtime.Parser.Node
 			// so the error gets logged.
 			try
 			{
-				for(int i = 0; i < numChildren; i++)
+				for (int i = 0; i < numChildren; i++)
 				{
 					result = GetChild(i).Execute(result, context);
 
-					if (referenceStack != null)
-					{
-						referenceStack.Push(result);
-					}
+					referenceStack?.Push(result);
 
 					if (result == null)
 					{
@@ -166,12 +160,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 				return result;
 			}
-			catch(MethodInvocationException methodInvocationException)
+			catch (MethodInvocationException methodInvocationException)
 			{
 				// someone tossed their cookies
 				runtimeServices.Error(
 					string.Format("Method {0} threw exception for reference ${1} in template {2} at  [{3},{4}]",
-					              methodInvocationException.MethodName, rootString, context.CurrentTemplateName, Line, Column));
+												methodInvocationException.MethodName, rootString, context.CurrentTemplateName, Line, Column));
 
 				methodInvocationException.ReferenceName = rootString;
 				throw;
@@ -199,15 +193,12 @@ namespace NVelocity.Runtime.Parser.Node
 			// 2) if not, then \$foo  (its considered shmoo, not VTL)
 			if (escaped)
 			{
-				StringBuilder b = new StringBuilder();
-				b.Append(escPrefix);
+				writer.Write(escPrefix);
 				if (value == null)
 				{
-					b.Append("\\");
+					writer.Write('\\');
 				}
-				b.Append(nullString);
-
-				writer.Write(b);
+				writer.Write(nullString);
 
 				return true;
 			}
@@ -226,17 +217,13 @@ namespace NVelocity.Runtime.Parser.Node
 			if (value == null)
 			{
 				// write prefix twice, because it's shmoo, so the \ don't escape each other...
-				StringBuilder b = new StringBuilder();
-
-				b.Append(escPrefix);
-				b.Append(escPrefix);
-				b.Append(morePrefix);
-				b.Append(nullString);
-
-				writer.Write(b);
+				writer.Write(escPrefix);
+				writer.Write(escPrefix);
+				writer.Write(morePrefix);
+				writer.Write(nullString);
 
 				if (referenceType != ReferenceType.Quiet &&
-				    runtimeServices.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
+						runtimeServices.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
 				{
 					runtimeServices.Warn(
 						new ReferenceException(string.Format("reference : template = {0}", context.CurrentTemplateName), this));
@@ -247,12 +234,9 @@ namespace NVelocity.Runtime.Parser.Node
 			else
 			{
 				// non-null processing
-				StringBuilder b = new StringBuilder();
-				b.Append(escPrefix);
-				b.Append(morePrefix);
-				b.Append(value);
-
-				writer.Write(b);
+				writer.Write(escPrefix);
+				writer.Write(morePrefix);
+				writer.Write(value);
 
 				return true;
 			}
@@ -274,7 +258,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			else if (value is Boolean)
 			{
-				return (bool) value;
+				return (bool)value;
 			}
 			else
 			{
@@ -310,7 +294,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			// How many child nodes do we have?
-			for(int i = 0; i < numChildren - 1; i++)
+			for (int i = 0; i < numChildren - 1; i++)
 			{
 				result = GetChild(i).Execute(result, context);
 
@@ -327,9 +311,7 @@ namespace NVelocity.Runtime.Parser.Node
 			// 2) ref,put("foo", value ) to parallel the get() map introspection
 			try
 			{
-				IDuck duck = result as IDuck;
-
-				if (duck == null)
+				if (result is not IDuck duck)
 				{
 					// first, we introspect for the set<identifier> setter method
 					Type c = result.GetType();
@@ -344,9 +326,9 @@ namespace NVelocity.Runtime.Parser.Node
 							throw new MethodAccessException();
 						}
 					}
-					catch(MethodAccessException)
+					catch (MethodAccessException)
 					{
-						StringBuilder sb = new StringBuilder();
+						StringBuilder sb = new();
 						sb.Append(identifier);
 
 						if (Char.IsLower(sb[0]))
@@ -367,7 +349,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 
 					// and if we get here, getMethod() didn't chuck an exception...
-					Object[] args = new Object[] {};
+					Object[] args = Array.Empty<object>();
 					p.SetValue(result, value, args);
 				}
 				else
@@ -375,21 +357,20 @@ namespace NVelocity.Runtime.Parser.Node
 					duck.SetInvoke(identifier, value);
 				}
 			}
-			catch(MethodAccessException)
+			catch (MethodAccessException)
 			{
 				// right now, we only support the IDictionary interface
-				if (result is IDictionary)
+				if (result is IDictionary d)
 				{
 					try
 					{
-						IDictionary d = (IDictionary) result;
 						d[identifier] = value;
 					}
-					catch(Exception ex)
+					catch (Exception ex)
 					{
 						runtimeServices.Error(
 							string.Format("ASTReference Map.put : exception : {0} template = {1} [{2},{3}]", ex, context.CurrentTemplateName,
-							              Line, Column));
+														Line, Column));
 						return false;
 					}
 				}
@@ -397,30 +378,30 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					runtimeServices.Error(
 						string.Format("ASTReference : cannot find {0} as settable property or key to Map in template = {1} [{2},{3}]",
-						              identifier, context.CurrentTemplateName, Line, Column));
+													identifier, context.CurrentTemplateName, Line, Column));
 					return false;
 				}
 			}
-			catch(TargetInvocationException targetInvocationException)
+			catch (TargetInvocationException targetInvocationException)
 			{
 				// this is possible 
 				throw new MethodInvocationException(
 					string.Format("ASTReference : Invocation of method '{0}' in  {1} threw exception {2}", identifier, result.GetType(),
-					              targetInvocationException.GetBaseException().GetType()), targetInvocationException, identifier);
+												targetInvocationException.GetBaseException().GetType()), targetInvocationException, identifier);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				// maybe a security exception?
 				runtimeServices.Error(
 					string.Format("ASTReference setValue() : exception : {0} template = {1} [{2},{3}]", e, context.CurrentTemplateName,
-					              Line, Column));
+												Line, Column));
 				return false;
 			}
 
 			return true;
 		}
 
-		public Object GetVariableValue(IContext context, String variable)
+		public static Object GetVariableValue(IContext context, String variable)
 		{
 			return context.Get(variable);
 		}
@@ -438,10 +419,10 @@ namespace NVelocity.Runtime.Parser.Node
 
 				// so, see if we have "\\!"
 
-				int slashBang = t.Image.IndexOf("\\!");
-
-				if (slashBang != -1)
+				if (t.Image.Contains("\\!"))
 				{
+					int len = t.Image.Length;
+
 					// lets do all the work here.  I would argue that if this occurs, it's 
 					// not a reference at all, so preceeding \ characters in front of the $
 					// are just schmoo.  So we just do the escape processing trick (even | odd)
@@ -449,10 +430,7 @@ namespace NVelocity.Runtime.Parser.Node
 					// tosses a wrench into things.
 
 					// count the escapes : even # -> not escaped, odd -> escaped
-					int i = 0;
-					int len = t.Image.Length;
-
-					i = t.Image.IndexOf('$');
+					int i = t.Image.IndexOf('$');
 
 					if (i == -1)
 					{
@@ -463,7 +441,7 @@ namespace NVelocity.Runtime.Parser.Node
 						return nullString;
 					}
 
-					while(i < len && t.Image[i] != '\\')
+					while (i < len && t.Image[i] != '\\')
 					{
 						i++;
 					}
@@ -472,16 +450,16 @@ namespace NVelocity.Runtime.Parser.Node
 					int start = i;
 					int count = 0;
 
-					while(i < len && t.Image[i++] == '\\')
+					while (i < len && t.Image[i++] == '\\')
 					{
 						count++;
 					}
 
 					// now construct the output string.  We really don't care about leading 
 					// slashes as this is not a reference.  It's quasi-schmoo
-					nullString = t.Image.Substring(0, (start) - (0)); // prefix up to the first
-					nullString += t.Image.Substring(start, (start + count - 1) - (start)); // get the slashes
-					nullString += t.Image.Substring(start + count); // and the rest, including the
+					nullString = t.Image[..start]; // prefix up to the first
+					nullString += t.Image[start..(start + count - 1)]; // get the slashes
+					nullString += t.Image[(start + count)..]; // and the rest, including the
 
 					// this isn't a valid reference, so lets short circuit the value and set calcs
 					computableReference = false;
@@ -501,7 +479,7 @@ namespace NVelocity.Runtime.Parser.Node
 					int i = 0;
 					int len = t.Image.Length;
 
-					while(i < len && t.Image[i] == '\\')
+					while (i < len && t.Image[i] == '\\')
 					{
 						i++;
 					}
@@ -513,10 +491,10 @@ namespace NVelocity.Runtime.Parser.Node
 
 					if (i > 0)
 					{
-						escPrefix = t.Image.Substring(0, (i / 2) - (0));
+						escPrefix = t.Image[..(i / 2)];
 					}
 
-					t.Image = t.Image.Substring(i);
+					t.Image = t.Image[i..];
 				}
 
 				// Look for preceeding stuff like '#' and '$'
@@ -529,8 +507,8 @@ namespace NVelocity.Runtime.Parser.Node
 				// the prefix.
 				if (loc1 > 0)
 				{
-					morePrefix = morePrefix + t.Image.Substring(0, (loc1) - (0));
-					t.Image = t.Image.Substring(loc1);
+					morePrefix += t.Image[..loc1];
+					t.Image = t.Image[loc1..];
 				}
 
 				// Now it should be clean. Get the literal in case this reference 
@@ -557,7 +535,7 @@ namespace NVelocity.Runtime.Parser.Node
 					else
 					{
 						// ex : $!provider.Title
-						return t.Image.Substring(2);
+						return t.Image[2..];
 					}
 				}
 				else if (t.Image.Equals("${"))
@@ -571,7 +549,7 @@ namespace NVelocity.Runtime.Parser.Node
 					// just nip off the '$' so we have 
 					// the root
 					referenceType = ReferenceType.Normal;
-					return t.Image.Substring(1);
+					return t.Image[1..];
 				}
 				else
 				{

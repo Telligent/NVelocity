@@ -14,10 +14,10 @@
 
 namespace NVelocity.App.Events
 {
-	using System;
-	using System.Collections;
 	using Context;
 	using Exception;
+	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// 'Package' of event handlers...
@@ -42,7 +42,7 @@ namespace NVelocity.App.Events
 		{
 			if (ReferenceInsertion != null)
 			{
-				ReferenceInsertionEventArgs args = new ReferenceInsertionEventArgs(referenceStack, reference, value);
+				ReferenceInsertionEventArgs args = new(referenceStack, reference, value);
 				ReferenceInsertion(this, args);
 				value = args.NewValue;
 			}
@@ -63,7 +63,7 @@ namespace NVelocity.App.Events
 				return true;
 			}
 
-			NullSetEventArgs e = new NullSetEventArgs(lhs, rhs);
+			NullSetEventArgs e = new(lhs, rhs);
 			NullSet(this, e);
 
 			return e.ShouldLog;
@@ -85,7 +85,7 @@ namespace NVelocity.App.Events
 				throw new VelocityException(e.Message, e);
 			}
 
-			MethodExceptionEventArgs mea = new MethodExceptionEventArgs(type, method, e);
+			MethodExceptionEventArgs mea = new(type, method, e);
 			MethodExceptionEvent(this, mea);
 
 			if (mea.ValueToRender == null)
@@ -105,8 +105,7 @@ namespace NVelocity.App.Events
 		/// <returns>true if successful, false otherwise</returns>
 		public bool AttachToContext(IContext context)
 		{
-			IInternalEventContext internalEventContext = context as IInternalEventContext;
-			if (internalEventContext == null)
+			if (context is not IInternalEventContext internalEventContext)
 			{
 				return false;
 			}

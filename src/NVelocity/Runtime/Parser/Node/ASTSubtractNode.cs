@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using Context;
+	using System;
 
 	/// <summary>
 	/// Handles integer subtraction of nodes (in #set() )
@@ -62,14 +62,14 @@ namespace NVelocity.Runtime.Parser.Node
 			return MathUtil.Sub(maxType, left, right);
 
 			// if not an Integer, not much we can do either
-//			if (!(left is Int32) || !(right is Int32))
-//			{
-//				runtimeServices.Error((!(left is Int32) ? "Left" : "Right") + " side of subtraction operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-//
-//				return null;
-//			}
-//
-//			return ((Int32) left) - ((Int32) right);
+			//			if (!(left is Int32) || !(right is Int32))
+			//			{
+			//				runtimeServices.Error((!(left is Int32) ? "Left" : "Right") + " side of subtraction operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+			//
+			//				return null;
+			//			}
+			//
+			//			return ((Int32) left) - ((Int32) right);
 		}
 	}
 }

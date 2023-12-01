@@ -24,8 +24,8 @@ namespace Commons.Collections
 	[Serializable]
 	public class LRUMap : ICollection, IDictionary, IEnumerable
 	{
-		private Hashtable objectTable = new Hashtable();
-		private ArrayList objectList = new ArrayList();
+		private readonly Hashtable objectTable = new();
+		private readonly ArrayList objectList = new();
 
 		/// <summary>
 		/// Default maximum size 
@@ -35,7 +35,7 @@ namespace Commons.Collections
 		/// <summary>
 		/// Maximum size 
 		/// </summary>
-		[NonSerialized] private int maxSize;
+		[NonSerialized] private readonly int maxSize;
 
 		public LRUMap() : this(DEFAULT_MAX_SIZE)
 		{
@@ -150,10 +150,10 @@ namespace Commons.Collections
 		{
 			get
 			{
-				ArrayList retList = new ArrayList();
-				for(int i = 0; i < objectList.Count; i++)
+				ArrayList retList = new();
+				for (int i = 0; i < objectList.Count; i++)
 				{
-					retList.Add(((DictionaryEntry) objectList[i]).Key);
+					retList.Add(((DictionaryEntry)objectList[i]).Key);
 				}
 				return retList;
 			}
@@ -163,10 +163,10 @@ namespace Commons.Collections
 		{
 			get
 			{
-				ArrayList retList = new ArrayList();
-				for(int i = 0; i < objectList.Count; i++)
+				ArrayList retList = new();
+				for (int i = 0; i < objectList.Count; i++)
 				{
-					retList.Add(((DictionaryEntry) objectList[i]).Value);
+					retList.Add(((DictionaryEntry)objectList[i]).Value);
 				}
 				return retList;
 			}
@@ -179,7 +179,7 @@ namespace Commons.Collections
 
 		public void AddAll(IDictionary dictionary)
 		{
-			foreach(DictionaryEntry entry in dictionary)
+			foreach (DictionaryEntry entry in dictionary)
 			{
 				Add(entry.Key, entry.Value);
 			}
@@ -187,9 +187,9 @@ namespace Commons.Collections
 
 		private int IndexOf(object key)
 		{
-			for(int i = 0; i < objectList.Count; i++)
+			for (int i = 0; i < objectList.Count; i++)
 			{
-				if (((DictionaryEntry) objectList[i]).Key.Equals(key))
+				if (((DictionaryEntry)objectList[i]).Key.Equals(key))
 				{
 					return i;
 				}
@@ -202,7 +202,7 @@ namespace Commons.Collections
 		/// </summary>
 		private void RemoveLRU()
 		{
-			Object key = ((DictionaryEntry) objectList[objectList.Count - 1]).Key;
+			Object key = ((DictionaryEntry)objectList[objectList.Count - 1]).Key;
 			objectTable.Remove(key);
 			objectList.RemoveAt(objectList.Count - 1);
 		}
@@ -226,7 +226,7 @@ namespace Commons.Collections
 		{
 			if (table == null)
 			{
-				throw new ArgumentNullException("table");
+				throw new ArgumentNullException(nameof(table));
 			}
 			return new SyncLRUMap(table);
 		}
@@ -242,30 +242,30 @@ namespace Commons.Collections
 				_table = table;
 			}
 
-//	    internal SyncLRUMap(SerializationInfo info, StreamingContext context) : base (info, context) {
-//		_table = (LRUMap)info.GetValue("ParentTable", typeof(LRUMap));
-//		if (_table==null) {
-//		    throw new SerializationException(Environment.GetResourceString("Serialization_InsufficientState"));
-//		}
-//	    }
+			//	    internal SyncLRUMap(SerializationInfo info, StreamingContext context) : base (info, context) {
+			//		_table = (LRUMap)info.GetValue("ParentTable", typeof(LRUMap));
+			//		if (_table==null) {
+			//		    throw new SerializationException(Environment.GetResourceString("Serialization_InsufficientState"));
+			//		}
+			//	    }
 
 
 			/*================================GetObjectData=================================
-	     **Action: Return a serialization info containing a reference to _table.  We need
-	     **        to implement this because our parent HT does and we don't want to actually
-	     **        serialize all of it's values (just a reference to the table, which will then
-	     **        be serialized separately.)
-	     **Returns: void
-	     **Arguments: info -- the SerializationInfo into which to store the data.
-	     **           context -- the StreamingContext for the current serialization (ignored)
-	     **Exceptions: ArgumentNullException if info is null.
-	     ==============================================================================*/
-//	    public override void GetObjectData(SerializationInfo info, StreamingContext context) {
-//		if (info==null) {
-//		    throw new ArgumentNullException("info");
-//		}
-//		info.AddValue("ParentTable", _table, typeof(Hashtable));
-//	    }
+				**Action: Return a serialization info containing a reference to _table.  We need
+				**        to implement this because our parent HT does and we don't want to actually
+				**        serialize all of it's values (just a reference to the table, which will then
+				**        be serialized separately.)
+				**Returns: void
+				**Arguments: info -- the SerializationInfo into which to store the data.
+				**           context -- the StreamingContext for the current serialization (ignored)
+				**Exceptions: ArgumentNullException if info is null.
+				==============================================================================*/
+			//	    public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+			//		if (info==null) {
+			//		    throw new ArgumentNullException("info");
+			//		}
+			//		info.AddValue("ParentTable", _table, typeof(Hashtable));
+			//	    }
 
 			public override int Count
 			{
@@ -312,7 +312,7 @@ namespace Commons.Collections
 
 			public override void Add(Object key, Object value)
 			{
-				lock(_table.SyncRoot)
+				lock (_table.SyncRoot)
 				{
 					_table.Add(key, value);
 				}
@@ -320,7 +320,7 @@ namespace Commons.Collections
 
 			public override void Clear()
 			{
-				lock(_table.SyncRoot)
+				lock (_table.SyncRoot)
 				{
 					_table.Clear();
 				}
@@ -331,13 +331,13 @@ namespace Commons.Collections
 				return _table.Contains(key);
 			}
 
-//	    public override bool ContainsKey(Object key) {
-//		return _table.ContainsKey(key);
-//	    }
+			//	    public override bool ContainsKey(Object key) {
+			//		return _table.ContainsKey(key);
+			//	    }
 
-//	    public override bool ContainsValue(Object key) {
-//		return _table.ContainsValue(key);
-//	    }
+			//	    public override bool ContainsValue(Object key) {
+			//		return _table.ContainsValue(key);
+			//	    }
 
 			public override void CopyTo(Array array, int arrayIndex)
 			{
@@ -348,22 +348,22 @@ namespace Commons.Collections
 
 			IDictionaryEnumerator IDictionary.GetEnumerator()
 			{
-				return ((IDictionary) _table).GetEnumerator();
+				return ((IDictionary)_table).GetEnumerator();
 			}
 
-//	    protected override int GetHash(Object key) {
-//		return _table.GetHash(key);
-//	    }
+			//	    protected override int GetHash(Object key) {
+			//		return _table.GetHash(key);
+			//	    }
 
-//	    protected override bool KeyEquals(Object item, Object key) {
-//		return _table.KeyEquals(item, key);
-//	    }
+			//	    protected override bool KeyEquals(Object item, Object key) {
+			//		return _table.KeyEquals(item, key);
+			//	    }
 
 			public override ICollection Keys
 			{
 				get
 				{
-					lock(_table.SyncRoot)
+					lock (_table.SyncRoot)
 					{
 						return _table.Keys;
 					}
@@ -374,7 +374,7 @@ namespace Commons.Collections
 			{
 				get
 				{
-					lock(_table.SyncRoot)
+					lock (_table.SyncRoot)
 					{
 						return _table.Values;
 					}
@@ -383,23 +383,23 @@ namespace Commons.Collections
 
 			public override void Remove(Object key)
 			{
-				lock(_table.SyncRoot)
+				lock (_table.SyncRoot)
 				{
 					_table.Remove(key);
 				}
 			}
 
 			/*==============================OnDeserialization===============================
-	     **Action: Does nothing.  We have to implement this because our parent HT implements it,
-	     **        but it doesn't do anything meaningful.  The real work will be done when we
-	     **        call OnDeserialization on our parent table.
-	     **Returns: void
-	     **Arguments: None
-	     **Exceptions: None
-	     ==============================================================================*/
-//	    public override void OnDeserialization(Object sender) {
-//		return;
-//	    }
+				**Action: Does nothing.  We have to implement this because our parent HT implements it,
+				**        but it doesn't do anything meaningful.  The real work will be done when we
+				**        call OnDeserialization on our parent table.
+				**Returns: void
+				**Arguments: None
+				**Exceptions: None
+				==============================================================================*/
+			//	    public override void OnDeserialization(Object sender) {
+			//		return;
+			//	    }
 		}
 	}
 }

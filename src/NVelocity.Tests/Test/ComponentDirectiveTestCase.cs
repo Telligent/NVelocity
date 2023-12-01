@@ -14,11 +14,11 @@
 // 
 namespace NVelocity.Test
 {
-	using System.IO;
 	using App;
 	using global::Commons.Collections;
 	using NUnit.Framework;
 	using Runtime;
+	using System.IO;
 
 	[TestFixture]
 	public class ComponentDirectiveTestCase : BaseTestCase
@@ -31,16 +31,16 @@ namespace NVelocity.Test
 		{
 			velocityEngine = new VelocityEngine();
 
-			ExtendedProperties extendedProperties = new ExtendedProperties();
+			ExtendedProperties extendedProperties = new();
 
 			extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
-			                               TemplateTest.FILE_RESOURCE_LOADER_PATH);
+																			TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
 			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
 			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
 			extendedProperties.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
 			extendedProperties.SetProperty("userdirective",
-			                               "NVelocity.Runtime.Directive.Component;NVelocity,NVelocity.Runtime.Directive.BlockComponent;NVelocity");
+																			"NVelocity.Runtime.Directive.Component;NVelocity,NVelocity.Runtime.Directive.BlockComponent;NVelocity");
 
 			velocityEngine.Init(extendedProperties);
 
@@ -51,12 +51,12 @@ namespace NVelocity.Test
 		[Test]
 		public void LineComponent1()
 		{
-			VelocityContext context = new VelocityContext();
+			VelocityContext context = new();
 
 			Template template = velocityEngine.GetTemplate(
 				GetFileName(null, "componentusage1", TemplateTest.TMPL_FILE_EXT));
 
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new();
 
 			template.Merge(context, writer);
 

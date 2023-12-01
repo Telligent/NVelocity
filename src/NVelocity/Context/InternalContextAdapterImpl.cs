@@ -14,11 +14,11 @@
 
 namespace NVelocity.Context
 {
-	using System;
-	using System.Collections;
 	using NVelocity.App.Events;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
+	using System;
+	using System.Collections;
 
 	/// <summary>  This adapter class is the container for all context types for internal
 	/// use.  The AST now uses this class rather than the app-level Context
@@ -92,15 +92,14 @@ namespace NVelocity.Context
 
 			if (c is IInternalHousekeepingContext)
 			{
-				internalHousekeepingContext = (IInternalHousekeepingContext) context;
+				internalHousekeepingContext = (IInternalHousekeepingContext)context;
 			}
 			else
 			{
 				internalHousekeepingContext = new InternalContextBase();
 			}
 
-			IInternalEventContext internalEventContext = context as IInternalEventContext;
-			if (internalEventContext != null)
+			if (context is IInternalEventContext internalEventContext)
 			{
 				this.internalEventContext = internalEventContext;
 			}
@@ -140,7 +139,7 @@ namespace NVelocity.Context
 				object[] keys = Keys;
 				object[] values = new object[keys.Length];
 
-				for(int i = 0; i < values.Length; i++)
+				for (int i = 0; i < values.Length; i++)
 				{
 					values[i] = Get(keys[i].ToString());
 				}
@@ -263,7 +262,7 @@ namespace NVelocity.Context
 
 		public void CopyTo(Array array, int index)
 		{
-			foreach(object value in Values)
+			foreach (object value in Values)
 			{
 				array.SetValue(value, index++);
 			}

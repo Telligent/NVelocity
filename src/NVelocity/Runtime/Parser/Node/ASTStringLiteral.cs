@@ -1,10 +1,10 @@
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
 	using System;
 	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
-	using Context;
 
 	/// <summary> 
 	/// ASTStringLiteral support.
@@ -56,14 +56,14 @@ namespace NVelocity.Runtime.Parser.Node
 			*/
 
 			interpolate = FirstToken.Image.StartsWith("\"") &&
-			              ((FirstToken.Image.IndexOf('$') != - 1) ||
-			               (FirstToken.Image.IndexOf('#') != - 1));
+										(FirstToken.Image.Contains('$') ||
+											FirstToken.Image.Contains('#'));
 
 			/*
 			*  get the contents of the string, minus the '/" at each end
 			*/
 
-			image = FirstToken.Image.Substring(1, (FirstToken.Image.Length - 1) - (1));
+			image = FirstToken.Image[1..^1];
 			/*
 			* tack a space on the end (dreaded <MORE> kludge)
 			*/
@@ -126,18 +126,18 @@ namespace NVelocity.Runtime.Parser.Node
 						nodeTree.Render(context, writer);
 
 						/*
-						 * and return the result as a String
-						 */
+							* and return the result as a String
+							*/
 
 						String ret = writer.ToString();
 
 						/*
-						 *  remove the space from the end (dreaded <MORE> kludge)
-						 */
+							*  remove the space from the end (dreaded <MORE> kludge)
+							*/
 
-						result = ret.Substring(0, (ret.Length - 1) - (0));
+						result = ret[..^1];
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						runtimeServices.Error(string.Format("Error in interpolating string literal : {0}", e));
 						result = image;
@@ -160,29 +160,27 @@ namespace NVelocity.Runtime.Parser.Node
 		private HybridDictionary InterpolateDictionaryString(string str, IInternalContextAdapter context)
 		{
 			char[] contents = str.ToCharArray();
-			int lastIndex;
-
-			return RecursiveBuildDictionary(contents, 2, context, out lastIndex);
+			return RecursiveBuildDictionary(contents, 2, context, out _);
 		}
 
 		private HybridDictionary RecursiveBuildDictionary(char[] contents, int fromIndex, IInternalContextAdapter context,
-		                                                  out int lastIndex)
+																											out int lastIndex)
 		{
 			// key=val, key='val', key=$val, key=${val}, key='id$id'
 
 			lastIndex = 0;
 
-			HybridDictionary hash = new HybridDictionary(true);
+			HybridDictionary hash = new(true);
 
 			bool inKey, valueStarted, expectSingleCommaAtEnd, inTransition;
 			int inEvaluationContext = 0;
 			inKey = false;
 			inTransition = true;
 			valueStarted = expectSingleCommaAtEnd = false;
-			StringBuilder sbKeyBuilder = new StringBuilder();
-			StringBuilder sbValBuilder = new StringBuilder();
+			StringBuilder sbKeyBuilder = new();
+			StringBuilder sbValBuilder = new();
 
-			for(int i = fromIndex; i < contents.Length; i++)
+			for (int i = fromIndex; i < contents.Length; i++)
 			{
 				char c = contents[i];
 
@@ -247,7 +245,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 						// Within escape
 
-						switch(ahead)
+						switch (ahead)
 						{
 							case 'r':
 								i++;
@@ -269,8 +267,8 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 
 					if ((c == '\'' && expectSingleCommaAtEnd) ||
-					    (!expectSingleCommaAtEnd && c == ',') ||
-					    (inEvaluationContext == 0 && c == '}'))
+							(!expectSingleCommaAtEnd && c == ',') ||
+							(inEvaluationContext == 0 && c == '}'))
 					{
 						ProcessDictEntry(hash, sbKeyBuilder, sbValBuilder, expectSingleCommaAtEnd, context);
 
@@ -322,20 +320,14 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 		private void ProcessDictEntry(HybridDictionary map, StringBuilder keyBuilder, object value,
-		                              IInternalContextAdapter context)
+																	IInternalContextAdapter context)
 		{
 			object key = keyBuilder.ToString().Trim();
 
 			if (key.ToString().StartsWith("$"))
 			{
-				object keyVal = EvaluateInPlace(key.ToString(), context);
-
-				if (keyVal == null)
-				{
-					throw new ArgumentException(
+				object keyVal = EvaluateInPlace(key.ToString(), context) ?? throw new ArgumentException(
 						string.Format("The dictionary entry {0} evaluated to null, but null is not a valid dictionary key", key));
-				}
-
 				key = keyVal;
 			}
 
@@ -345,13 +337,14 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 		private void ProcessDictEntry(HybridDictionary map,
-		                              StringBuilder keyBuilder, StringBuilder value,
-		                              bool isTextContent, IInternalContextAdapter context)
+																	StringBuilder keyBuilder, StringBuilder value,
+																	bool isTextContent, IInternalContextAdapter context)
 		{
 			object val = value.ToString().Trim();
 
 			// Is it a reference?
-			if (val.ToString().StartsWith("$") || val.ToString().IndexOf('$') != -1)
+			var stringVal = val.ToString();
+			if (stringVal.StartsWith("$") || stringVal.Contains('$'))
 			{
 				val = EvaluateInPlace(val.ToString(), context);
 			}
@@ -359,13 +352,13 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				// Is it a Int32 or Single?
 
-				if (val.ToString().IndexOf('.') == -1)
+				if (stringVal.Contains('.'))
 				{
 					try
 					{
 						val = Convert.ToInt32(val);
 					}
-					catch(Exception)
+					catch (Exception)
 					{
 						throw new ArgumentException(
 							string.Format(
@@ -379,7 +372,7 @@ namespace NVelocity.Runtime.Parser.Node
 					{
 						val = Convert.ToSingle(val);
 					}
-					catch(Exception)
+					catch (Exception)
 					{
 						throw new ArgumentException(
 							string.Format(
@@ -406,13 +399,13 @@ namespace NVelocity.Runtime.Parser.Node
 
 				return Evaluate(inlineNode, context);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				throw new ArgumentException(string.Format("Problem evaluating dictionary entry with content {0}", content), ex);
 			}
 		}
 
-		private object Evaluate(SimpleNode inlineNode, IInternalContextAdapter context)
+		private static object Evaluate(SimpleNode inlineNode, IInternalContextAdapter context)
 		{
 			if (inlineNode.ChildrenCount == 1)
 			{
@@ -421,9 +414,9 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			else
 			{
-				StringBuilder result = new StringBuilder();
+				StringBuilder result = new();
 
-				for(int i = 0; i < inlineNode.ChildrenCount; i++)
+				for (int i = 0; i < inlineNode.ChildrenCount; i++)
 				{
 					INode child = inlineNode.GetChild(i);
 
@@ -441,7 +434,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		private bool IsDictionaryString(string str)
+		private static bool IsDictionaryString(string str)
 		{
 			return str.StartsWith(DictStart) && str.EndsWith(DictEnd);
 		}

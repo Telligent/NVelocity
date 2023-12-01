@@ -14,11 +14,11 @@
 
 namespace NVelocity.Runtime.Resource.Loader
 {
+	using Commons.Collections;
+	using NVelocity.Exception;
 	using System;
 	using System.Collections;
 	using System.IO;
-	using Commons.Collections;
-	using NVelocity.Exception;
 	using Util;
 
 	/// <summary>
@@ -36,7 +36,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// so that we can properly check the modification
 		/// times of the files.
 		/// </summary>
-		protected Hashtable templatePaths = new Hashtable();
+		protected Hashtable templatePaths = new();
 
 
 		public override void Init(ExtendedProperties configuration)
@@ -57,7 +57,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </returns>
 		public override Stream GetResourceStream(String templateName)
 		{
-			lock(this)
+			lock (this)
 			{
 				int size = paths.Count;
 
@@ -85,12 +85,12 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				if (template.StartsWith("/") || template.StartsWith("\\"))
 				{
-					template = template.Substring(1);
+					template = template[1..];
 				}
 
-				for(int i = 0; i < size; i++)
+				for (int i = 0; i < size; i++)
 				{
-					String path = (String) paths[i];
+					String path = (String)paths[i];
 
 					//This fixes the Directory Seperators making sure that they are correct for the platform.
 					//This is a hack and very inefficient location to perform the fix.
@@ -141,11 +141,11 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				runtimeServices.Debug(string.Format("FileResourceLoader attempting to load {0}", filename));
 
-				FileInfo file = new FileInfo(filename);
+				FileInfo file = new(filename);
 
 				/*
-				 * This is not needed, the call below will error if the file does not exist as well
-				 * as if there are permission errors
+					* This is not needed, the call below will error if the file does not exist as well
+					* as if there are permission errors
 				if (!file.Exists)
 				{
 					runtimeServices.debug("FileResourceLoader : File does not exist " + filename);
@@ -155,7 +155,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				return new BufferedStream(file.OpenRead());
 			}
-			catch(Exception exception)
+			catch (Exception exception)
 			{
 				runtimeServices.Debug(string.Format("FileResourceLoader : {0}", exception.Message));
 				return null;
@@ -168,8 +168,8 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		public override bool IsSourceModified(Resource resource)
 		{
-			String path = (String) templatePaths[resource.Name];
-			FileInfo file = new FileInfo(path + Path.AltDirectorySeparatorChar + resource.Name);
+			String path = (String)templatePaths[resource.Name];
+			FileInfo file = new(path + Path.AltDirectorySeparatorChar + resource.Name);
 
 			if (file.Exists)
 			{
@@ -193,8 +193,8 @@ namespace NVelocity.Runtime.Resource.Loader
 
 		public override long GetLastModified(Resource resource)
 		{
-			String path = (String) templatePaths[resource.Name];
-			FileInfo file = new FileInfo(path + Path.AltDirectorySeparatorChar + resource.Name);
+			String path = (String)templatePaths[resource.Name];
+			FileInfo file = new(path + Path.AltDirectorySeparatorChar + resource.Name);
 
 			if (file.Exists)
 			{

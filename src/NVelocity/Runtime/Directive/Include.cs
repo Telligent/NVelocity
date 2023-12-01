@@ -14,13 +14,13 @@
 
 namespace NVelocity.Runtime.Directive
 {
-	using System;
-	using System.IO;
 	using Context;
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Parser.Node;
 	using Parser;
 	using Resource;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// Pluggable directive that handles the #include() statement in VTL.
@@ -109,7 +109,7 @@ namespace NVelocity.Runtime.Directive
 			// get our arguments and check them
 			int argCount = node.ChildrenCount;
 
-			for(int i = 0; i < argCount; i++)
+			for (int i = 0; i < argCount; i++)
 			{
 				// we only handle StringLiterals and References right now
 				INode n = node.GetChild(i);
@@ -170,7 +170,7 @@ namespace NVelocity.Runtime.Directive
 
 				if (current == null)
 				{
-					encoding = (String) runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
+					encoding = (String)runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 				}
 				else
 				{
@@ -179,19 +179,19 @@ namespace NVelocity.Runtime.Directive
 
 				resource = runtimeServices.GetContent(arg, encoding);
 			}
-			catch(ResourceNotFoundException)
+			catch (ResourceNotFoundException)
 			{
 				// the arg wasn't found.  Note it and throw
 				runtimeServices.Error(
 					string.Format("#include(): cannot find resource '{0}', called from template {1} at ({2}, {3})", arg,
-					              context.CurrentTemplateName, Line, Column));
+												context.CurrentTemplateName, Line, Column));
 				throw;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeServices.Error(
 					string.Format("#include(): arg = '{0}',  called from template {1} at ({2}, {3}) : {4}", arg,
-					              context.CurrentTemplateName, Line, Column, e));
+												context.CurrentTemplateName, Line, Column, e));
 			}
 
 			if (resource == null)
@@ -199,7 +199,7 @@ namespace NVelocity.Runtime.Directive
 				return false;
 			}
 
-			writer.Write((String) resource.Data);
+			writer.Write((String)resource.Data);
 			return true;
 		}
 

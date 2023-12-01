@@ -15,7 +15,6 @@
 namespace NVelocity.Exception
 {
 	using System;
-	using System.Runtime.Serialization;
 
 	/// <summary>  Application-level exception thrown when a resource of any type
 	/// has a syntax or other error which prevents it from being parsed.
@@ -38,10 +37,6 @@ namespace NVelocity.Exception
 		}
 
 		public ParseErrorException(String exceptionMessage, Exception innerException) : base(exceptionMessage, innerException)
-		{
-		}
-
-		protected ParseErrorException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

@@ -14,8 +14,8 @@
 
 namespace NVelocity.Runtime
 {
-	using System;
 	using Resource;
+	using System;
 
 	/// <summary>
 	/// This class defines the keys that are used in the

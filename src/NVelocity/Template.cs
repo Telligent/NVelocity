@@ -14,13 +14,13 @@
 
 namespace NVelocity
 {
-	using System;
-	using System.IO;
 	using Context;
 	using Exception;
 	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Runtime.Resource;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// This class is used for controlling all template
@@ -72,24 +72,24 @@ namespace NVelocity
 				// now parse the template
 				try
 				{
-					StreamReader br = new StreamReader(s, System.Text.Encoding.GetEncoding(encoding));
+					StreamReader br = new(s, System.Text.Encoding.GetEncoding(encoding));
 
 					data = runtimeServices.Parse(br, name);
 					InitDocument();
 					return true;
 				}
-				catch(IOException ioException)
+				catch (IOException ioException)
 				{
 					String msg = string.Format("Template.process : Unsupported input encoding : {0} for template {1}", encoding, name);
 
 					throw errorCondition = new ParseErrorException(msg, ioException);
 				}
-				catch(ParseException parseException)
+				catch (ParseException parseException)
 				{
 					// remember the error and convert
 					throw errorCondition = new ParseErrorException(parseException.Message, parseException);
 				}
-				catch(System.Exception e)
+				catch (System.Exception e)
 				{
 					// who knows?  Something from initDocument()
 					errorCondition = e;
@@ -117,7 +117,7 @@ namespace NVelocity
 		public void InitDocument()
 		{
 			// send an empty InternalContextAdapter down into the AST to initialize it
-			InternalContextAdapterImpl internalContextAdapterImpl = new InternalContextAdapterImpl(new VelocityContext());
+			InternalContextAdapterImpl internalContextAdapterImpl = new(new VelocityContext());
 
 			try
 			{
@@ -125,7 +125,7 @@ namespace NVelocity
 				internalContextAdapterImpl.PushCurrentTemplateName(name);
 
 				// init the AST
-				((SimpleNode) data).Init(internalContextAdapterImpl, runtimeServices);
+				((SimpleNode)data).Init(internalContextAdapterImpl, runtimeServices);
 			}
 			finally
 			{
@@ -167,14 +167,14 @@ namespace NVelocity
 			{
 				// create an InternalContextAdapter to carry the user Context down
 				// into the rendering engine.  Set the template name and render()
-				InternalContextAdapterImpl internalContextAdapterImpl = new InternalContextAdapterImpl(context);
+				InternalContextAdapterImpl internalContextAdapterImpl = new(context);
 
 				try
 				{
 					internalContextAdapterImpl.PushCurrentTemplateName(name);
 					internalContextAdapterImpl.CurrentResource = this;
 
-					((SimpleNode) data).Render(internalContextAdapterImpl, writer);
+					((SimpleNode)data).Render(internalContextAdapterImpl, writer);
 				}
 				finally
 				{
@@ -199,7 +199,7 @@ namespace NVelocity
 			{
 				return resourceLoader.GetResourceStream(name);
 			}
-			catch(ResourceNotFoundException resourceNotFoundException)
+			catch (ResourceNotFoundException resourceNotFoundException)
 			{
 				//  remember and re-throw
 				errorCondition = resourceNotFoundException;

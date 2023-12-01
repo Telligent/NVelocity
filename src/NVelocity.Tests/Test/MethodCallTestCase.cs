@@ -14,13 +14,13 @@
 // 
 namespace NVelocity.Test
 {
+	using App;
+	using Exception;
+	using NUnit.Framework;
 	using System;
 	using System.Collections;
 	using System.Globalization;
 	using System.IO;
-	using App;
-	using Exception;
-	using NUnit.Framework;
 
 	[TestFixture]
 	public class MethodCallTestCase
@@ -102,7 +102,7 @@ namespace NVelocity.Test
 		public void HasRelaxedSignature()
 		{
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-			DirectoryInfo di = new DirectoryInfo(path);
+			DirectoryInfo di = new(path);
 			c.Put("di", di);
 			Assert.AreEqual(path, Eval("$test.justDoIt($di)"));
 		}
@@ -112,7 +112,7 @@ namespace NVelocity.Test
 		public void HasRelaxedSignatureWithCorrectCase()
 		{
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-			DirectoryInfo di = new DirectoryInfo(path);
+			DirectoryInfo di = new(path);
 			c.Put("di", di);
 			Assert.AreEqual(path, Eval("$test.JustDoIt($di)"));
 		}
@@ -122,7 +122,7 @@ namespace NVelocity.Test
 		public void HasRelaxedSignatureWithMessedUpCase()
 		{
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-			DirectoryInfo di = new DirectoryInfo(path);
+			DirectoryInfo di = new(path);
 			c.Put("di", di);
 			Assert.AreEqual(path, Eval("$test.juSTDOIt($di)"));
 		}
@@ -157,7 +157,7 @@ namespace NVelocity.Test
 
 		private string Eval(string template)
 		{
-			using(StringWriter sw = new StringWriter())
+			using (StringWriter sw = new())
 			{
 				bool ok = velocityEngine.Evaluate(c, sw, "ContextTest.CaseInsensitive", template);
 

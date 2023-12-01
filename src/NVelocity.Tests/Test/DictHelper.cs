@@ -24,7 +24,7 @@ namespace NVelocity.Test
 		{
 			IDictionary dictionary = new HybridDictionary();
 
-			foreach(String arg in args)
+			foreach (String arg in args)
 			{
 				String[] parts = arg.Split('=');
 

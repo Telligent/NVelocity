@@ -1,7 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
 	using Context;
+	using System;
 
 	public class ASTNumberLiteral : SimpleNode
 	{
@@ -28,8 +28,8 @@ namespace NVelocity.Runtime.Parser.Node
 		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			/*
-	    *  init the tree correctly
-	    */
+			*  init the tree correctly
+			*/
 
 			base.Init(context, data);
 

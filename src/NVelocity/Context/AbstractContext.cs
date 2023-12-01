@@ -74,12 +74,11 @@ namespace NVelocity.Context
 			innerContext = inner;
 
 			/*
-			 *  now, do a 'forward pull' of event cartridge so
-			 *  it's accessible, bringing to the top level.
-			 */
+				*  now, do a 'forward pull' of event cartridge so
+				*  it's accessible, bringing to the top level.
+				*/
 
-			IInternalEventContext internalEventContext = innerContext as IInternalEventContext;
-			if (internalEventContext != null)
+			if (innerContext is IInternalEventContext internalEventContext)
 			{
 				AttachEventCartridge(internalEventContext.EventCartridge);
 			}
@@ -182,17 +181,17 @@ namespace NVelocity.Context
 		public Object Put(String key, Object value)
 		{
 			/*
-	    * don't even continue if key or value is null
-	    */
+			* don't even continue if key or value is null
+			*/
 
 			if (key == null)
 			{
 				return null;
 			}
-//			else if (value == null)
-//			{
-//				return null;
-//			}
+			//			else if (value == null)
+			//			{
+			//				return null;
+			//			}
 
 			return InternalPut(key, value);
 		}
@@ -212,8 +211,8 @@ namespace NVelocity.Context
 		public Object Get(String key)
 		{
 			/*
-	    *  punt if key is null
-	    */
+			*  punt if key is null
+			*/
 
 			if (key == null)
 			{
@@ -221,9 +220,9 @@ namespace NVelocity.Context
 			}
 
 			/*
-	    *  get the object for this key.  If null, and we are chaining another Context
-	    *  call the get() on it.
-	    */
+			*  get the object for this key.  If null, and we are chaining another Context
+			*  call the get() on it.
+			*/
 
 			Object o = InternalGet(key);
 

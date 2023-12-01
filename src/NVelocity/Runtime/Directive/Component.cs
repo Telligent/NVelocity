@@ -14,10 +14,10 @@
 
 namespace NVelocity.Runtime.Directive
 {
-	using System;
-	using System.IO;
 	using Context;
 	using NVelocity.Runtime.Parser.Node;
+	using System;
+	using System.IO;
 
 	public class Component : Directive
 	{

@@ -71,7 +71,7 @@ namespace Commons.Collections
 				throw new Exception();
 			}
 
-			StringBuilder result = new StringBuilder();
+			StringBuilder result = new();
 			// Go through the current string, adding characters to the result until a delimiter is reached.
 			while (currentPosition < length && delimiters.IndexOf(source.Substring(currentPosition, 1)) < 0)
 			{

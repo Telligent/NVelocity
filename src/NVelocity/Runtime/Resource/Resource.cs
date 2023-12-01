@@ -14,8 +14,8 @@
 
 namespace NVelocity.Runtime.Resource
 {
-	using System;
 	using Loader;
+	using System;
 
 	/// <summary>
 	/// This class represent a general text resource that
@@ -101,9 +101,9 @@ namespace NVelocity.Runtime.Resource
 		public bool RequiresChecking()
 		{
 			/*
-			 *  short circuit this if modificationCheckInterval == 0
-			 *  as this means "don't check"
-			 */
+				*  short circuit this if modificationCheckInterval == 0
+				*  as this means "don't check"
+				*/
 
 			if (modificationCheckInterval <= 0)
 			{
@@ -111,8 +111,8 @@ namespace NVelocity.Runtime.Resource
 			}
 
 			/*
-			 *  see if we need to check now
-			 */
+				*  see if we need to check now
+				*/
 
 			return ((DateTime.Now.Ticks - 621355968000000000) / 10000 >= nextCheck);
 		}

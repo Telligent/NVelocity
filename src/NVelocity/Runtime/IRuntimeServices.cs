@@ -14,12 +14,12 @@
 
 namespace NVelocity.Runtime
 {
-	using System;
-	using System.IO;
 	using Commons.Collections;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util.Introspection;
 	using Resource;
+	using System;
+	using System.IO;
 
 	/// <summary> Interface for internal runtime services that are needed by the
 	/// various components w/in Velocity.  This was taken from the old

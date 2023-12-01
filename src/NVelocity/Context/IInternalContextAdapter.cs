@@ -30,7 +30,7 @@ namespace NVelocity.Context
 	///
 	/// </version>
 	public interface IInternalContextAdapter : IInternalHousekeepingContext, IContext, IInternalWrapperContext,
-	                                           IInternalEventContext, IDictionary
+																				IInternalEventContext, IDictionary
 	{
 		/// <summary>
 		/// Need to define this method here otherwise since both <see cref="IDictionary"/> and <see cref="IContext"/> 

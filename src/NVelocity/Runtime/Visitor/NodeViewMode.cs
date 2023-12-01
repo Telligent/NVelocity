@@ -14,10 +14,10 @@
 
 namespace NVelocity.Runtime.Visitor
 {
-	using System;
-	using System.Text;
 	using NVelocity.Runtime.Parser.Node;
 	using Parser;
+	using System;
+	using System.Text;
 
 	/// <summary> This class is simply a visitor implementation
 	/// that traverses the AST, produced by the Velocity
@@ -35,15 +35,15 @@ namespace NVelocity.Runtime.Visitor
 	public class NodeViewMode : BaseVisitor
 	{
 		private int indent = 0;
-		private bool showTokens = true;
+		private readonly bool showTokens = true;
 
 		/// <summary>Indent child nodes to help visually identify
 		/// the structure of the AST.
 		/// </summary>
 		private String IndentString()
 		{
-			StringBuilder sb = new StringBuilder();
-			for(int i = 0; i < indent; ++i)
+			StringBuilder sb = new();
+			for (int i = 0; i < indent; ++i)
 			{
 				sb.Append("  ");
 			}

@@ -14,19 +14,14 @@
 
 namespace NVelocity.Runtime.Exception
 {
-	using System;
-	using System.Runtime.Serialization;
 	using NVelocity.Runtime.Parser.Node;
+	using System;
 
 	[Serializable]
 	public class NodeException : Exception
 	{
 		public NodeException(String exceptionMessage, INode node)
 			: base(string.Format("{0}: {1} [line {2},column {3}]", exceptionMessage, node.Literal, node.Line, node.Column))
-		{
-		}
-
-		public NodeException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

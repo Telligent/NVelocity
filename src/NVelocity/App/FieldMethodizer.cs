@@ -54,12 +54,12 @@ namespace NVelocity.App
 		/// <summary>
 		/// Hold the field objects by field name
 		/// </summary>
-		private Dictionary<string, FieldInfo> fieldHash = new Dictionary<string, FieldInfo>();
+		private readonly Dictionary<string, FieldInfo> fieldHash = new();
 
 		/// <summary>
 		/// Hold the class objects by field name
 		/// </summary>
-		private Dictionary<string, Type> classHash = new Dictionary<string, Type>();
+		private readonly Dictionary<string, Type> classHash = new();
 
 		/// <summary>
 		/// Allow object to be initialized without any data. You would use
@@ -80,7 +80,7 @@ namespace NVelocity.App
 			{
 				AddObject(s);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Console.Out.WriteLine(e);
 			}
@@ -99,7 +99,7 @@ namespace NVelocity.App
 			{
 				AddObject(o);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Console.Out.WriteLine(e);
 			}
@@ -136,7 +136,7 @@ namespace NVelocity.App
 					return f.GetValue(classHash[fieldName]);
 				}
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 			}
 			return null;
@@ -148,7 +148,7 @@ namespace NVelocity.App
 		private void Inspect(Type type)
 		{
 			FieldInfo[] fields = type.GetFields();
-			for(int i = 0; i < fields.Length; i++)
+			for (int i = 0; i < fields.Length; i++)
 			{
 				// only if public and static
 				if (fields[i].IsPublic && fields[i].IsStatic)

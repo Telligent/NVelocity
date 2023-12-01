@@ -1,8 +1,8 @@
 namespace NVelocity.Runtime.Parser.Node
 {
+	using Context;
 	using System;
 	using System.IO;
-	using Context;
 
 	public class ASTBlock : SimpleNode
 	{
@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			int i, k = ChildrenCount;
 
-			for(i = 0; i < k; i++)
+			for (i = 0; i < k; i++)
 				GetChild(i).Render(context, writer);
 
 			return true;

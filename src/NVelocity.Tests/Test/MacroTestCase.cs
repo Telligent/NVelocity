@@ -14,10 +14,10 @@
 // 
 namespace NVelocity.Test
 {
-	using System;
-	using System.IO;
 	using App;
 	using NUnit.Framework;
+	using System;
+	using System.IO;
 
 	[TestFixture]
 	public class MacroTestCase
@@ -51,7 +51,7 @@ namespace NVelocity.Test
 				"#end\r\n" +
 				"#rec('hello' 1)\r\n";
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			bool success = ve.Evaluate(context, sw, "MacroTest1", template);
 

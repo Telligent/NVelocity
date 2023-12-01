@@ -44,14 +44,14 @@ namespace Commons.Collections
 		/// <returns>A String</returns>
 		public override String NextToken()
 		{
-			StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new();
 
-			while(HasMoreTokens())
+			while (HasMoreTokens())
 			{
 				String token = base.NextToken();
 				if (token.EndsWith(@"\"))
 				{
-					buffer.Append(token.Substring(0, (token.Length - 1) - (0)));
+					buffer.Append(token[..^1]);
 					buffer.Append(DELIMITER);
 				}
 				else

@@ -14,12 +14,11 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
-	using System.Reflection;
 	using Context;
 	using NVelocity.App.Events;
 	using NVelocity.Exception;
 	using NVelocity.Util.Introspection;
+	using System;
 
 	/// <summary>
 	/// ASTIdentifier.java
@@ -78,9 +77,10 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
-			bool isString = o.GetType() == typeof(string);
-			bool isDecimal = o.GetType() == typeof(decimal);
-			bool isPrimitive = o.GetType().IsPrimitive;
+			var c = o.GetType();
+			bool isString = c == typeof(string);
+			bool isDecimal = c == typeof(decimal);
+			bool isPrimitive = c.IsPrimitive;
 			if (identifier == "to_quote" && (isString || isPrimitive || isDecimal))
 			{
 				return string.Format("\"{0}\"", EscapeDoubleQuote(o.ToString()));
@@ -90,9 +90,8 @@ namespace NVelocity.Runtime.Parser.Node
 				return string.Format("'{0}'", EscapeSingleQuote(o.ToString()));
 			}
 
-			IDuck duck = o as IDuck;
 
-			if (duck != null)
+			if (o is IDuck duck)
 			{
 				return duck.GetInvoke(identifier);
 			}
@@ -101,8 +100,6 @@ namespace NVelocity.Runtime.Parser.Node
 
 			try
 			{
-				Type c = o.GetType();
-
 				// first, see if we have this information cached.
 				IntrospectionCacheData introspectionCacheData = context.ICacheGet(this);
 
@@ -113,7 +110,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (introspectionCacheData != null && introspectionCacheData.ContextData == c)
 				{
-					velPropertyGet = (IVelPropertyGet) introspectionCacheData.Thingy;
+					velPropertyGet = (IVelPropertyGet)introspectionCacheData.Thingy;
 				}
 				else
 				{
@@ -127,7 +124,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeServices.Error(string.Format("ASTIdentifier.execute() : identifier = {0} : {1}", identifier, e));
 			}
@@ -142,7 +139,11 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				return velPropertyGet.Invoke(o);
 			}
-			catch(TargetInvocationException targetInvocationException)
+			catch (ArgumentException)
+			{
+				return null;
+			}
+			catch (Exception ex)
 			{
 				EventCartridge ec = context.EventCartridge;
 
@@ -153,40 +154,28 @@ namespace NVelocity.Runtime.Parser.Node
 					// no event cartridge to override. Just throw
 					String message = String.Format(
 						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
-						velPropertyGet.MethodName, o != null ? o.GetType().FullName : string.Empty,
+						velPropertyGet.MethodName, o != null ? c.FullName : string.Empty,
 						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
-					throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
+					throw new MethodInvocationException(message, ex, velPropertyGet.MethodName);
 				}
 				else
 				{
 					try
 					{
-						return ec.HandleMethodException(o.GetType(), velPropertyGet.MethodName, targetInvocationException.InnerException);
+						return ec.HandleMethodException(c, velPropertyGet.MethodName, ex);
 					}
-					catch(Exception)
+					catch (Exception)
 					{
 						String message = String.Format(
 							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
-							velPropertyGet.MethodName, o != null ? o.GetType().FullName : string.Empty,
+							velPropertyGet.MethodName, o != null ? c.FullName : string.Empty,
 							uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
 
-						throw new MethodInvocationException(message, targetInvocationException.InnerException, velPropertyGet.MethodName);
+						throw new MethodInvocationException(message, ex, velPropertyGet.MethodName);
 					}
 				}
 			}
-			catch(ArgumentException)
-			{
-				return null;
-			}
-			catch(Exception e)
-			{
-				runtimeServices.Error(
-					string.Format("ASTIdentifier() : exception invoking method for identifier '{0}' in {1} : {2}", identifier,
-					              o.GetType(), e));
-			}
-
-			return null;
 		}
 
 		private static string EscapeSingleQuote(string content)

@@ -14,12 +14,12 @@
 
 namespace NVelocity.Runtime.Resource.Loader
 {
+	using Commons.Collections;
+	using NVelocity.Exception;
 	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Reflection;
-	using Commons.Collections;
-	using NVelocity.Exception;
 	using Util;
 
 	public class AssemblyRelativeResourceLoader : ResourceLoader
@@ -61,7 +61,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			if (template.StartsWith("\\"))
 			{
-				template = template.Substring(1);
+				template = template[1..];
 			}
 
 			if (template == null || template.Length == 0)
@@ -76,23 +76,23 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			if (template.StartsWith("/"))
 			{
-				template = template.Substring(1);
+				template = template[1..];
 			}
 
 			template = template.Replace('\\', '.');
 			template = template.Replace('/', '.');
 
-			for(int i = 0; i < assemblyNames.Count; i++)
+			for (int i = 0; i < assemblyNames.Count; i++)
 			{
-				String assemblyName = (String) assemblyNames[i];
-				String prefix = (String) prefixes[i];
+				String assemblyName = (String)assemblyNames[i];
+				String prefix = (String)prefixes[i];
 				Assembly assembly;
 
 				try
 				{
 					assembly = Assembly.Load(assemblyName);
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					throw new ResourceNotFoundException(string.Format("Assembly could not be found {0}", assemblyName), ex);
 				}

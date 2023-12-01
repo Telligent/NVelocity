@@ -14,9 +14,6 @@
 
 namespace NVelocity.App
 {
-	using System;
-	using System.IO;
-	using System.Text;
 	using Commons.Collections;
 	using Context;
 	using Exception;
@@ -24,6 +21,9 @@ namespace NVelocity.App
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Runtime.Resource;
 	using Runtime;
+	using System;
+	using System.IO;
+	using System.Text;
 
 	/// <summary>
 	/// This class provides  services to the application
@@ -158,16 +158,16 @@ namespace NVelocity.App
 		[Obsolete("Use the overload that takes a TextReader")]
 		public static bool Evaluate(IContext context, TextWriter writer, String logTag, Stream instream)
 		{
-			// first, parse - convert ParseException if thrown
-			TextReader reader = null;
 			String encoding = null;
 
+			// first, parse - convert ParseException if thrown
+			TextReader reader;
 			try
 			{
 				encoding = RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT);
 				reader = new StreamReader(new StreamReader(instream, Encoding.GetEncoding(encoding)).BaseStream);
 			}
-			catch(IOException ioException)
+			catch (IOException ioException)
 			{
 				String msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
 				throw new ParseErrorException(msg, ioException);
@@ -188,13 +188,12 @@ namespace NVelocity.App
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
 		public static bool Evaluate(IContext context, TextWriter writer, String logTag, TextReader reader)
 		{
-			SimpleNode nodeTree = null;
-
+			SimpleNode nodeTree;
 			try
 			{
 				nodeTree = RuntimeSingleton.Parse(reader, logTag);
 			}
-			catch(ParseException parseException)
+			catch (ParseException parseException)
 			{
 				throw new ParseErrorException(parseException.Message, parseException);
 			}
@@ -202,7 +201,7 @@ namespace NVelocity.App
 			// now we want to init and render
 			if (nodeTree != null)
 			{
-				InternalContextAdapterImpl internalContextAdapterImpl = new InternalContextAdapterImpl(context);
+				InternalContextAdapterImpl internalContextAdapterImpl = new(context);
 
 				internalContextAdapterImpl.PushCurrentTemplateName(logTag);
 
@@ -212,7 +211,7 @@ namespace NVelocity.App
 					{
 						nodeTree.Init(internalContextAdapterImpl, RuntimeSingleton.RuntimeServices);
 					}
-					catch(Exception exception)
+					catch (Exception exception)
 					{
 						RuntimeSingleton.Error(
 							string.Format("Velocity.evaluate() : init exception for tag = {0} : {1}", logTag, exception));
@@ -247,7 +246,7 @@ namespace NVelocity.App
 		/// <param name="writer"> Writer for output stream</param>
 		/// <returns>true if Velocimacro exists and successfully invoked, false otherwise.</returns>
 		public static bool InvokeVelocimacro(String vmName, String logTag, String[] parameters, IContext context,
-		                                     TextWriter writer)
+																					TextWriter writer)
 		{
 			// check parameters
 			if (vmName == null || parameters == null || context == null || writer == null || logTag == null)
@@ -264,12 +263,12 @@ namespace NVelocity.App
 			}
 
 			// now just create the VM call, and use evaluate
-			StringBuilder construct = new StringBuilder("#");
+			StringBuilder construct = new("#");
 
 			construct.Append(vmName);
-			construct.Append("(");
+			construct.Append('(');
 
-			for(int i = 0; i < parameters.Length; i++)
+			for (int i = 0; i < parameters.Length; i++)
 			{
 				construct.Append(" $");
 				construct.Append(parameters[i]);
@@ -282,7 +281,7 @@ namespace NVelocity.App
 				bool retval = Evaluate(context, writer, logTag, construct.ToString());
 				return retval;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				RuntimeSingleton.Error(string.Format("Velocity.invokeVelocimacro() : error {0}", e));
 			}
@@ -302,8 +301,8 @@ namespace NVelocity.App
 		{
 			return
 				MergeTemplate(templateName,
-				              RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT),
-				              context, writer);
+											RuntimeSingleton.getString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT),
+											context, writer);
 		}
 
 		/// <summary>

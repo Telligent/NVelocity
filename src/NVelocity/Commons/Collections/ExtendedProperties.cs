@@ -112,7 +112,7 @@ namespace Commons.Collections
 
 		/// <summary> Default configurations repository.
 		/// </summary>
-		private ExtendedProperties defaults;
+		private readonly ExtendedProperties defaults;
 
 		/// <summary>
 		/// The file connected to this repository (holding comments and such).
@@ -147,7 +147,7 @@ namespace Commons.Collections
 		/// you wish to perform operations with configuration
 		/// information in a particular order.
 		/// </summary>
-		protected internal ArrayList keysAsListed = new ArrayList();
+		protected internal ArrayList keysAsListed = new();
 
 		/// <summary>
 		/// Creates an empty extended properties object.
@@ -178,7 +178,7 @@ namespace Commons.Collections
 			this.file = file;
 
 			basePath = new FileInfo(file).FullName;
-			basePath = basePath.Substring(0, (basePath.LastIndexOf(fileSeparator) + 1) - (0));
+			basePath = basePath[..(basePath.LastIndexOf(fileSeparator) + 1)];
 
 			Load(new FileStream(file, FileMode.Open, FileAccess.Read));
 
@@ -235,7 +235,7 @@ namespace Commons.Collections
 		/// <exception cref="IOException" />
 		public void Load(Stream input, String encoding)
 		{
-			lock(this)
+			lock (this)
 			{
 				PropertiesReader reader = null;
 				if (encoding != null)
@@ -244,20 +244,17 @@ namespace Commons.Collections
 					{
 						reader = new PropertiesReader(new StreamReader(input, Encoding.GetEncoding(encoding)));
 					}
-					catch(IOException)
+					catch (IOException)
 					{
 						// Get one with the default encoding...
 					}
 				}
 
-				if (reader == null)
-				{
-					reader = new PropertiesReader(new StreamReader(input));
-				}
+				reader ??= new PropertiesReader(new StreamReader(input));
 
 				try
 				{
-					while(true)
+					while (true)
 					{
 						String line = reader.ReadProperty();
 
@@ -270,13 +267,13 @@ namespace Commons.Collections
 
 						if (equalSignIndex > 0)
 						{
-							String key = line.Substring(0, (equalSignIndex) - (0)).Trim();
-							String value = line.Substring(equalSignIndex + 1).Trim();
+							String key = line[..equalSignIndex].Trim();
+							String value = line[(equalSignIndex + 1)..].Trim();
 
 							/*
-							 * Configure produces lines like this ... just
-							 * ignore them.
-							 */
+								* Configure produces lines like this ... just
+								* ignore them.
+								*/
 							if (String.Empty.Equals(value))
 							{
 								continue;
@@ -285,29 +282,29 @@ namespace Commons.Collections
 							if (Include != null && key.ToUpper().Equals(Include.ToUpper()))
 							{
 								/*
-								 * Recursively load properties files.
-								 */
+									* Recursively load properties files.
+									*/
 								FileInfo file;
 
 								if (value.StartsWith(fileSeparator))
 								{
 									/*
-									 * We have an absolute path so we'll
-									 * use this.
-									 */
+										* We have an absolute path so we'll
+										* use this.
+										*/
 									file = new FileInfo(value);
 								}
 								else
 								{
 									/*
-									 * We have a relative path, and we have
-									 * two possible forms here. If we have the
-									 * "./" form then just strip that off first
-									 * before continuing.
-									 */
+										* We have a relative path, and we have
+										* two possible forms here. If we have the
+										* "./" form then just strip that off first
+										* before continuing.
+										*/
 									if (value.StartsWith(string.Format(".{0}", fileSeparator)))
 									{
-										value = value.Substring(2);
+										value = value[2..];
 									}
 									file = new FileInfo(basePath + value);
 								}
@@ -335,11 +332,11 @@ namespace Commons.Collections
 						}
 					}
 				}
-				catch(NullReferenceException)
+				catch (NullReferenceException)
 				{
 					/*
-					 * Should happen only when EOF is reached.
-					 */
+						* Should happen only when EOF is reached.
+						*/
 					return;
 				}
 				reader.Close();
@@ -358,8 +355,8 @@ namespace Commons.Collections
 		public Object GetProperty(String key)
 		{
 			/*
-	    *  first, try to get from the 'user value' store
-	    */
+			*  first, try to get from the 'user value' store
+			*/
 			Object o = this[key];
 
 			if (o == null)
@@ -398,28 +395,30 @@ namespace Commons.Collections
 			Object o = this[key];
 
 			/*
-	    *  $$$ GMJ
-	    *  FIXME : post 1.0 release, we need to not assume
-	    *  that a scalar is a String - it can be an Object
-	    *  so we should make a little vector-like class
-	    *  say, Foo that wraps (not extends Vector),
-	    *  so we can do things like
-	    *  if ( !( o instanceof Foo) )
-	    *  so we know it's our 'vector' container
-	    *
-	    *  This applies throughout
-	    */
+			*  $$$ GMJ
+			*  FIXME : post 1.0 release, we need to not assume
+			*  that a scalar is a String - it can be an Object
+			*  so we should make a little vector-like class
+			*  say, Foo that wraps (not extends Vector),
+			*  so we can do things like
+			*  if ( !( o instanceof Foo) )
+			*  so we know it's our 'vector' container
+			*
+			*  This applies throughout
+			*/
 
 			if (o is String)
 			{
-				ArrayList v = new ArrayList(2);
-				v.Add(o);
-				v.Add(token);
+				ArrayList v = new(2)
+				{
+						o,
+						token
+				};
 				CollectionsUtil.PutElement(this, key, v);
 			}
-			else if (o is ArrayList)
+			else if (o is ArrayList list)
 			{
-				((ArrayList) o).Add(token);
+				list.Add(token);
 			}
 			else
 			{
@@ -437,11 +436,11 @@ namespace Commons.Collections
 		* like that cannot parse multiple same key
 		* values.
 		*/
-				if (token is String && ((String) token).IndexOf(PropertiesTokenizer.DELIMITER) > 0)
+				if (token is String v && v.IndexOf(PropertiesTokenizer.DELIMITER) > 0)
 				{
-					PropertiesTokenizer tokenizer = new PropertiesTokenizer((String) token);
+					PropertiesTokenizer tokenizer = new(v);
 
-					while(tokenizer.HasMoreTokens())
+					while (tokenizer.HasMoreTokens())
 					{
 						String s = tokenizer.NextToken();
 
@@ -456,14 +455,14 @@ namespace Commons.Collections
 				else
 				{
 					/*
-		    * We want to keep track of the order the keys
-		    * are parsed, or dynamically entered into
-		    * the configuration. So when we see a key
-		    * for the first time we will place it in
-		    * an ArrayList so that if a client class needs
-		    * to perform operations with configuration
-		    * in a definite order it will be possible.
-		    */
+				* We want to keep track of the order the keys
+				* are parsed, or dynamically entered into
+				* the configuration. So when we see a key
+				* for the first time we will place it in
+				* an ArrayList so that if a client class needs
+				* to perform operations with configuration
+				* in a definite order it will be possible.
+				*/
 					AddPropertyDirect(key, token);
 				}
 			}
@@ -481,8 +480,8 @@ namespace Commons.Collections
 		private void AddPropertyDirect(String key, Object obj)
 		{
 			/*
-	    * safety check
-	    */
+			* safety check
+			*/
 
 			if (!ContainsKey(key))
 			{
@@ -490,8 +489,8 @@ namespace Commons.Collections
 			}
 
 			/*
-	    * and the value
-	    */
+			* and the value
+			*/
 			CollectionsUtil.PutElement(this, key, obj);
 		}
 
@@ -508,34 +507,36 @@ namespace Commons.Collections
 			Object o = this[key];
 
 			/*
-	    *  $$$ GMJ
-	    *  FIXME : post 1.0 release, we need to not assume
-	    *  that a scalar is a String - it can be an Object
-	    *  so we should make a little vector-like class
-	    *  say, Foo that wraps (not extends Vector),
-	    *  so we can do things like
-	    *  if ( !( o instanceof Foo) )
-	    *  so we know it's our 'vector' container
-	    *
-	    *  This applies throughout
-	    */
+			*  $$$ GMJ
+			*  FIXME : post 1.0 release, we need to not assume
+			*  that a scalar is a String - it can be an Object
+			*  so we should make a little vector-like class
+			*  say, Foo that wraps (not extends Vector),
+			*  so we can do things like
+			*  if ( !( o instanceof Foo) )
+			*  so we know it's our 'vector' container
+			*
+			*  This applies throughout
+			*/
 
 			/*
-	    *  do the usual thing - if we have a value and 
-	    *  it's scalar, make a vector, otherwise add
-	    *  to the vector
-	    */
+			*  do the usual thing - if we have a value and 
+			*  it's scalar, make a vector, otherwise add
+			*  to the vector
+			*/
 
 			if (o is String)
 			{
-				ArrayList v = new ArrayList(2);
-				v.Add(o);
-				v.Add(token);
+				ArrayList v = new(2)
+				{
+						o,
+						token
+				};
 				CollectionsUtil.PutElement(this, key, v);
 			}
 			else if (o is ArrayList)
 			{
-				((ArrayList) o).Add(token);
+				((ArrayList)o).Add(token);
 			}
 			else
 			{
@@ -565,7 +566,7 @@ namespace Commons.Collections
 		/// </exception>
 		public void Save(TextWriter output, String Header)
 		{
-			lock(this)
+			lock (this)
 			{
 				if (output != null)
 				{
@@ -575,7 +576,7 @@ namespace Commons.Collections
 						textWriter.WriteLine(Header);
 					}
 
-					foreach(String key in Keys)
+					foreach (String key in Keys)
 					{
 						Object value = this[key];
 						if (value == null)
@@ -585,11 +586,11 @@ namespace Commons.Collections
 
 						if (value is String)
 						{
-							WriteKeyOutput(textWriter, key, (String) value);
+							WriteKeyOutput(textWriter, key, (String)value);
 						}
 						else if (value is IEnumerable)
 						{
-							foreach(String currentElement in (IEnumerable) value)
+							foreach (String currentElement in (IEnumerable)value)
 								WriteKeyOutput(textWriter, key, currentElement);
 						}
 
@@ -602,8 +603,8 @@ namespace Commons.Collections
 
 		private void WriteKeyOutput(TextWriter textWriter, String key, String value)
 		{
-			StringBuilder currentOutput = new StringBuilder();
-			currentOutput.Append(key).Append("=").Append(value);
+			StringBuilder currentOutput = new();
+			currentOutput.Append(key).Append('=').Append(value);
 			textWriter.WriteLine(currentOutput.ToString());
 		}
 
@@ -617,13 +618,13 @@ namespace Commons.Collections
 		/// </param>
 		public void Combine(ExtendedProperties c)
 		{
-			foreach(String key in c.Keys)
+			foreach (String key in c.Keys)
 			{
 				Object o = c[key];
 				// if the value is a String, escape it so that if there are delimiters that the value is not converted to a list
 				if (o is String)
 				{
-					o = ((String) o).Replace(",", @"\,");
+					o = ((String)o).Replace(",", @"\,");
 				}
 
 				SetProperty(key, o);
@@ -645,9 +646,9 @@ namespace Commons.Collections
 				* things get *very* confusing
 				*/
 
-				for(int i = 0; i < keysAsListed.Count; i++)
+				for (int i = 0; i < keysAsListed.Count; i++)
 				{
-					if (((String) keysAsListed[i]).Equals(key))
+					if (((String)keysAsListed[i]).Equals(key))
 					{
 						keysAsListed.RemoveAt(i);
 						break;
@@ -676,11 +677,11 @@ namespace Commons.Collections
 		/// </returns>
 		public IEnumerable GetKeys(String prefix)
 		{
-			ArrayList matchingKeys = new ArrayList();
+			ArrayList matchingKeys = new();
 
-			foreach(Object key in Keys)
+			foreach (Object key in Keys)
 			{
-				if (key is String && ((String) key).StartsWith(prefix))
+				if (key is String && ((String)key).StartsWith(prefix))
 				{
 					matchingKeys.Add(key);
 				}
@@ -698,12 +699,12 @@ namespace Commons.Collections
 		/// </param>
 		public ExtendedProperties Subset(String prefix)
 		{
-			ExtendedProperties c = new ExtendedProperties();
+			ExtendedProperties c = new();
 			bool validSubset = false;
 
-			foreach(Object key in Keys)
+			foreach (Object key in Keys)
 			{
-				if (key is String && ((String) key).StartsWith(prefix))
+				if (key is String && ((String)key).StartsWith(prefix))
 				{
 					if (!validSubset)
 						validSubset = true;
@@ -716,13 +717,13 @@ namespace Commons.Collections
 					* with the key prefix. This is not a useful
 					* subset but it is a valid subset.
 					*/
-					if (((String) key).Length == prefix.Length)
+					if (((String)key).Length == prefix.Length)
 					{
 						newKey = prefix;
 					}
 					else
 					{
-						newKey = ((String) key).Substring(prefix.Length + 1);
+						newKey = ((String)key)[(prefix.Length + 1)..];
 					}
 
 					/*
@@ -750,8 +751,8 @@ namespace Commons.Collections
 		/// </summary>
 		public override String ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-			foreach(String key in Keys)
+			StringBuilder sb = new();
+			foreach (String key in Keys)
 			{
 				Object value = this[key];
 				sb.AppendFormat("{0} => {1}", key, ValueToString(value)).Append(Environment.NewLine);
@@ -764,7 +765,7 @@ namespace Commons.Collections
 			if (value is ArrayList)
 			{
 				String s = "ArrayList :: ";
-				foreach(Object o in (ArrayList) value)
+				foreach (Object o in (ArrayList)value)
 				{
 					if (!s.EndsWith(", "))
 					{
@@ -816,7 +817,7 @@ namespace Commons.Collections
 
 			if (value is String)
 			{
-				return (String) value;
+				return (String)value;
 			}
 			else if (value == null)
 			{
@@ -831,7 +832,7 @@ namespace Commons.Collections
 			}
 			else if (value is ArrayList)
 			{
-				return (String) ((ArrayList) value)[0];
+				return (String)((ArrayList)value)[0];
 			}
 			else
 			{
@@ -880,22 +881,22 @@ namespace Commons.Collections
 		public Hashtable GetProperties(String key, Hashtable defaultProps)
 		{
 			/*
-	    * Grab an array of the tokens for this key.
-	    */
+			* Grab an array of the tokens for this key.
+			*/
 			String[] tokens = GetStringArray(key);
 
 			/*
-	    * Each token is of the form 'key=value'.
-	    */
-			Hashtable props = new Hashtable(defaultProps);
-			for(int i = 0; i < tokens.Length; i++)
+			* Each token is of the form 'key=value'.
+			*/
+			Hashtable props = new(defaultProps);
+			for (int i = 0; i < tokens.Length; i++)
 			{
 				String token = tokens[i];
 				int equalSign = token.IndexOf('=');
 				if (equalSign > 0)
 				{
-					String pkey = token.Substring(0, (equalSign) - (0)).Trim();
-					String pvalue = token.Substring(equalSign + 1).Trim();
+					String pkey = token[..equalSign].Trim();
+					String pvalue = token[(equalSign + 1)..].Trim();
 					CollectionsUtil.PutElement(props, pkey, pvalue);
 				}
 				else
@@ -926,18 +927,20 @@ namespace Commons.Collections
 			ArrayList vector;
 			if (value is String)
 			{
-				vector = new ArrayList(1);
-				vector.Add(value);
+				vector = new ArrayList(1)
+				{
+						value
+				};
 			}
 			else if (value is ArrayList)
 			{
-				vector = (ArrayList) value;
+				vector = (ArrayList)value;
 			}
 			else if (value == null)
 			{
 				if (defaults == null)
 				{
-					return new String[0];
+					return Array.Empty<string>();
 				}
 				else
 				{
@@ -950,9 +953,9 @@ namespace Commons.Collections
 			}
 
 			String[] tokens = new String[vector.Count];
-			for(int i = 0; i < tokens.Length; i++)
+			for (int i = 0; i < tokens.Length; i++)
 			{
-				tokens[i] = (String) vector[i];
+				tokens[i] = (String)vector[i];
 			}
 
 			return tokens;
@@ -983,7 +986,7 @@ namespace Commons.Collections
 		public List<string> GetStringList(String key)
 		{
 			Object value = this[key];
-			return (List<string>) value;
+			return (List<string>)value;
 		}
 
 		/// <summary> Get a Vector of strings associated with the given configuration
@@ -1006,12 +1009,14 @@ namespace Commons.Collections
 
 			if (value is ArrayList)
 			{
-				return (ArrayList) value;
+				return (ArrayList)value;
 			}
 			else if (value is String)
 			{
-				ArrayList v = new ArrayList(1);
-				v.Add(value);
+				ArrayList v = new(1)
+				{
+						value
+				};
 				CollectionsUtil.PutElement(this, key, v);
 				return v;
 			}
@@ -1049,7 +1054,7 @@ namespace Commons.Collections
 		public bool GetBoolean(String key)
 		{
 			Boolean b = GetBoolean(key, DEFAULT_BOOLEAN);
-			if ((Object) b == null)
+			if ((Object)b == null)
 			{
 				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
@@ -1079,11 +1084,11 @@ namespace Commons.Collections
 
 			if (value is Boolean)
 			{
-				return (Boolean) value;
+				return (Boolean)value;
 			}
 			else if (value is String)
 			{
-				String s = TestBoolean((String) value);
+				String s = TestBoolean((String)value);
 				Boolean b = s.ToUpper().Equals("TRUE");
 				CollectionsUtil.PutElement(this, key, b);
 				return b;
@@ -1119,7 +1124,7 @@ namespace Commons.Collections
 		/// text maps to a boolean value, or <code>null</code> otherwise.
 		///
 		/// </returns>
-		public String TestBoolean(String value)
+		public static String TestBoolean(String value)
 		{
 			String s = value.ToLower();
 
@@ -1156,7 +1161,7 @@ namespace Commons.Collections
 			if (ContainsKey(key))
 			{
 				Byte b = GetByte(key, DEFAULT_BYTE);
-				return (sbyte) b;
+				return (sbyte)b;
 			}
 			else
 			{
@@ -1177,7 +1182,7 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Byte.
 		/// </exception>
-		public sbyte GetByte(String key, sbyte defaultValue)
+		public static sbyte GetByte(String key, sbyte defaultValue)
 		{
 			return GetByte(key, defaultValue);
 		}
@@ -1201,11 +1206,11 @@ namespace Commons.Collections
 
 			if (value is Byte)
 			{
-				return (Byte) value;
+				return (Byte)value;
 			}
 			else if (value is String)
 			{
-				Byte b = Byte.Parse((String) value);
+				Byte b = Byte.Parse((String)value);
 				CollectionsUtil.PutElement(this, key, b);
 				return b;
 			}
@@ -1273,7 +1278,7 @@ namespace Commons.Collections
 		public Int32 GetInteger(String key)
 		{
 			Int32 i = GetInteger(key, DEFAULT_INT32);
-			if ((Object) i == null)
+			if ((Object)i == null)
 			{
 				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
@@ -1305,11 +1310,11 @@ namespace Commons.Collections
 
 			if (value is Int32)
 			{
-				return (Int32) value;
+				return (Int32)value;
 			}
 			else if (value is String)
 			{
-				Int32 i = Int32.Parse((String) value);
+				Int32 i = Int32.Parse((String)value);
 				CollectionsUtil.PutElement(this, key, i);
 				return i;
 			}
@@ -1347,7 +1352,7 @@ namespace Commons.Collections
 		public Int64 GetLong(String key)
 		{
 			Int64 l = GetLong(key, DEFAULT_INT64);
-			if ((Object) l == null)
+			if ((Object)l == null)
 			{
 				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
@@ -1376,11 +1381,11 @@ namespace Commons.Collections
 
 			if (value is Int64)
 			{
-				return (Int64) value;
+				return (Int64)value;
 			}
 			else if (value is String)
 			{
-				Int64 l = Int64.Parse((String) value);
+				Int64 l = Int64.Parse((String)value);
 				CollectionsUtil.PutElement(this, key, l);
 				return l;
 			}
@@ -1418,7 +1423,7 @@ namespace Commons.Collections
 		public float GetFloat(String key)
 		{
 			Single f = GetFloat(key, DEFAULT_SINGLE);
-			if ((Object) f == null)
+			if ((Object)f == null)
 			{
 				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
@@ -1447,12 +1452,12 @@ namespace Commons.Collections
 
 			if (value is Single)
 			{
-				return (Single) value;
+				return (Single)value;
 			}
 			else if (value is String)
 			{
 				//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Float.Float' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-				Single f = Single.Parse((String) value);
+				Single f = Single.Parse((String)value);
 				CollectionsUtil.PutElement(this, key, f);
 				return f;
 			}
@@ -1490,7 +1495,7 @@ namespace Commons.Collections
 		public Double GetDouble(String key)
 		{
 			Double d = GetDouble(key, DEFAULT_DOUBLE);
-			if ((Object) d == null)
+			if ((Object)d == null)
 			{
 				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
 			}
@@ -1519,12 +1524,12 @@ namespace Commons.Collections
 
 			if (value is Double)
 			{
-				return (Double) value;
+				return (Double)value;
 			}
 			else if (value is String)
 			{
 				//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Double.Double' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-				Double d = Double.Parse((String) value);
+				Double d = Double.Parse((String)value);
 				CollectionsUtil.PutElement(this, key, d);
 				return d;
 			}
@@ -1552,9 +1557,9 @@ namespace Commons.Collections
 		/// <returns>ExtendedProperties configuration created from the properties object.</returns>
 		public static ExtendedProperties ConvertProperties(ExtendedProperties p)
 		{
-			ExtendedProperties c = new ExtendedProperties();
+			ExtendedProperties c = new();
 
-			foreach(String key in p.Keys)
+			foreach (String key in p.Keys)
 			{
 				Object value = p.GetProperty(key);
 

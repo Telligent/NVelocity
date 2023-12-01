@@ -15,7 +15,6 @@
 namespace NVelocity.Exception
 {
 	using System;
-	using System.Runtime.Serialization;
 
 	/// <summary>  
 	/// Base class for Velocity exceptions thrown to the
@@ -29,10 +28,6 @@ namespace NVelocity.Exception
 		}
 
 		public VelocityException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
-
-		protected VelocityException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

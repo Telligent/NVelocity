@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+using System.Collections.Generic;
 
 namespace NVelocity.Runtime.Parser.Node
 {
@@ -31,7 +32,18 @@ namespace NVelocity.Runtime.Parser.Node
 		public const int Greater = 1;
 
 		private static readonly IDictionary comparers = new Hashtable();
-		private static readonly ObjectComparer instance = new ObjectComparer();
+		private static readonly ObjectComparer instance = new();
+
+		private static readonly Dictionary<Type, bool> _reTypeToLong = new Dictionary<Type, bool> {
+			{ typeof(char), true },
+			{ typeof(byte), true },
+			{ typeof(sbyte), true },
+			{ typeof(short), true },
+			{ typeof(ushort), true },
+			{ typeof(int), true },
+			{ typeof(uint), true },
+			{typeof (long), true }
+		};
 
 		static ObjectComparer()
 		{
@@ -83,7 +95,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			if (xType.IsPrimitive && yType.IsPrimitive)
 			{
-				return ComparePrimitive(x, y);
+				return ComparePrimitive(x, y, xType, yType);
 			}
 
 			if (xType == typeof(decimal) || yType == typeof(decimal))
@@ -104,32 +116,31 @@ namespace NVelocity.Runtime.Parser.Node
 			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", x, y));
 		}
 
-		public int ComparePrimitive(object x, object y)
+		private int ComparePrimitive(object x, object y, Type typeX, Type typeY)
 		{
-			x = ReType(x);
-			y = ReType(y);
+			x = ReType(x, ref typeX);
+			y = ReType(y, ref typeY);
 
-			if (x.GetType() == y.GetType())
+			if (typeX == typeY)
 			{
 				return (x as IComparable).CompareTo(y);
 			}
 
-			IObjectComparer cmp = comparers[string.Format("{0}:{1}", x.GetType(), y.GetType())] as IObjectComparer;
-
-			if (cmp != null)
+			if (comparers[string.Format("{0}:{1}", typeX, typeY)] is IObjectComparer cmp)
 			{
 				return cmp.Compare(x, y);
 			}
 
-			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", x.GetType(), y.GetType()));
+			throw new ArgumentException(string.Format("Unable to compare {0} and {1}", typeX, typeY));
 		}
 
-		public object ReType(object value)
+		private object ReType(object value, ref Type t)
 		{
-			// short, ushort, int, uint, long -> long
-			if (value is char || value is byte || value is sbyte || value is short || value is ushort
-			    || value is int || value is uint || value is long)
+			if (_reTypeToLong.ContainsKey(t))
+			{
 				value = Convert.ToInt64(value);
+				t = typeof(long);
+			}
 
 			return value;
 		}
@@ -163,28 +174,27 @@ namespace NVelocity.Runtime.Parser.Node
 			public int Compare(object x, object y)
 			{
 				if (x is double)
-					return Compare((double) x, y);
+					return Compare((double)x, y);
 
-				return -Compare((double) y, x);
+				return -Compare((double)y, x);
 			}
 
 			public int Compare(double d, object y)
 			{
 				if (y is long)
 				{
-					long l = (long) y;
+					long l = (long)y;
 					return d == l ? Equal : (d < l ? Smaller : Greater);
 				}
 
 				if (y is ulong)
 				{
-					ulong l = (ulong) y;
+					ulong l = (ulong)y;
 					return d == l ? Equal : (d < l ? Smaller : Greater);
 				}
 
-				if (y is float)
+				if (y is float f)
 				{
-					float f = (float) y;
 					return d == f ? Equal : (d < f ? Smaller : Greater);
 				}
 
@@ -209,22 +219,22 @@ namespace NVelocity.Runtime.Parser.Node
 			public int Compare(object x, object y)
 			{
 				if (x is float)
-					return Compare((float) x, y);
+					return Compare((float)x, y);
 
-				return -Compare((float) y, x);
+				return -Compare((float)y, x);
 			}
 
 			public int Compare(float f, object y)
 			{
 				if (y is long)
 				{
-					long l = (long) y;
+					long l = (long)y;
 					return f == l ? Equal : (f < l ? Smaller : Greater);
 				}
 
 				if (y is ulong)
 				{
-					ulong l = (ulong) y;
+					ulong l = (ulong)y;
 					return f == l ? Equal : (f < l ? Smaller : Greater);
 				}
 
@@ -246,27 +256,24 @@ namespace NVelocity.Runtime.Parser.Node
 
 			public int Compare(object x, object y)
 			{
-				if (x is ulong)
+				if (x is ulong xAsLong)
 				{
-					ulong xAsLong = (ulong) x;
 					return Compare(xAsLong, y);
 				}
 
-				return -Compare((ulong) y, x);
+				return -Compare((ulong)y, x);
 			}
 
 			public int Compare(ulong ul, object y)
 			{
-				if (y is long)
+				if (y is long l)
 				{
-					long l = (long) y;
-
 					if (l < 0)
 					{
 						return Smaller;
 					}
 
-					ulong ull = (ulong) l;
+					ulong ull = (ulong)l;
 
 					return ul == ull ? Equal : (ul < ull ? Smaller : Greater);
 				}

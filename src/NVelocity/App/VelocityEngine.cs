@@ -14,15 +14,15 @@
 
 namespace NVelocity.App
 {
-	using System;
-	using System.IO;
-	using System.Text;
 	using Commons.Collections;
 	using Context;
 	using Exception;
 	using NVelocity.Runtime.Parser;
 	using NVelocity.Runtime.Parser.Node;
 	using Runtime;
+	using System;
+	using System.IO;
+	using System.Text;
 
 	/// <summary>
 	/// This class provides a separate new-able instance of the
@@ -43,7 +43,7 @@ namespace NVelocity.App
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
 	public class VelocityEngine
 	{
-		private RuntimeInstance runtimeInstance = new RuntimeInstance();
+		private readonly RuntimeInstance runtimeInstance = new();
 
 		/// <summary>
 		/// Init-less CTOR
@@ -180,16 +180,16 @@ namespace NVelocity.App
 		[Obsolete("Use the overload that takes an TextReader")]
 		public bool Evaluate(IContext context, TextWriter writer, String logTag, Stream instream)
 		{
-			// first, parse - convert ParseException if thrown
-			TextReader br = null;
 			String encoding = null;
 
+			// first, parse - convert ParseException if thrown
+			TextReader br;
 			try
 			{
 				encoding = runtimeInstance.GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT);
 				br = new StreamReader(new StreamReader(instream, Encoding.GetEncoding(encoding)).BaseStream);
 			}
-			catch(IOException ioException)
+			catch (IOException ioException)
 			{
 				String msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
 				throw new ParseErrorException(msg, ioException);
@@ -210,13 +210,12 @@ namespace NVelocity.App
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
 		public bool Evaluate(IContext context, TextWriter writer, String logTag, TextReader reader)
 		{
-			SimpleNode nodeTree = null;
-
+			SimpleNode nodeTree;
 			try
 			{
 				nodeTree = runtimeInstance.Parse(reader, logTag);
 			}
-			catch(ParseException parseException)
+			catch (ParseException parseException)
 			{
 				throw new ParseErrorException(parseException.Message, parseException);
 			}
@@ -224,7 +223,7 @@ namespace NVelocity.App
 			// now we want to init and render
 			if (nodeTree != null)
 			{
-				InternalContextAdapterImpl internalContextAdapterImpl = new InternalContextAdapterImpl(context);
+				InternalContextAdapterImpl internalContextAdapterImpl = new(context);
 
 				internalContextAdapterImpl.PushCurrentTemplateName(logTag);
 
@@ -234,7 +233,7 @@ namespace NVelocity.App
 					{
 						nodeTree.Init(internalContextAdapterImpl, runtimeInstance);
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						runtimeInstance.Error(string.Format("Velocity.evaluate() : init exception for tag = {0} : {1}", logTag, e));
 					}
@@ -284,12 +283,12 @@ namespace NVelocity.App
 			}
 
 			// now just create the VM call, and use evaluate
-			StringBuilder construct = new StringBuilder("#");
+			StringBuilder construct = new("#");
 
 			construct.Append(vmName);
-			construct.Append("(");
+			construct.Append('(');
 
-			for(int i = 0; i < parameters.Length; i++)
+			for (int i = 0; i < parameters.Length; i++)
 			{
 				construct.Append(" $");
 				construct.Append(parameters[i]);
@@ -303,7 +302,7 @@ namespace NVelocity.App
 
 				return retval;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				runtimeInstance.Error(string.Format("VelocityEngine.invokeVelocimacro() : error {0}", e));
 				throw;
@@ -322,8 +321,8 @@ namespace NVelocity.App
 		{
 			return
 				MergeTemplate(templateName,
-				              runtimeInstance.GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT),
-				              context, writer);
+											runtimeInstance.GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT),
+											context, writer);
 		}
 
 		/// <summary>

@@ -14,11 +14,11 @@
 // 
 namespace NVelocity.Test
 {
-	using System;
-	using System.IO;
 	using App;
 	using NUnit.Framework;
 	using Runtime.Parser.Node;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// Tests comparison of custom objects.
@@ -61,10 +61,10 @@ leq
 
 		#endregion
 
-		private int Int = 11;
-		private ulong ULong = 12UL;
-		private float Float = 13.878F;
-		private double Double = 15.059D;
+		private readonly int Int = 11;
+		private readonly ulong ULong = 12UL;
+		private readonly float Float = 13.878F;
+		private readonly double Double = 15.059D;
 
 		private VelocityEngine ve;
 		private VelocityContext ctx;
@@ -82,55 +82,55 @@ leq
 		public void Equivalence()
 		{
 			String eqTest = "#set($int = 1)\r\n" +
-			                "#set($str = \"str\")\r\n" +
-			                "#set($bool = true)\r\n" +
-			                "#if( $int == $str)\r\n" +
-			                "wrong\r\n" +
-			                "#else\r\n" +
-			                "right\r\n" +
-			                "#end\r\n" +
-			                "#if( $int == 1 )\r\n" +
-			                "right\r\n" +
-			                "#else\r\n" +
-			                "wrong\r\n" +
-			                "#end\r\n" +
-			                "#if ( $int == 2 )\r\n" +
-			                "wrong\r\n" +
-			                "#else\r\n" +
-			                "right\r\n" +
-			                "#end\r\n" +
-			                "#if( $str == 2 )\r\n" +
-			                "wrong\r\n" +
-			                "#else\r\n" +
-			                "right\r\n" +
-			                "#end\r\n" +
-			                "#if( $str == \"str\")\r\n" +
-			                "right\r\n" +
-			                "#else\r\n" +
-			                "wrong\r\n" +
-			                "#end\r\n" +
-			                "#if( $str == $nonexistantreference )\r\n" +
-			                "wrong\r\n" +
-			                "#else\r\n" +
-			                "right\r\n" +
-			                "#end\r\n" +
-			                "#if( $str == $bool )\r\n" +
-			                "wrong\r\n" +
-			                "#else\r\n" +
-			                "right\r\n" +
-			                "#end\r\n" +
-			                "#if ($bool == true )\r\n" +
-			                "right\r\n" +
-			                "#else\r\n" +
-			                "wrong\r\n" +
-			                "#end\r\n" +
-			                "#if( $bool == false )\r\n" +
-			                "wrong\r\n" +
-			                "#else\r\n" +
-			                "right\r\n" +
-			                "#end\r\n";
+											"#set($str = \"str\")\r\n" +
+											"#set($bool = true)\r\n" +
+											"#if( $int == $str)\r\n" +
+											"wrong\r\n" +
+											"#else\r\n" +
+											"right\r\n" +
+											"#end\r\n" +
+											"#if( $int == 1 )\r\n" +
+											"right\r\n" +
+											"#else\r\n" +
+											"wrong\r\n" +
+											"#end\r\n" +
+											"#if ( $int == 2 )\r\n" +
+											"wrong\r\n" +
+											"#else\r\n" +
+											"right\r\n" +
+											"#end\r\n" +
+											"#if( $str == 2 )\r\n" +
+											"wrong\r\n" +
+											"#else\r\n" +
+											"right\r\n" +
+											"#end\r\n" +
+											"#if( $str == \"str\")\r\n" +
+											"right\r\n" +
+											"#else\r\n" +
+											"wrong\r\n" +
+											"#end\r\n" +
+											"#if( $str == $nonexistantreference )\r\n" +
+											"wrong\r\n" +
+											"#else\r\n" +
+											"right\r\n" +
+											"#end\r\n" +
+											"#if( $str == $bool )\r\n" +
+											"wrong\r\n" +
+											"#else\r\n" +
+											"right\r\n" +
+											"#end\r\n" +
+											"#if ($bool == true )\r\n" +
+											"right\r\n" +
+											"#else\r\n" +
+											"wrong\r\n" +
+											"#end\r\n" +
+											"#if( $bool == false )\r\n" +
+											"wrong\r\n" +
+											"#else\r\n" +
+											"right\r\n" +
+											"#end\r\n";
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 			Assert.IsTrue(ve.Evaluate(ctx, sw, string.Empty, eqTest));
 			Assert.AreEqual("right\r\nright\r\nright\r\nright\r\nright\r\nright\r\nright\r\nright\r\nright\r\n", sw.ToString());
 
@@ -224,8 +224,8 @@ leq
 		[Test]
 		public void CompareTimeSpan()
 		{
-			TimeSpan longer = new TimeSpan(15, 12, 37, 12);
-			TimeSpan shorter = new TimeSpan(17, 56, 59);
+			TimeSpan longer = new(15, 12, 37, 12);
+			TimeSpan shorter = new(17, 56, 59);
 
 			Assert.AreEqual(ObjectComparer.Greater, ObjectComparer.CompareObjects(longer, shorter));
 			Assert.AreEqual(ObjectComparer.Smaller, ObjectComparer.CompareObjects(shorter, longer));
@@ -239,7 +239,7 @@ leq
 			ctx.Put("left", small);
 			ctx.Put("right", small);
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 			Assert.IsTrue(ve.Evaluate(ctx, sw, string.Empty, VmTemplate));
 			Assert.AreEqual(CmpEqual, sw.ToString());
 

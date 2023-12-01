@@ -14,10 +14,10 @@
 // 
 namespace NVelocity.Bugs
 {
-	using System.Collections;
-	using System.IO;
 	using App;
 	using NUnit.Framework;
+	using System.Collections;
+	using System.IO;
 
 	[TestFixture]
 	public class NVelocity11
@@ -25,13 +25,13 @@ namespace NVelocity.Bugs
 		[Test]
 		public void DoesNotGiveNullReferenceExceptionWhenAmbiguousMatchBecauseOfNullArg()
 		{
-			VelocityEngine engine = new VelocityEngine();
+			VelocityEngine engine = new();
 			engine.Init();
 
-			VelocityContext ctx = new VelocityContext();
+			VelocityContext ctx = new();
 			ctx.Put("test", new TestClass());
 			ctx.Put("nullObj", null);
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new();
 
 			Assert.IsTrue(engine.Evaluate(ctx, writer, "testEval", "$test.DoSomething($nullObj)"));
 			Assert.AreEqual("$test.DoSomething($nullObj)", writer.GetStringBuilder().ToString());

@@ -28,9 +28,9 @@ namespace NVelocity.App.Events
 	public class MethodExceptionEventArgs : EventArgs
 	{
 		private Object valueToRender;
-		private Exception exceptionThrown;
-		private Type targetClass;
-		private String targetMethod;
+		private readonly Exception exceptionThrown;
+		private readonly Type targetClass;
+		private readonly String targetMethod;
 
 		public MethodExceptionEventArgs(Type targetClass, String targetMethod, Exception exceptionThrown)
 		{

@@ -14,13 +14,13 @@
 // 
 namespace NVelocity.Test.Extensions
 {
+	using App;
+	using App.Events;
+	using NUnit.Framework;
 	using System;
 	using System.Collections;
 	using System.IO;
 	using System.Text.RegularExpressions;
-	using App;
-	using App.Events;
-	using NUnit.Framework;
 
 	/// <summary>
 	/// This class exemplifies an extension to NVelocity rendering, using
@@ -55,11 +55,11 @@ namespace NVelocity.Test.Extensions
 			velocityContext.Put("escString", new EscapableString("<escape me>"));
 			velocityContext.Put("normal", "normal>not<escapable");
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
-			                                     "ExtensionsTest.EscapeEscapableSimpleObject",
-			                                     @"$escString | $normal");
+																						"ExtensionsTest.EscapeEscapableSimpleObject",
+																						@"$escString | $normal");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"&lt;escape me&gt; | normal>not<escapable", sw.ToString());
@@ -71,11 +71,11 @@ namespace NVelocity.Test.Extensions
 			velocityContext.Put("escComplex", new EscapableComplexObject("my>name", "my&value"));
 			velocityContext.Put("normal", "normal>not<escapable");
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
-			                                     "ExtensionsTest.EscapeEscapableComplexObject",
-			                                     @"$escComplex.name $escComplex.value | $normal");
+																						"ExtensionsTest.EscapeEscapableComplexObject",
+																						@"$escComplex.name $escComplex.value | $normal");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"my&gt;name my&amp;value | normal>not<escapable", sw.ToString());
@@ -88,11 +88,11 @@ namespace NVelocity.Test.Extensions
 			velocityContext.Put("escMixed", new EscapableComplexObject("escape&me", new NotEscapableString("don't &escape> me")));
 			velocityContext.Put("normal", "normal>not<escapable");
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
-			                                     "ExtensionsTest.EscapeEscapableComplexMixedObject",
-			                                     @"$escMixed.name $escMixed.value | $normal");
+																						"ExtensionsTest.EscapeEscapableComplexMixedObject",
+																						@"$escMixed.name $escMixed.value | $normal");
 
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(@"escape&amp;me don't &escape> me | normal>not<escapable", sw.ToString());
@@ -103,7 +103,7 @@ namespace NVelocity.Test.Extensions
 		{
 			velocityContext.Put("singleItem", "text");
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			bool ok = velocityEngine.Evaluate(velocityContext, sw, "", @"$singleItem");
 
@@ -114,9 +114,9 @@ namespace NVelocity.Test.Extensions
 		[Test]
 		public void ReplaceMultipleItems()
 		{
-			velocityContext.Put("multipleItems", new[] {"text", "text"});
+			velocityContext.Put("multipleItems", new[] { "text", "text" });
 
-			StringWriter sw = new StringWriter();
+			StringWriter sw = new();
 
 			bool ok = velocityEngine.Evaluate(velocityContext, sw, "",
 				"#foreach($item in $multipleItems)\n$item\n#end");
@@ -133,7 +133,7 @@ namespace NVelocity.Test.Extensions
 		private void EventCartridge_ReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
 		{
 			Stack rs = e.GetCopyOfReferenceStack();
-			while(rs.Count > 0)
+			while (rs.Count > 0)
 			{
 				Object current = rs.Pop();
 				if (current is INotEscapable)
@@ -148,7 +148,7 @@ namespace NVelocity.Test.Extensions
 
 			if (e.RootString == "$multipleItems")
 			{
-				e.NewValue = new[] {"Item 1", "Item 2"};
+				e.NewValue = new[] { "Item 1", "Item 2" };
 			}
 			else if (e.RootString == "$singleItem")
 			{
@@ -158,7 +158,7 @@ namespace NVelocity.Test.Extensions
 
 		private string Escaper(Match m)
 		{
-			switch(m.Value)
+			switch (m.Value)
 			{
 				case "&":
 					return "&amp;";
@@ -185,7 +185,7 @@ namespace NVelocity.Test.Extensions
 
 		public class EscapableString : IEscapable
 		{
-			private String value;
+			private readonly String value;
 
 			public EscapableString(String value)
 			{
@@ -200,7 +200,7 @@ namespace NVelocity.Test.Extensions
 
 		public class NotEscapableString : INotEscapable
 		{
-			private String value;
+			private readonly String value;
 
 			public NotEscapableString(String value)
 			{
@@ -215,8 +215,8 @@ namespace NVelocity.Test.Extensions
 
 		public class EscapableComplexObject : IEscapable
 		{
-			private Object name;
-			private Object value;
+			private readonly Object name;
+			private readonly Object value;
 
 			public EscapableComplexObject(Object name, Object value)
 			{

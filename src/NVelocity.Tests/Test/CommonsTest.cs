@@ -14,11 +14,11 @@
 // 
 namespace NVelocity.Test
 {
+	using global::Commons.Collections;
+	using NUnit.Framework;
 	using System;
 	using System.Collections;
 	using System.IO;
-	using global::Commons.Collections;
-	using NUnit.Framework;
 
 	/// <summary>
 	/// Make sure that properties files are loaded correctly
@@ -29,12 +29,12 @@ namespace NVelocity.Test
 		[TearDown]
 		protected void TearDown()
 		{
-			FileInfo file = new FileInfo("test1.properties");
+			FileInfo file = new("test1.properties");
 			try
 			{
 				file.Delete();
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				// ignore problems cleaning up file
 			}
@@ -43,7 +43,7 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_ExtendedProperties()
 		{
-			FileInfo file = new FileInfo("test1.properties");
+			FileInfo file = new("test1.properties");
 			StreamWriter sw = file.CreateText();
 			sw.WriteLine("# lines starting with # are comments.  Blank lines are ignored");
 			sw.WriteLine(string.Empty);
@@ -70,14 +70,14 @@ namespace NVelocity.Test
 			String s = sr.ReadToEnd();
 			sr.Close();
 
-			ExtendedProperties props = new ExtendedProperties(file.FullName);
+			ExtendedProperties props = new(file.FullName);
 			VerifyProperties(props, "prefix.");
 
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new();
 			props.Save(writer, "header");
 
 			// make sure that combine does not change types
-			ExtendedProperties p = new ExtendedProperties();
+			ExtendedProperties p = new();
 			p.Combine(props);
 			VerifyProperties(p, "prefix.");
 
@@ -91,22 +91,22 @@ namespace NVelocity.Test
 			Assert.IsTrue(props.Count == 5, "expected to have 5 properties, had " + props.Count);
 
 			Assert.IsTrue(props.GetString(prefix + "key").Equals("value"),
-			              "key was not correct: " + props.GetString(prefix + "key"));
+										"key was not correct: " + props.GetString(prefix + "key"));
 
 			// make sure the comma escaping is working correctly
 			Assert.IsTrue(props.GetString(prefix + "commas.excaped").Equals("Hi, what'up?"),
-			              "commas.excaped was not correct: " + props.GetString(prefix + "commas.excaped"));
+										"commas.excaped was not correct: " + props.GetString(prefix + "commas.excaped"));
 
 			// make sure that multiple tokens on a single line are parsed correctly
 			Object o = props.GetProperty(prefix + "tokens_on_a_line");
 			Assert.IsTrue((o is ArrayList), prefix + "tokens_on_a_line was expected to be an ArrayList");
-			Assert.IsTrue(((ArrayList) o).Count == 2, prefix + "tokens_on_a_line was expected to be an ArrayList with 2 elements");
+			Assert.IsTrue(((ArrayList)o).Count == 2, prefix + "tokens_on_a_line was expected to be an ArrayList with 2 elements");
 
 			// make sure that tokens specified on multiple lines get put together correctly
 			o = props.GetProperty(prefix + "tokens_on_multiple_lines");
 			Assert.IsTrue((o is ArrayList), prefix + "tokens_on_multiple_lines was expected to be an ArrayList");
-			Assert.IsTrue(((ArrayList) o).Count == 2,
-			              prefix + "tokens_on_multiple_lines was expected to be an ArrayList with 2 elements");
+			Assert.IsTrue(((ArrayList)o).Count == 2,
+										prefix + "tokens_on_multiple_lines was expected to be an ArrayList with 2 elements");
 		}
 	}
 }

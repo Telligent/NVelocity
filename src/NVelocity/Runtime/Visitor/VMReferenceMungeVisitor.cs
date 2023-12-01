@@ -14,9 +14,9 @@
 
 namespace NVelocity.Runtime.Visitor
 {
+	using NVelocity.Runtime.Parser.Node;
 	using System;
 	using System.Collections;
-	using NVelocity.Runtime.Parser.Node;
 
 	/// <summary>
 	/// This class is a visitor used by the VM proxy to change the
@@ -32,7 +32,7 @@ namespace NVelocity.Runtime.Visitor
 		/// Map containing VM arg to instance-use reference
 		/// Passed in with CTOR
 		/// </summary>
-		private Hashtable argumentMap = null;
+		private readonly Hashtable argumentMap = null;
 
 		/// <summary>
 		/// CTOR - takes a map of args to reference
@@ -52,7 +52,7 @@ namespace NVelocity.Runtime.Visitor
 		{
 			// see if there is an override value for this
 			// reference
-			String overrideVal = (String) argumentMap[node.Literal.Substring(1)];
+			String overrideVal = (String)argumentMap[node.Literal[1..]];
 
 			// if so, set in the node
 			if (overrideVal != null)

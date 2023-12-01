@@ -1,9 +1,9 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-	using System;
-	using System.IO;
 	using Context;
 	using Directive;
+	using System;
+	using System.IO;
 
 	/// <summary>
 	/// This class is responsible for handling the pluggable
