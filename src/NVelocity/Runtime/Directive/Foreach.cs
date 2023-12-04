@@ -43,16 +43,7 @@ namespace NVelocity.Runtime.Directive
 			}
 		}
 
-		private enum EnumType
-		{
-			Unknown = -1,
-			Array = 1,
-			Iterator = 2,
-			Dictionary = 3,
-			Collection = 4,
-			Enumeration = 5,
-			Enumerable = 6,
-		}
+		private List<INode>[] sections;
 
 		/// <summary>
 		/// The name of the variable to use when placing
@@ -161,6 +152,8 @@ namespace NVelocity.Runtime.Directive
 			// this is really the only thing we can do here as everything
 			// else is context sensitive
 			elementKey = node.GetChild(0).FirstToken.Image[1..];
+
+			PrepareSections(node.GetChild(3));
 		}
 
 		/// <summary>
@@ -186,87 +179,18 @@ namespace NVelocity.Runtime.Directive
 				return null;
 			}
 
-			// See if we already know what type this is. 
-			// Use the introspection cache
-			EnumType type = EnumType.Unknown;
-
-			IntrospectionCacheData introspectionCacheData = context.ICacheGet(this);
-			Type c = listObject.GetType();
-
-			// if we have an entry in the cache, and the Class we have
-			// cached is the same as the Class of the data object
-			// then we are ok
-
-			if (introspectionCacheData != null && introspectionCacheData.ContextData == c)
+			if (listObject is IEnumerable enumerable)
 			{
-				// dig the type out of the data object
-				type = ((EnumType)introspectionCacheData.Thingy);
+				return enumerable.GetEnumerator();
 			}
-
-			// If we still don't know what this is, 
-			// figure out what type of object the list
-			// element is, and get the iterator for it
-			if (type == EnumType.Unknown)
+			else
 			{
-				if (c.IsArray)
-				{
-					type = EnumType.Array;
-				}
-				else if (listObject is IDictionary)
-				{
-					type = EnumType.Dictionary;
-				}
-				else if (listObject is ICollection)
-				{
-					type = EnumType.Collection;
-				}
-				else if (listObject is IEnumerable)
-				{
-					type = EnumType.Enumerable;
-				}
-				else if (listObject is IEnumerator)
-				{
-					type = EnumType.Enumeration;
-				}
+				runtimeServices.Warn(
+								string.Format(
+										"Could not determine type of enumerator ({0}) in #foreach loop for {1} at [{2},{3}] in template {4}",
+										listObject.GetType().Name, node.GetChild(2).FirstToken.Image, Line, Column, context.CurrentTemplateName));
 
-				// if we did figure it out, cache it
-				if (type != EnumType.Unknown)
-				{
-					introspectionCacheData = new IntrospectionCacheData(c, type);
-					context.ICachePut(this, introspectionCacheData);
-				}
-			}
-
-			// now based on the type from either cache or examination...
-			switch (type)
-			{
-				case EnumType.Collection:
-					return ((ICollection)listObject).GetEnumerator();
-
-				case EnumType.Enumerable:
-					return ((IEnumerable)listObject).GetEnumerator();
-
-				case EnumType.Enumeration:
-					runtimeServices.Warn(
-							string.Format(
-									"Warning! The reference {0} is an Enumeration in the #foreach() loop at [{1},{2}] in template {3}. Because it's not resetable, if used in more than once, this may lead to unexpected results.",
-									node.GetChild(2).FirstToken.Image, Line, Column, context.CurrentTemplateName));
-					return (IEnumerator)listObject;
-
-				case EnumType.Array:
-					return ((Array)listObject).GetEnumerator();
-
-				case EnumType.Dictionary:
-					return ((IDictionary)listObject).GetEnumerator();
-
-				default:
-					/*  we have no clue what this is  */
-					runtimeServices.Warn(
-							string.Format(
-									"Could not determine type of enumerator ({0}) in #foreach loop for {1} at [{2},{3}] in template {4}",
-									c.Name, node.GetChild(2).FirstToken.Image, Line, Column, context.CurrentTemplateName));
-
-					return null;
+				return null;
 			}
 		}
 
@@ -279,7 +203,6 @@ namespace NVelocity.Runtime.Directive
 			IEnumerator enumerator = GetIterator(context, node);
 			INode bodyNode = node.GetChild(3);
 
-			List<INode>[] sections = PrepareSections(bodyNode);
 			bool isFancyLoop = (sections != null);
 
 			if (enumerator == null && !isFancyLoop)
@@ -310,28 +233,28 @@ namespace NVelocity.Runtime.Directive
 						{
 							if (counter == counterInitialValue)
 							{
-								ProcessSection(ForeachSectionEnum.BeforeAll, sections, context, writer);
+								ProcessSection(ForeachSectionEnum.BeforeAll, context, writer);
 							}
 							else
 							{
-								ProcessSection(ForeachSectionEnum.Between, sections, context, writer);
+								ProcessSection(ForeachSectionEnum.Between, context, writer);
 							}
 
-							ProcessSection(ForeachSectionEnum.Before, sections, context, writer);
+							ProcessSection(ForeachSectionEnum.Before, context, writer);
 
 							// since 1st item is zero we invert odd/even
 							if ((counter - counterInitialValue) % 2 == 0)
 							{
-								ProcessSection(ForeachSectionEnum.Odd, sections, context, writer);
+								ProcessSection(ForeachSectionEnum.Odd, context, writer);
 							}
 							else
 							{
-								ProcessSection(ForeachSectionEnum.Even, sections, context, writer);
+								ProcessSection(ForeachSectionEnum.Even, context, writer);
 							}
 
-							ProcessSection(ForeachSectionEnum.Each, sections, context, writer);
+							ProcessSection(ForeachSectionEnum.Each, context, writer);
 
-							ProcessSection(ForeachSectionEnum.After, sections, context, writer);
+							ProcessSection(ForeachSectionEnum.After, context, writer);
 						}
 						else
 						{
@@ -350,11 +273,11 @@ namespace NVelocity.Runtime.Directive
 			{
 				if (counter > counterInitialValue)
 				{
-					ProcessSection(ForeachSectionEnum.AfterAll, sections, context, writer);
+					ProcessSection(ForeachSectionEnum.AfterAll, context, writer);
 				}
 				else
 				{
-					ProcessSection(ForeachSectionEnum.NoData, sections, context, writer);
+					ProcessSection(ForeachSectionEnum.NoData, context, writer);
 				}
 			}
 
@@ -383,7 +306,7 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		private void ProcessSection(ForeachSectionEnum sectionEnumType, List<INode>[] sections, IInternalContextAdapter context, TextWriter writer)
+		private void ProcessSection(ForeachSectionEnum sectionEnumType, IInternalContextAdapter context, TextWriter writer)
 		{
 			int sectionIndex = (int)sectionEnumType;
 
@@ -398,13 +321,13 @@ namespace NVelocity.Runtime.Directive
 			}
 		}
 
-		private List<INode>[] PrepareSections(INode node)
+		private void PrepareSections(INode node)
 		{
 			bool isFancyLoop = false;
 
 			int curSection = (int)ForeachSectionEnum.Each;
 
-			List<INode>[] sections = new List<INode>[SectionNames.Length];
+			var sections = new List<INode>[SectionNames.Length];
 
 			int nodeCount = node.ChildrenCount;
 
@@ -428,11 +351,11 @@ namespace NVelocity.Runtime.Directive
 
 			if (!isFancyLoop)
 			{
-				return null;
+				this.sections = null;
 			}
 			else
 			{
-				return sections;
+				this.sections = sections;
 			}
 		}
 	}
