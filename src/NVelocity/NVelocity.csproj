@@ -471,6 +471,7 @@
     <Compile Include="Util\Introspection\MethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\Introspection\SegmentedLruCache.cs" />
     <Compile Include="Util\Introspection\UberspectImpl.cs">
       <SubType>Code</SubType>
     </Compile>

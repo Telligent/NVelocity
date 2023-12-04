@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,24 +6,21 @@ namespace NVelocity.Util.Introspection
 {
 	public sealed class Invoker
 	{
-		private static readonly ConcurrentDictionary<MethodInfo, Func<object, object[], object>> MethodToWrapperMap = new ConcurrentDictionary<MethodInfo, Func<object, object[], object>>();
+		private static readonly SegmentedLruCache<MethodInfo, Func<object, object[], object>> WrapperByMethodInfo = new SegmentedLruCache<MethodInfo, Func<object, object[], object>>(10000);
 
 		public static Func<object, object[], object> GetFunc(MethodInfo methodInfo)
 		{
 			if (methodInfo == null)
 				throw new ArgumentNullException(nameof(methodInfo));
 
-			return MethodToWrapperMap.GetOrAdd(methodInfo, CreateMethodWrapper);
-		}
+			var f = WrapperByMethodInfo.Get(methodInfo);
+			if (f == null)
+			{
+				f = CreateMethodWrapper(methodInfo);
+				WrapperByMethodInfo.Put(methodInfo, f);
+			}
 
-		public static object Invoke(MethodInfo methodInfo, object target, params object[] parameters)
-		{
-			return GetFunc(methodInfo)(target, parameters);
-		}
-
-		public static object Invoke(PropertyInfo propertyInfo, object target, params object[] parameters)
-		{
-			return GetFunc(propertyInfo)(target, parameters);
+			return f;
 		}
 
 		public static Func<object, object[], object> GetFunc(PropertyInfo propertyInfo)
