@@ -20,7 +20,7 @@ namespace NVelocity.Runtime.Exception
 	[Serializable]
 	public class NodeException : Exception
 	{
-		public NodeException(String exceptionMessage, INode node)
+		public NodeException(string exceptionMessage, INode node)
 			: base(string.Format("{0}: {1} [line {2},column {3}]", exceptionMessage, node.Literal, node.Line, node.Column))
 		{
 		}

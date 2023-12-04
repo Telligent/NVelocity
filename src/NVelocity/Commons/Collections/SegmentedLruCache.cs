@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NVelocity.Util.Introspection
+namespace Commons.Collections
 {
 	public class SegmentedLruCache<TKey, TValue> where TKey : notnull
 	{
@@ -23,15 +23,48 @@ namespace NVelocity.Util.Introspection
 
 		public SegmentedLruCache(int capacity)
 		{
+			Capacity = capacity;
 			_dictionary = new ConcurrentDictionary<TKey, Entry<TKey, TValue>>();
 
 			// partition capacity into 3 equal segments
-			_hotCapcity = _warmCapacity = _coldCapacity = System.Convert.ToInt32(System.Math.Round((double)capacity / 3));
+			_hotCapcity = _warmCapacity = _coldCapacity = Convert.ToInt32(Math.Round((double)capacity / 3));
 			_coldCapacity += capacity - (_hotCapcity + _warmCapacity + _coldCapacity);
 
 			_hotSegment = new Queue<Entry<TKey, TValue>>(_hotCapcity);
 			_warmSegment = new Queue<Entry<TKey, TValue>>(_warmCapacity + 1);
 			_coldSegment = new Queue<Entry<TKey, TValue>>(_coldCapacity);
+		}
+
+		public int Capacity { get; }
+
+		public int Count
+		{
+			get
+			{
+				return _dictionary.Count;
+			}
+		}
+
+		public void Remove(TKey key)
+		{
+			lock (_putSync)
+			{
+				if (_dictionary.TryRemove(key, out Entry<TKey, TValue> v))
+				{
+					MoveToCold(v);
+				}
+			}
+		}
+
+		public void Clear()
+		{
+			lock (_putSync)
+			{
+				_hotSegment.Clear();
+				_warmSegment.Clear();
+				_coldSegment.Clear();
+				_dictionary.Clear();
+			}
 		}
 
 		public TValue Get(TKey key)

@@ -18,14 +18,15 @@ namespace NVelocity.Runtime.Resource.Loader
 	using NVelocity.Exception;
 	using System;
 	using System.Collections;
-	using System.IO;
+				using System.Collections.Generic;
+				using System.IO;
 	using System.Reflection;
 	using Util;
 
 	public class AssemblyRelativeResourceLoader : ResourceLoader
 	{
-		private ArrayList assemblyNames;
-		private ArrayList prefixes;
+		private List<string> assemblyNames;
+		private List<string> prefixes;
 
 		/// <summary> 
 		/// Initialize the template loader with a
@@ -33,8 +34,8 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		public override void Init(ExtendedProperties configuration)
 		{
-			assemblyNames = configuration.GetVector("assembly");
-			prefixes = configuration.GetVector("prefix");
+			assemblyNames = configuration.GetStringList("assembly");
+			prefixes = configuration.GetStringList("prefix");
 			if (assemblyNames.Count != prefixes.Count)
 			{
 				throw new ResourceNotFoundException("Need to specify prefixes!");
@@ -45,7 +46,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary> Get the InputStream that the Runtime will parse
 		/// to create a template.
 		/// </summary>
-		public override Stream GetResourceStream(String templateName)
+		public override Stream GetResourceStream(string templateName)
 		{
 			// Make sure we have a valid templateName.
 			if (templateName == null || templateName.Length == 0)
@@ -57,7 +58,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				throw new ResourceNotFoundException("Need to specify a file name or file path!");
 			}
 
-			String template = StringUtils.NormalizePath(templateName);
+			string template = StringUtils.NormalizePath(templateName);
 
 			if (template.StartsWith("\\"))
 			{
@@ -66,7 +67,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			if (template == null || template.Length == 0)
 			{
-				String msg =
+				string msg =
 					string.Format(
 						"File resource error : argument {0} contains .. and may be trying to access content outside of template root.  Rejected.",
 						template);
@@ -84,8 +85,8 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			for (int i = 0; i < assemblyNames.Count; i++)
 			{
-				String assemblyName = (String)assemblyNames[i];
-				String prefix = (String)prefixes[i];
+				string assemblyName = (string)assemblyNames[i];
+				string prefix = (string)prefixes[i];
 				Assembly assembly;
 
 				try

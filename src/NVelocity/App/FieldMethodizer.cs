@@ -74,7 +74,7 @@ namespace NVelocity.App
 		/// to methodize.
 		/// </summary>
 		/// <param name="s">Name of class to methodize.</param>
-		public FieldMethodizer(String s)
+		public FieldMethodizer(string s)
 		{
 			try
 			{
@@ -93,7 +93,7 @@ namespace NVelocity.App
 		/// the class.
 		/// </summary>
 		/// <param name="o">object to methodize.</param>
-		public FieldMethodizer(Object o)
+		public FieldMethodizer(object o)
 		{
 			try
 			{
@@ -108,15 +108,15 @@ namespace NVelocity.App
 		/// <summary>
 		/// Add the Name of the class to methodize
 		/// </summary>
-		public void AddObject(String s)
+		public void AddObject(string s)
 		{
 			Type type = Type.GetType(s);
 			Inspect(type);
 		}
 
-		/// <summary> Add an Object to methodize
+		/// <summary> Add an object to methodize
 		/// </summary>
-		public void AddObject(Object o)
+		public void AddObject(object o)
 		{
 			Inspect(o.GetType());
 		}
@@ -126,7 +126,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="fieldName">Name of static field to retrieve</param>
 		/// <returns>The value of the given field.</returns>
-		public Object Get(String fieldName)
+		public object Get(string fieldName)
 		{
 			try
 			{

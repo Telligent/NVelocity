@@ -18,7 +18,8 @@ namespace NVelocity.Runtime.Resource.Loader
 	using NVelocity.Exception;
 	using System;
 	using System.Collections;
-	using System.IO;
+				using System.Collections.Generic;
+				using System.IO;
 	using Util;
 
 	/// <summary>
@@ -29,21 +30,21 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary>
 		/// The paths to search for templates.
 		/// </summary>
-		protected ArrayList paths = null;
+		protected List<string> paths = null;
 
 		/// <summary>
 		/// Used to map the path that a template was found on
 		/// so that we can properly check the modification
 		/// times of the files.
 		/// </summary>
-		protected Hashtable templatePaths = new();
+		protected Dictionary<string, string> templatePaths = new();
 
 
 		public override void Init(ExtendedProperties configuration)
 		{
 			runtimeServices.Info("FileResourceLoader : initialization starting.");
 
-			paths = configuration.GetVector("path");
+			paths = configuration.GetStringList("path");
 		}
 
 		/// <summary>
@@ -55,7 +56,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// @throws ResourceNotFoundException if template not found
 		/// in the file template path.
 		/// </returns>
-		public override Stream GetResourceStream(String templateName)
+		public override Stream GetResourceStream(string templateName)
 		{
 			lock (this)
 			{
@@ -75,7 +76,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				if (template == null || template.Length == 0)
 				{
-					String msg =
+					string msg =
 						string.Format(
 							"File resource error : argument {0} contains .. and may be trying to access content outside of template root.  Rejected.",
 							template);
@@ -90,7 +91,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				for (int i = 0; i < size; i++)
 				{
-					String path = (String)paths[i];
+					string path = (string)paths[i];
 
 					//This fixes the Directory Seperators making sure that they are correct for the platform.
 					//This is a hack and very inefficient location to perform the fix.
@@ -105,7 +106,7 @@ namespace NVelocity.Runtime.Resource.Loader
 						// Store the path that this template came
 						// from so that we can check its modification
 						// time.
-						SupportClass.PutElement(templatePaths, templateName, path);
+						templatePaths[templateName] = path;
 						return inputStream;
 					}
 				}
@@ -113,7 +114,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				// We have now searched all the paths for
 				// templates and we didn't find anything so
 				// throw an exception.
-				String msg2 = string.Format("FileResourceLoader Error: cannot find resource {0}", template);
+				string msg2 = string.Format("FileResourceLoader Error: cannot find resource {0}", template);
 				throw new ResourceNotFoundException(msg2);
 			}
 		}
@@ -124,7 +125,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <param name="path">a normalized path</param>
 		/// <param name="template">filename of template to get</param>
 		/// <returns>InputStream input stream that will be parsed</returns>
-		private Stream FindTemplate(String path, String template)
+		private Stream FindTemplate(string path, string template)
 		{
 			try
 			{
@@ -168,7 +169,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		public override bool IsSourceModified(Resource resource)
 		{
-			String path = (String)templatePaths[resource.Name];
+			string path = (string)templatePaths[resource.Name];
 			FileInfo file = new(path + Path.AltDirectorySeparatorChar + resource.Name);
 
 			if (file.Exists)
@@ -193,7 +194,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 		public override long GetLastModified(Resource resource)
 		{
-			String path = (String)templatePaths[resource.Name];
+			string path = (string)templatePaths[resource.Name];
 			FileInfo file = new(path + Path.AltDirectorySeparatorChar + resource.Name);
 
 			if (file.Exists)

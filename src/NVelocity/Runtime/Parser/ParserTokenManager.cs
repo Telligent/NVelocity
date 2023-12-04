@@ -3441,7 +3441,7 @@ namespace NVelocity.Runtime.Parser
 			}
 		}
 
-		public static String[] jjstrLiteralImages = {
+		public static string[] jjstrLiteralImages = {
 																									null, null, null, null, null, null, null, null, null, null, null, null,
 																									null,
 																									null, null, null, null, null, null, null, null, null, null, null, null,
@@ -3453,7 +3453,7 @@ namespace NVelocity.Runtime.Parser
 																									null, null, null, null, null, null, null,
 																								};
 
-		public static String[] lexStateNames = {
+		public static string[] lexStateNames = {
 																							"DIRECTIVE",
 																							"REFMOD2",
 																							"REFMODIFIER",
@@ -3536,7 +3536,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			Token t = Token.NewToken(jjmatchedKind);
 			t.Kind = jjmatchedKind;
-			String im = jjstrLiteralImages[jjmatchedKind];
+			string im = jjstrLiteralImages[jjmatchedKind];
 			t.Image = (im == null) ? input_stream.GetImage() : im;
 			t.BeginLine = input_stream.BeginLine;
 			t.BeginColumn = input_stream.BeginColumn;
@@ -3696,7 +3696,7 @@ namespace NVelocity.Runtime.Parser
 						}
 						int error_line = input_stream.EndLine;
 						int error_column = input_stream.EndColumn;
-						String error_after = null;
+						string error_after = null;
 						bool EOFSeen = false;
 						if (input_stream.ReadChar())
 						{
@@ -3735,7 +3735,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				case 60:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					/*
@@ -3751,7 +3751,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 61:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					if (debugPrint)
@@ -3773,7 +3773,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				case 10:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen)));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen)));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
@@ -3798,7 +3798,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 11:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen)));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen)));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
@@ -3823,7 +3823,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 12:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen)));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen)));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
@@ -3841,7 +3841,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 13:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen)));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen)));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
@@ -3852,7 +3852,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 14:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen)));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen)));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
@@ -3862,7 +3862,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 15:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen)));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen)));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
@@ -3900,7 +3900,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				case 5:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					if (!inComment)
@@ -3916,14 +3916,14 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 6:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					RPARENHandler();
 					break;
 				case 7:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					/*
@@ -3936,7 +3936,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 9:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					if (!inComment)
@@ -3953,7 +3953,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 19:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					inComment = false;
@@ -3961,7 +3961,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 20:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					inComment = false;
@@ -3969,7 +3969,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 21:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					inComment = false;
@@ -3977,7 +3977,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 24:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					/*
@@ -3991,7 +3991,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 27:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					if (debugPrint)
@@ -4007,7 +4007,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 43:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					inDirective = false;
@@ -4015,21 +4015,21 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 44:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					SwitchTo(DIRECTIVE);
 					break;
 				case 45:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					SwitchTo(DIRECTIVE);
 					break;
 				case 46:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					inDirective = false;
@@ -4037,14 +4037,14 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 47:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					matchedToken.Kind = EOF;
 					break;
 				case 49:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					/*
@@ -4060,7 +4060,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 57:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					/*
@@ -4083,7 +4083,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 				case 59:
 					if (image == null)
-						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
+						image = new StringBuilder(new string(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (jjmatchedPos + 1)));
 					StateStackPop();

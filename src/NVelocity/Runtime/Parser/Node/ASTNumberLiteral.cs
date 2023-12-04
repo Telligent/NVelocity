@@ -5,7 +5,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 	public class ASTNumberLiteral : SimpleNode
 	{
-		private Int32 valueField;
+		private int valueField;
 
 		public ASTNumberLiteral(int id) : base(id)
 		{
@@ -17,7 +17,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -25,7 +25,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>  Initialization method - doesn't do much but do the object
 		/// creation.  We only need to do it once.
 		/// </summary>
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			/*
 			*  init the tree correctly
@@ -33,12 +33,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 			base.Init(context, data);
 
-			valueField = Int32.Parse(FirstToken.Image);
+			valueField = int.Parse(FirstToken.Image);
 
 			return data;
 		}
 
-		public override Object Value(IInternalContextAdapter context)
+		public override object Value(IInternalContextAdapter context)
 		{
 			return valueField;
 		}

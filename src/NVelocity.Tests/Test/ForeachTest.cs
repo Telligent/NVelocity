@@ -31,7 +31,7 @@ namespace NVelocity.Test
 		private VelocityContext c;
 		private StringWriter sw;
 		private VelocityEngine velocityEngine;
-		private Boolean ok;
+		private bool ok;
 		private string template;
 
 		[SetUp]

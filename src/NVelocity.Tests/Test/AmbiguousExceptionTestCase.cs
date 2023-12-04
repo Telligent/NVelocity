@@ -76,9 +76,9 @@ namespace NVelocity.Test
 
 	public interface ISomething
 	{
-		String DoSome(String x);
+								string DoSome(string x);
 
-		String DoSome(int x);
+								string DoSome(int x);
 	}
 
 	public class ModelClass : ISomething
@@ -91,7 +91,7 @@ namespace NVelocity.Test
 			set { amount = value; }
 		}
 
-		public String DoSome(string x)
+		public string DoSome(string x)
 		{
 			return "x:" + x;
 		}

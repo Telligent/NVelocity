@@ -32,11 +32,11 @@ namespace NVelocity.Exception
 	[Serializable]
 	public class ParseErrorException : VelocityException
 	{
-		public ParseErrorException(String exceptionMessage) : base(exceptionMessage)
+		public ParseErrorException(string exceptionMessage) : base(exceptionMessage)
 		{
 		}
 
-		public ParseErrorException(String exceptionMessage, Exception innerException) : base(exceptionMessage, innerException)
+		public ParseErrorException(string exceptionMessage, Exception innerException) : base(exceptionMessage, innerException)
 		{
 		}
 	}

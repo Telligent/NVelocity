@@ -111,7 +111,7 @@ namespace NVelocity.Test
 			c.Put("style", "style='color:red'");
 			c.Put("survey", 1);
 			c.Put("id", 2);
-			c.Put("siteRoot", String.Empty);
+			c.Put("siteRoot", string.Empty);
 			c.Put("Helper", new Helper());
 			c.Put("DictHelper", new DictHelper());
 
@@ -138,7 +138,7 @@ namespace NVelocity.Test
 
 	public class Helper
 	{
-		public String Dump(IDictionary options)
+		public string Dump(IDictionary options)
 		{
 			if (options == null) throw new ArgumentNullException(nameof(options));
 

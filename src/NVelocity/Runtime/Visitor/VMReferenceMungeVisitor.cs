@@ -16,7 +16,7 @@ namespace NVelocity.Runtime.Visitor
 {
 	using NVelocity.Runtime.Parser.Node;
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// This class is a visitor used by the VM proxy to change the
@@ -32,12 +32,12 @@ namespace NVelocity.Runtime.Visitor
 		/// Map containing VM arg to instance-use reference
 		/// Passed in with CTOR
 		/// </summary>
-		private readonly Hashtable argumentMap = null;
+		private readonly Dictionary<string, string> argumentMap = null;
 
 		/// <summary>
 		/// CTOR - takes a map of args to reference
 		/// </summary>
-		public VMReferenceMungeVisitor(Hashtable map)
+		public VMReferenceMungeVisitor(Dictionary<string, string> map)
 		{
 			argumentMap = map;
 		}
@@ -47,12 +47,14 @@ namespace NVelocity.Runtime.Visitor
 		/// set the literal in the ASTReference node
 		/// </summary>
 		/// <param name="node">ASTReference to work on</param>
-		/// <param name="data">Object to pass down from caller</param>
-		public override Object Visit(ASTReference node, Object data)
+		/// <param name="data">object to pass down from caller</param>
+		public override object Visit(ASTReference node, object data)
 		{
 			// see if there is an override value for this
 			// reference
-			String overrideVal = (String)argumentMap[node.Literal[1..]];
+			string overrideVal;
+			if (!argumentMap.TryGetValue(node.Literal[1..], out overrideVal))
+				overrideVal = null;
 
 			// if so, set in the node
 			if (overrideVal != null)

@@ -48,7 +48,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -57,7 +57,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// simple init - init our subtree and get what we can from
 		/// the AST
 		/// </summary>
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			base.Init(context, data);
 
@@ -72,7 +72,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// actual return if the method returns something, or
 		/// an empty string "" if the method returns void
 		/// </summary>
-		public override Object Execute(Object o, IInternalContextAdapter context)
+		public override object Execute(object o, IInternalContextAdapter context)
 		{
 			object[] parameters = new object[paramCount];
 
@@ -106,7 +106,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				/*
 				*  like ASTIdentifier, if we have cache information, and the
-				*  Class of Object o is the same as that in the cache, we are
+				*  Class of object o is the same as that in the cache, we are
 				*  safe.
 				*/
 
@@ -175,7 +175,7 @@ namespace NVelocity.Runtime.Parser.Node
 				runtimeServices.Error(string.Format("ASTMethod.execute() : exception from introspection : {0}", ex));
 
 				throw new RuntimeException(
-					String.Format(
+					string.Format(
 						"Error during object introspection. Check inner exception for details. Node literal {0} Line {1} Column {2}",
 						base.Literal, Line, Column), ex);
 			}
@@ -187,11 +187,11 @@ namespace NVelocity.Runtime.Parser.Node
 				*  valid for something declared with a void return type.
 				*  Since the caller is expecting something to be returned,
 				*  as long as things are peachy, we can return an empty 
-				*  String so ASTReference() correctly figures out that
+				*  string so ASTReference() correctly figures out that
 				*  all is well.
 				*/
 
-				Object obj;
+				object obj;
 
 				if (method == null)
 				{
@@ -208,7 +208,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					if (obj == null && method.ReturnType == typeof(void))
 					{
-						obj = String.Empty;
+						obj = string.Empty;
 					}
 				}
 
@@ -282,7 +282,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		private object PerformIntrospection(Type data, object[] parameters)
 		{
-			String methodNameUsed = methodName;
+			string methodNameUsed = methodName;
 
 			MethodInfo m = runtimeServices.Introspector.GetMethod(data, methodNameUsed, parameters);
 

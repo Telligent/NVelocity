@@ -21,6 +21,7 @@ namespace NVelocity.Context
 	using Runtime;
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>  This is a special, internal-use-only context implementation to be
 	/// used for the new Velocimacro implementation.
@@ -42,8 +43,8 @@ namespace NVelocity.Context
 	{
 		private void InitBlock()
 		{
-			vmProxyHash = new Hashtable();
-			localContext = new Hashtable();
+			vmProxyHash = new Dictionary<string, VMProxyArg>();
+			localContext = new Dictionary<string, object>();
 		}
 
 		public IContext InternalUserContext
@@ -56,7 +57,7 @@ namespace NVelocity.Context
 			get { return innerContext.BaseContext; }
 		}
 
-		public Object[] Keys
+		public string[] Keys
 		{
 			get
 			{
@@ -96,12 +97,12 @@ namespace NVelocity.Context
 			set { throw new NotImplementedException(); }
 		}
 
-		public String CurrentTemplateName
+		public string CurrentTemplateName
 		{
 			get { return innerContext.CurrentTemplateName; }
 		}
 
-		public Object[] TemplateNameStack
+		public object[] TemplateNameStack
 		{
 			get { return innerContext.TemplateNameStack; }
 		}
@@ -121,12 +122,12 @@ namespace NVelocity.Context
 		/// <summary>container for our VMProxy Objects
 		/// </summary>
 		//UPGRADE_NOTE: The initialization of  'vmProxyHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		internal Hashtable vmProxyHash;
+		internal Dictionary<string, VMProxyArg> vmProxyHash;
 
 		/// <summary>container for any local or constant VMProxy items
 		/// </summary>
 		//UPGRADE_NOTE: The initialization of  'localContext' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		internal Hashtable localContext;
+		internal Dictionary<string, object> localContext;
 
 		/// <summary>the base context store.  This is the 'global' context
 		/// </summary>
@@ -170,7 +171,7 @@ namespace NVelocity.Context
 			*  local context, otherwise, put the vmpa in our vmProxyHash
 			*/
 
-			String key = vmpa.ContextReference;
+			string key = vmpa.ContextReference;
 
 			if (vmpa.isConstant())
 			{
@@ -192,13 +193,15 @@ namespace NVelocity.Context
 		/// <returns>old stored object
 		///
 		/// </returns>
-		public Object Put(String key, Object value)
+		public object Put(string key, object value)
 		{
 			/*
 			*  first see if this is a vmpa
 			*/
 
-			VMProxyArg vmProxyArg = (VMProxyArg)vmProxyHash[key];
+			VMProxyArg vmProxyArg;
+			if (!vmProxyHash.TryGetValue(key, out vmProxyArg))
+				vmProxyArg = null;
 
 			if (vmProxyArg == null)
 			{
@@ -245,15 +248,16 @@ namespace NVelocity.Context
 		/// <returns> stored object or null
 		///
 		/// </returns>
-		public Object Get(String key)
+		public object Get(string key)
 		{
 			/*
 			* first, see if it's a VMPA
 			*/
 
-			Object o;
-
-			VMProxyArg vmProxyArg = (VMProxyArg)vmProxyHash[key];
+			object o;
+			VMProxyArg vmProxyArg;
+			if (!vmProxyHash.TryGetValue(key, out vmProxyArg))
+				vmProxyArg = null;
 
 			if (vmProxyArg == null)
 			{
@@ -263,22 +267,13 @@ namespace NVelocity.Context
 				* if we have localContextScope mode, then just 
 				* put in the local context
 				*/
-
-					o = localContext[key];
+					if (!localContext.TryGetValue(key, out o))
+						o = null;
 				}
 				else
 				{
-					/*
-				*  try the local context
-				*/
-
-					o = localContext[key];
-
-					/*
-* last chance
-*/
-
-					o ??= innerContext.Get(key);
+					if (!localContext.TryGetValue(key, out o))
+						o = innerContext.Get(key);
 				}
 			}
 			else
@@ -291,7 +286,7 @@ namespace NVelocity.Context
 
 		/// <summary>  not yet impl
 		/// </summary>
-		public bool ContainsKey(Object key)
+		public bool ContainsKey(string key)
 		{
 			return false;
 		}
@@ -300,19 +295,22 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <summary>  impl badly
 		/// </summary>
-		public Object Remove(Object key)
+		public object Remove(string key)
 		{
-			Object o = vmProxyHash[key];
+			VMProxyArg o;
+			if (!vmProxyHash.TryGetValue(key, out o))
+				o = null;
+			
 			vmProxyHash.Remove(key);
 			return o;
 		}
 
-		void IDictionary.Remove(Object key)
+		void IDictionary.Remove(object key)
 		{
-			Remove(key);
+			Remove(key.ToString());
 		}
 
-		public void PushCurrentTemplateName(String s)
+		public void PushCurrentTemplateName(string s)
 		{
 			innerContext.PushCurrentTemplateName(s);
 		}
@@ -323,12 +321,12 @@ namespace NVelocity.Context
 		}
 
 
-		public IntrospectionCacheData ICacheGet(Object key)
+		public IntrospectionCacheData ICacheGet(object key)
 		{
 			return innerContext.ICacheGet(key);
 		}
 
-		public void ICachePut(Object key, IntrospectionCacheData o)
+		public void ICachePut(object key, IntrospectionCacheData o)
 		{
 			innerContext.ICachePut(key, o);
 		}

@@ -15,38 +15,41 @@
 namespace NVelocity.App.Events
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	public class ReferenceInsertionEventArgs : EventArgs
 	{
-		private readonly Stack referenceStack;
+		private readonly Stack<object> referenceStack;
 		private readonly object originalValue;
 		private object newValue;
-		private readonly String rootString;
+		private readonly string rootString;
 
-		public ReferenceInsertionEventArgs(Stack referenceStack, String rootString, Object value)
+		public ReferenceInsertionEventArgs(Stack<object> referenceStack, string rootString, object value)
 		{
 			this.rootString = rootString;
 			this.referenceStack = referenceStack;
 			originalValue = newValue = value;
 		}
 
-		public Stack GetCopyOfReferenceStack()
+		public Stack<object> GetCopyOfReferenceStack()
 		{
-			return (Stack)referenceStack.Clone();
+			var a = new object[referenceStack.Count];
+			referenceStack.CopyTo(a, 0);
+			Array.Reverse(a);
+			return new(a);
 		}
 
-		public String RootString
+		public string RootString
 		{
 			get { return rootString; }
 		}
 
-		public Object OriginalValue
+		public object OriginalValue
 		{
 			get { return originalValue; }
 		}
 
-		public Object NewValue
+		public object NewValue
 		{
 			get { return newValue; }
 			set { newValue = value; }
@@ -56,7 +59,7 @@ namespace NVelocity.App.Events
 	///// <summary>
 	///// Reference 'Stream insertion' event handler.  Called with object
 	///// that will be inserted into stream via value.toString().
-	///// Make sure you return an Object that will toString() without throwing an exception.
+	///// Make sure you return an object that will toString() without throwing an exception.
 	///// </summary>
-	//public delegate void ReferenceInsertionEventHandler(Object sender, ReferenceInsertionEventArgs e);
+	//public delegate void ReferenceInsertionEventHandler(object sender, ReferenceInsertionEventArgs e);
 }

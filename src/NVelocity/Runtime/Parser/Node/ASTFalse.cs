@@ -18,7 +18,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -28,7 +28,7 @@ namespace NVelocity.Runtime.Parser.Node
 			return false;
 		}
 
-		public override Object Value(IInternalContextAdapter context)
+		public override object Value(IInternalContextAdapter context)
 		{
 			return val;
 		}

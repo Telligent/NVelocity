@@ -12,13 +12,13 @@ namespace NVelocity.Runtime.Parser.Node
 	public class ASTStringLiteral : SimpleNode
 	{
 		// begin and end dictionary string markers
-		private static readonly String DictStart = "%{";
-		private static readonly String DictEnd = "}";
+		private static readonly string DictStart = "%{";
+		private static readonly string DictEnd = "}";
 
 		private bool interpolate = true;
 		private SimpleNode nodeTree = null;
-		private String image = string.Empty;
-		private String interpolateImage = string.Empty;
+		private string image = string.Empty;
+		private string interpolateImage = string.Empty;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ASTStringLiteral"/> class.
@@ -40,7 +40,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>  init : we don't have to do much.  Init the tree (there
 		/// shouldn't be one) and then see if interpolation is turned on.
 		/// </summary>
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			base.Init(context, data);
 
@@ -98,7 +98,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -108,7 +108,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// the literal is rendered against the context
 		/// Otherwise, the stringlit is returned.
 		/// </summary>
-		public override Object Value(IInternalContextAdapter context)
+		public override object Value(IInternalContextAdapter context)
 		{
 			string result = image;
 
@@ -126,10 +126,10 @@ namespace NVelocity.Runtime.Parser.Node
 						nodeTree.Render(context, writer);
 
 						/*
-							* and return the result as a String
+							* and return the result as a string
 							*/
 
-						String ret = writer.ToString();
+						string ret = writer.ToString();
 
 						/*
 							*  remove the space from the end (dreaded <MORE> kludge)
@@ -300,7 +300,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (i == contents.Length - 1)
 				{
-					if (sbKeyBuilder.ToString().Trim() == String.Empty)
+					if (sbKeyBuilder.ToString().Trim() == string.Empty)
 					{
 						break;
 					}

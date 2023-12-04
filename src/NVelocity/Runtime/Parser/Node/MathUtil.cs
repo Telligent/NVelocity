@@ -20,35 +20,35 @@ namespace NVelocity.Runtime.Parser.Node
 	{
 		public static object Add(Type maxType, object left, object right)
 		{
-			if (maxType == typeof(Double))
+			if (maxType == typeof(double))
 			{
 				return Convert.ToDouble(left) + Convert.ToDouble(right);
 			}
-			else if (maxType == typeof(Single))
+			else if (maxType == typeof(float))
 			{
 				return Convert.ToSingle(left) + Convert.ToSingle(right);
 			}
-			else if (maxType == typeof(Decimal))
+			else if (maxType == typeof(decimal))
 			{
 				return Convert.ToDecimal(left) + Convert.ToDecimal(right);
 			}
-			else if (maxType == typeof(Int64))
+			else if (maxType == typeof(long))
 			{
 				return Convert.ToInt64(left) + Convert.ToInt64(right);
 			}
-			else if (maxType == typeof(Int32))
+			else if (maxType == typeof(int))
 			{
 				return Convert.ToInt32(left) + Convert.ToInt32(right);
 			}
-			else if (maxType == typeof(Int16))
+			else if (maxType == typeof(short))
 			{
 				return Convert.ToInt16(left) + Convert.ToInt16(right);
 			}
-			else if (maxType == typeof(SByte))
+			else if (maxType == typeof(sbyte))
 			{
 				return Convert.ToSByte(left) + Convert.ToSByte(right);
 			}
-			else if (maxType == typeof(Byte))
+			else if (maxType == typeof(byte))
 			{
 				return Convert.ToByte(left) + Convert.ToByte(right);
 			}
@@ -58,35 +58,35 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public static object Mult(Type maxType, object left, object right)
 		{
-			if (maxType == typeof(Double))
+			if (maxType == typeof(double))
 			{
 				return Convert.ToDouble(left) * Convert.ToDouble(right);
 			}
-			else if (maxType == typeof(Single))
+			else if (maxType == typeof(float))
 			{
 				return Convert.ToSingle(left) * Convert.ToSingle(right);
 			}
-			else if (maxType == typeof(Decimal))
+			else if (maxType == typeof(decimal))
 			{
 				return Convert.ToDecimal(left) * Convert.ToDecimal(right);
 			}
-			else if (maxType == typeof(Int64))
+			else if (maxType == typeof(long))
 			{
 				return Convert.ToInt64(left) * Convert.ToInt64(right);
 			}
-			else if (maxType == typeof(Int32))
+			else if (maxType == typeof(int))
 			{
 				return Convert.ToInt32(left) * Convert.ToInt32(right);
 			}
-			else if (maxType == typeof(Int16))
+			else if (maxType == typeof(short))
 			{
 				return Convert.ToInt16(left) * Convert.ToInt16(right);
 			}
-			else if (maxType == typeof(SByte))
+			else if (maxType == typeof(sbyte))
 			{
 				return Convert.ToSByte(left) * Convert.ToSByte(right);
 			}
-			else if (maxType == typeof(Byte))
+			else if (maxType == typeof(byte))
 			{
 				return Convert.ToByte(left) * Convert.ToByte(right);
 			}
@@ -96,35 +96,35 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public static object Div(Type maxType, object left, object right)
 		{
-			if (maxType == typeof(Double))
+			if (maxType == typeof(double))
 			{
 				return Convert.ToDouble(left) / Convert.ToDouble(right);
 			}
-			else if (maxType == typeof(Single))
+			else if (maxType == typeof(float))
 			{
 				return Convert.ToSingle(left) / Convert.ToSingle(right);
 			}
-			else if (maxType == typeof(Decimal))
+			else if (maxType == typeof(decimal))
 			{
 				return Convert.ToDecimal(left) / Convert.ToDecimal(right);
 			}
-			else if (maxType == typeof(Int64))
+			else if (maxType == typeof(long))
 			{
 				return Convert.ToInt64(left) / Convert.ToInt64(right);
 			}
-			else if (maxType == typeof(Int32))
+			else if (maxType == typeof(int))
 			{
 				return Convert.ToInt32(left) / Convert.ToInt32(right);
 			}
-			else if (maxType == typeof(Int16))
+			else if (maxType == typeof(short))
 			{
 				return Convert.ToInt16(left) / Convert.ToInt16(right);
 			}
-			else if (maxType == typeof(SByte))
+			else if (maxType == typeof(sbyte))
 			{
 				return Convert.ToSByte(left) / Convert.ToSByte(right);
 			}
-			else if (maxType == typeof(Byte))
+			else if (maxType == typeof(byte))
 			{
 				return Convert.ToByte(left) / Convert.ToByte(right);
 			}
@@ -134,35 +134,35 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public static object Mod(Type maxType, object left, object right)
 		{
-			if (maxType == typeof(Double))
+			if (maxType == typeof(double))
 			{
 				return Convert.ToDouble(left) % Convert.ToDouble(right);
 			}
-			else if (maxType == typeof(Single))
+			else if (maxType == typeof(float))
 			{
 				return Convert.ToSingle(left) % Convert.ToSingle(right);
 			}
-			else if (maxType == typeof(Decimal))
+			else if (maxType == typeof(decimal))
 			{
 				return Convert.ToDecimal(left) % Convert.ToDecimal(right);
 			}
-			else if (maxType == typeof(Int64))
+			else if (maxType == typeof(long))
 			{
 				return Convert.ToInt64(left) % Convert.ToInt64(right);
 			}
-			else if (maxType == typeof(Int32))
+			else if (maxType == typeof(int))
 			{
 				return Convert.ToInt32(left) % Convert.ToInt32(right);
 			}
-			else if (maxType == typeof(Int16))
+			else if (maxType == typeof(short))
 			{
 				return Convert.ToInt16(left) % Convert.ToInt16(right);
 			}
-			else if (maxType == typeof(SByte))
+			else if (maxType == typeof(sbyte))
 			{
 				return Convert.ToSByte(left) % Convert.ToSByte(right);
 			}
-			else if (maxType == typeof(Byte))
+			else if (maxType == typeof(byte))
 			{
 				return Convert.ToByte(left) % Convert.ToByte(right);
 			}
@@ -172,35 +172,35 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public static object Sub(Type maxType, object left, object right)
 		{
-			if (maxType == typeof(Double))
+			if (maxType == typeof(double))
 			{
 				return Convert.ToDouble(left) - Convert.ToDouble(right);
 			}
-			else if (maxType == typeof(Single))
+			else if (maxType == typeof(float))
 			{
 				return Convert.ToSingle(left) - Convert.ToSingle(right);
 			}
-			else if (maxType == typeof(Decimal))
+			else if (maxType == typeof(decimal))
 			{
 				return Convert.ToDecimal(left) - Convert.ToDecimal(right);
 			}
-			else if (maxType == typeof(Int64))
+			else if (maxType == typeof(long))
 			{
 				return Convert.ToInt64(left) - Convert.ToInt64(right);
 			}
-			else if (maxType == typeof(Int32))
+			else if (maxType == typeof(int))
 			{
 				return Convert.ToInt32(left) - Convert.ToInt32(right);
 			}
-			else if (maxType == typeof(Int16))
+			else if (maxType == typeof(short))
 			{
 				return Convert.ToInt16(left) - Convert.ToInt16(right);
 			}
-			else if (maxType == typeof(SByte))
+			else if (maxType == typeof(sbyte))
 			{
 				return Convert.ToSByte(left) - Convert.ToSByte(right);
 			}
-			else if (maxType == typeof(Byte))
+			else if (maxType == typeof(byte))
 			{
 				return Convert.ToByte(left) - Convert.ToByte(right);
 			}
@@ -212,37 +212,37 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			if (leftType == rightType) return leftType;
 
-			if (leftType == typeof(Double) || rightType == typeof(Double))
+			if (leftType == typeof(double) || rightType == typeof(double))
 			{
-				return typeof(Double);
+				return typeof(double);
 			}
-			else if (leftType == typeof(Single) || rightType == typeof(Single))
+			else if (leftType == typeof(float) || rightType == typeof(float))
 			{
-				return typeof(Single);
+				return typeof(float);
 			}
-			else if (leftType == typeof(Decimal) || rightType == typeof(Decimal))
+			else if (leftType == typeof(decimal) || rightType == typeof(decimal))
 			{
-				return typeof(Decimal);
+				return typeof(decimal);
 			}
-			else if (leftType == typeof(Int64) || rightType == typeof(Int64))
+			else if (leftType == typeof(long) || rightType == typeof(long))
 			{
-				return typeof(Int64);
+				return typeof(long);
 			}
-			else if (leftType == typeof(Int32) || rightType == typeof(Int32))
+			else if (leftType == typeof(int) || rightType == typeof(int))
 			{
-				return typeof(Int32);
+				return typeof(int);
 			}
-			else if (leftType == typeof(Int16) || rightType == typeof(Int16))
+			else if (leftType == typeof(short) || rightType == typeof(short))
 			{
-				return typeof(Int16);
+				return typeof(short);
 			}
-			else if (leftType == typeof(SByte) || rightType == typeof(SByte))
+			else if (leftType == typeof(sbyte) || rightType == typeof(sbyte))
 			{
-				return typeof(SByte);
+				return typeof(sbyte);
 			}
-			else if (leftType == typeof(Byte) || rightType == typeof(Byte))
+			else if (leftType == typeof(byte) || rightType == typeof(byte))
 			{
-				return typeof(Byte);
+				return typeof(byte);
 			}
 
 			return null;

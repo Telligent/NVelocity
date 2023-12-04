@@ -89,8 +89,8 @@ namespace NVelocity.Runtime.Parser
 		public const int IN_FORMAL_COMMENT = 7;
 		public const int IN_SINGLE_LINE_COMMENT = 8;
 
-		public static readonly String[] TokenImage =
-			new String[]
+		public static readonly string[] TokenImage =
+			new string[]
 				{
 					"<EOF>",
 					"\"[\"", "\"]\"", "\",\"", "\"..\"", "\"(\"", "<RPAREN>", "\")\"", "<ESCAPE_DIRECTIVE>", "<SET_DIRECTIVE>"

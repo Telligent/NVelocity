@@ -67,7 +67,7 @@ namespace NVelocity.Util
 		/// <summary>
 		/// Get an object from the pool, null if the pool is empty.
 		/// </summary>
-		public Object get()
+		public object get()
 		{
 			lock (this)
 			{

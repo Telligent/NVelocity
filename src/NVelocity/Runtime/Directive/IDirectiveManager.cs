@@ -15,14 +15,14 @@
 namespace NVelocity.Runtime.Directive
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	public interface IDirectiveManager
 	{
-		void Register(String directiveTypeName);
+		void Register(string directiveTypeName);
 
-		Directive Create(String name, Stack directiveStack);
+		Directive Create(string name, Stack<Directive> directiveStack);
 
-		bool Contains(String name);
+		bool Contains(string name);
 	}
 }

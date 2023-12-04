@@ -80,7 +80,7 @@ namespace NVelocity
 				}
 				catch (IOException ioException)
 				{
-					String msg = string.Format("Template.process : Unsupported input encoding : {0} for template {1}", encoding, name);
+					string msg = string.Format("Template.process : Unsupported input encoding : {0} for template {1}", encoding, name);
 
 					throw errorCondition = new ParseErrorException(msg, ioException);
 				}
@@ -186,7 +186,7 @@ namespace NVelocity
 			else
 			{
 				// this shouldn't happen either, but just in case.
-				String msg = "Template.merge() failure. The document is null, most likely due to parsing error.";
+				string msg = "Template.merge() failure. The document is null, most likely due to parsing error.";
 
 				runtimeServices.Error(msg);
 				throw new System.Exception(msg);

@@ -94,17 +94,17 @@ namespace NVelocity.Runtime.Parser
 			ReInit(textReader, startLine, startColumn, 4096);
 		}
 
-		public String GetImage()
+		public string GetImage()
 		{
 			if (bufferPosition >= tokenBegin)
 			{
-				Int32 len = (bufferPosition - tokenBegin + 1) > buffer.Length ? buffer.Length : (bufferPosition - tokenBegin + 1);
-				//return new String(buffer, tokenBegin, bufferPosition - tokenBegin + 1);
-				return new String(buffer, tokenBegin, len);
+																int len = (bufferPosition - tokenBegin + 1) > buffer.Length ? buffer.Length : (bufferPosition - tokenBegin + 1);
+				//return new string(buffer, tokenBegin, bufferPosition - tokenBegin + 1);
+				return new string(buffer, tokenBegin, len);
 			}
 			else
 			{
-				return new String(buffer, tokenBegin, bufferSize - tokenBegin) + new String(buffer, 0, bufferPosition + 1);
+				return new string(buffer, tokenBegin, bufferSize - tokenBegin) + new string(buffer, 0, bufferPosition + 1);
 			}
 		}
 
@@ -417,7 +417,7 @@ namespace NVelocity.Runtime.Parser
 				if (!FillBuff())
 				{
 					currentCharacterAvailable = false;
-					currentCharacter = default(Char);
+					currentCharacter = default(char);
 					return false;
 				}
 			}

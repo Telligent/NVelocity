@@ -31,9 +31,9 @@ namespace NVelocity.Runtime.Parser
 	{
 		/// <summary> The end of line string for this machine.
 		/// </summary>
-		protected internal String eol = Environment.NewLine;
+		protected internal string eol = Environment.NewLine;
 
-		public override String Message
+		public override string Message
 		{
 			get
 			{
@@ -41,7 +41,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					return base.Message;
 				}
-				String expected = string.Empty;
+				string expected = string.Empty;
 				int maxSize = 0;
 				for (int i = 0; i < expectedTokenSequences.Length; i++)
 				{
@@ -59,7 +59,7 @@ namespace NVelocity.Runtime.Parser
 					}
 					expected += string.Format("{0}    ", eol);
 				}
-				String retval = "Encountered \"";
+				string retval = "Encountered \"";
 				Token tok = currentToken.Next;
 				for (int i = 0; i < maxSize; i++)
 				{
@@ -101,7 +101,7 @@ namespace NVelocity.Runtime.Parser
 		/// print the error message in the form:
 		/// ParseException: &lt;result of getMessage&gt;
 		/// </summary>
-		public ParseException(Token currentTokenVal, int[][] expectedTokenSequencesVal, String[] tokenImageVal)
+		public ParseException(Token currentTokenVal, int[][] expectedTokenSequencesVal, string[] tokenImageVal)
 			: base(string.Empty)
 		{
 			specialConstructor = true;
@@ -123,7 +123,7 @@ namespace NVelocity.Runtime.Parser
 			specialConstructor = false;
 		}
 
-		public ParseException(String message) : base(message)
+		public ParseException(string message) : base(message)
 		{
 			specialConstructor = false;
 		}
@@ -150,7 +150,7 @@ namespace NVelocity.Runtime.Parser
 		/// parser within which the parse error occurred.  This array is
 		/// defined in the generated ...Constants interface.
 		/// </summary>
-		public String[] tokenImage;
+		public string[] tokenImage;
 
 		/// <summary> This method has the standard behavior when this object has been
 		/// created using the standard constructors.  Otherwise, it uses
@@ -165,7 +165,7 @@ namespace NVelocity.Runtime.Parser
 		/// when these raw version cannot be used as part of an ASCII
 		/// string literal.
 		/// </summary>
-		protected internal static String AddEscapes(String str)
+		protected internal static string AddEscapes(string str)
 		{
 			StringBuilder retval = new();
 			for (int i = 0; i < str.Length; i++)
@@ -211,7 +211,7 @@ namespace NVelocity.Runtime.Parser
 						char character;
 						if ((character = str[i]) < 0x20 || character > 0x7e)
 						{
-							String s = string.Format("0000{0}", Convert.ToString(character, 16));
+							string s = string.Format("0000{0}", Convert.ToString(character, 16));
 							retval.AppendFormat("\\u{0}", s[^4..]);
 						}
 						else

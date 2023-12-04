@@ -19,6 +19,7 @@ namespace NVelocity.Test
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Tests to make sure that the VelocityContext is functioning correctly
@@ -262,12 +263,12 @@ namespace NVelocity.Test
 			VelocityEngine ve = new();
 			ve.Init();
 
-			Boolean ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", "Hello $firstName $lastName");
+												bool ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive", "Hello $firstName $lastName");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("Hello Cort $lastName", sw.ToString());
 
 			// create a context based on a case insensitive hashtable
-			Hashtable ht = new(StringComparer.CurrentCultureIgnoreCase)
+			Dictionary<string, object> ht = new (StringComparer.CurrentCultureIgnoreCase)
 			{
 					{ "firstName", "Cort" },
 					{ "LastName", "Schaefer" }
@@ -281,7 +282,7 @@ namespace NVelocity.Test
 			Assert.AreEqual("Hello Cort Schaefer", sw.ToString());
 
 			// create a context based on a case insensitive hashtable, verify that stuff added to the context after it is created if found case insensitive
-			ht = new Hashtable(StringComparer.CurrentCultureIgnoreCase)
+			ht = new (StringComparer.CurrentCultureIgnoreCase)
 			{
 					{ "firstName", "Cort" }
 			};
@@ -331,14 +332,14 @@ namespace NVelocity.Test
 		private string firstName = "hammett";
 		private string middleNameInitial = "V";
 
-		public String Print(String arg)
+		public string Print(string arg)
 		{
 			return arg;
 		}
 
-		public String Contents(params String[] args)
+		public string Contents(params string[] args)
 		{
-			return String.Join(",", args);
+			return string.Join(",", args);
 		}
 
 		public string FirstName
@@ -356,14 +357,14 @@ namespace NVelocity.Test
 
 	public class Something2
 	{
-		public String FormatDate(DateTime dt)
+		public string FormatDate(DateTime dt)
 		{
 			return dt.Day.ToString();
 		}
 
-		public String Contents(String name, int age, params String[] args)
+		public string Contents(string name, int age, params string[] args)
 		{
-			return name + age + String.Join(",", args);
+			return name + age + string.Join(",", args);
 		}
 	}
 }

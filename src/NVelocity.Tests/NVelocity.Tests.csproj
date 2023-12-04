@@ -84,9 +84,6 @@
     <Compile Include="Test\CommonsTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Test\Commons\LRUMapTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Test\Commons\StringTokenizerTest.cs" />
     <Compile Include="Test\ComponentDirectiveTestCase.cs">
       <SubType>Code</SubType>

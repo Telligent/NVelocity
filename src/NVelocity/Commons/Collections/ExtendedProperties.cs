@@ -19,6 +19,7 @@ namespace Commons.Collections
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
+	using System.Linq;
 
 	/// <summary>
 	/// This class extends normal Java properties by adding the possibility
@@ -101,14 +102,14 @@ namespace Commons.Collections
 	/// much time to improve it), I wrote it this way.  If you don't like
 	/// it, go ahead and tune it up!</para>
 	/// </summary>
-	public class ExtendedProperties : Hashtable
+	public class ExtendedProperties : Dictionary<string, object>
 	{
-		private static readonly Byte DEFAULT_BYTE = 0;
-		private static readonly Boolean DEFAULT_BOOLEAN = false;
-		private static readonly Int32 DEFAULT_INT32 = 0;
-		private static readonly Single DEFAULT_SINGLE = 0;
-		private static readonly Int64 DEFAULT_INT64 = 0;
-		private static readonly Double DEFAULT_DOUBLE = 0;
+		private static readonly byte DEFAULT_BYTE = 0;
+		private static readonly bool DEFAULT_BOOLEAN = false;
+		private static readonly int DEFAULT_INT32 = 0;
+		private static readonly float DEFAULT_SINGLE = 0;
+		private static readonly long DEFAULT_INT64 = 0;
+		private static readonly double DEFAULT_DOUBLE = 0;
 
 		/// <summary> Default configurations repository.
 		/// </summary>
@@ -117,18 +118,18 @@ namespace Commons.Collections
 		/// <summary>
 		/// The file connected to this repository (holding comments and such).
 		/// </summary>
-		protected internal String file;
+		protected internal string file;
 
 		/// <summary>
 		/// Base path of the configuration file used to create
 		/// this ExtendedProperties object.
 		/// </summary>
-		protected internal String basePath;
+		protected internal string basePath;
 
 		/// <summary>
 		/// File separator.
 		/// </summary>
-		protected internal String fileSeparator = Path.AltDirectorySeparatorChar.ToString();
+		protected internal string fileSeparator = Path.AltDirectorySeparatorChar.ToString();
 
 		/// <summary>
 		/// Has this configuration been initialized.
@@ -139,7 +140,7 @@ namespace Commons.Collections
 		/// This is the name of the property that can point to other
 		/// properties file for including other properties files.
 		/// </summary>
-		protected internal static String include = "include";
+		protected internal static string include = "include";
 
 		/// <summary>
 		/// These are the keys in the order they listed
@@ -147,7 +148,7 @@ namespace Commons.Collections
 		/// you wish to perform operations with configuration
 		/// information in a particular order.
 		/// </summary>
-		protected internal ArrayList keysAsListed = new();
+		protected internal List<string> keysAsListed = new();
 
 		/// <summary>
 		/// Creates an empty extended properties object.
@@ -160,9 +161,9 @@ namespace Commons.Collections
 		/// Creates and loads the extended properties from the specified
 		/// file.
 		/// </summary>
-		/// <param name="file">A String.</param>
+		/// <param name="file">A string.</param>
 		/// <exception cref="IOException" />
-		public ExtendedProperties(String file) : this(file, null)
+		public ExtendedProperties(string file) : this(file, null)
 		{
 		}
 
@@ -170,10 +171,10 @@ namespace Commons.Collections
 		/// Creates and loads the extended properties from the specified
 		/// file.
 		/// </summary>
-		/// <param name="file">A String.</param>
+		/// <param name="file">A string.</param>
 		/// <param name="defaultFile">File to load defaults from.</param>
 		/// <exception cref="IOException" />
-		public ExtendedProperties(String file, String defaultFile)
+		public ExtendedProperties(string file, string defaultFile)
 		{
 			this.file = file;
 
@@ -208,13 +209,13 @@ namespace Commons.Collections
 			return isInitialized;
 		}
 
-		public String Include
+		public string Include
 		{
 			get { return include; }
 			set { include = value; }
 		}
 
-		public new IEnumerable Keys
+		public new IEnumerable<string> Keys
 		{
 			get { return keysAsListed; }
 		}
@@ -233,7 +234,7 @@ namespace Commons.Collections
 		/// <param name="encoding">An encoding.
 		/// </param>
 		/// <exception cref="IOException" />
-		public void Load(Stream input, String encoding)
+		public void Load(Stream input, string encoding)
 		{
 			lock (this)
 			{
@@ -256,7 +257,7 @@ namespace Commons.Collections
 				{
 					while (true)
 					{
-						String line = reader.ReadProperty();
+						string line = reader.ReadProperty();
 
 						if (line == null)
 						{
@@ -267,14 +268,14 @@ namespace Commons.Collections
 
 						if (equalSignIndex > 0)
 						{
-							String key = line[..equalSignIndex].Trim();
-							String value = line[(equalSignIndex + 1)..].Trim();
+							string key = line[..equalSignIndex].Trim();
+							string value = line[(equalSignIndex + 1)..].Trim();
 
 							/*
 								* Configure produces lines like this ... just
 								* ignore them.
 								*/
-							if (String.Empty.Equals(value))
+							if (string.Empty.Equals(value))
 							{
 								continue;
 							}
@@ -352,12 +353,14 @@ namespace Commons.Collections
 		/// if not then default value if exists, otherwise null
 		///
 		/// </returns>
-		public Object GetProperty(String key)
+		public object GetProperty(string key)
 		{
 			/*
 			*  first, try to get from the 'user value' store
 			*/
-			Object o = this[key];
+			object o;
+			if (!TryGetValue(key, out o))
+				o = null;
 
 			if (o == null)
 			{
@@ -390,14 +393,16 @@ namespace Commons.Collections
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="token"></param>
-		public void AddProperty(String key, Object token)
+		public void AddProperty(string key, object token)
 		{
-			Object o = this[key];
+			object o;
+			if (!TryGetValue(key, out o))
+				o = null;
 
 			/*
 			*  $$$ GMJ
 			*  FIXME : post 1.0 release, we need to not assume
-			*  that a scalar is a String - it can be an Object
+			*  that a scalar is a string - it can be an object
 			*  so we should make a little vector-like class
 			*  say, Foo that wraps (not extends Vector),
 			*  so we can do things like
@@ -407,18 +412,18 @@ namespace Commons.Collections
 			*  This applies throughout
 			*/
 
-			if (o is String)
+			if (o is string oldSingleValue)
 			{
-				ArrayList v = new(2)
+				List<string> v = new()
 				{
-						o,
-						token
+						oldSingleValue,
+						token.ToString()
 				};
-				CollectionsUtil.PutElement(this, key, v);
+				this[key] = v;
 			}
-			else if (o is ArrayList list)
+			else if (o is List<string> list)
 			{
-				list.Add(token);
+				list.Add(token.ToString());
 			}
 			else
 			{
@@ -428,7 +433,7 @@ namespace Commons.Collections
 		* configuration with the key 'key'. So
 		* we just want to place it directly into
 		* the configuration ... but we are going to
-		* make a special exception for String objects
+		* make a special exception for string objects
 		* that contain "," characters. We will take
 		* CSV lists and turn the list into a vector of
 		* Strings before placing it in the configuration.
@@ -436,13 +441,13 @@ namespace Commons.Collections
 		* like that cannot parse multiple same key
 		* values.
 		*/
-				if (token is String v && v.IndexOf(PropertiesTokenizer.DELIMITER) > 0)
+				if (token is string stringToken && stringToken.IndexOf(PropertiesTokenizer.DELIMITER) > 0)
 				{
-					PropertiesTokenizer tokenizer = new(v);
+					PropertiesTokenizer tokenizer = new(stringToken);
 
 					while (tokenizer.HasMoreTokens())
 					{
-						String s = tokenizer.NextToken();
+						string s = tokenizer.NextToken();
 
 						/*
 			* we know this is a string, so make sure it
@@ -459,7 +464,7 @@ namespace Commons.Collections
 				* are parsed, or dynamically entered into
 				* the configuration. So when we see a key
 				* for the first time we will place it in
-				* an ArrayList so that if a client class needs
+				* a list so that if a client class needs
 				* to perform operations with configuration
 				* in a definite order it will be possible.
 				*/
@@ -477,7 +482,7 @@ namespace Commons.Collections
 		/// <param name="obj">object to store
 		///
 		/// </param>
-		private void AddPropertyDirect(String key, Object obj)
+		private void AddPropertyDirect(string key, object obj)
 		{
 			/*
 			* safety check
@@ -491,7 +496,7 @@ namespace Commons.Collections
 			/*
 			* and the value
 			*/
-			CollectionsUtil.PutElement(this, key, obj);
+			this[key] = obj;
 		}
 
 		/// <summary>  Sets a string property w/o checking for commas - used
@@ -502,14 +507,16 @@ namespace Commons.Collections
 		/// Thanks to Leon Messerschmidt for this one.
 		///
 		/// </summary>
-		private void AddStringProperty(String key, String token)
+		private void AddStringProperty(string key, string token)
 		{
-			Object o = this[key];
+			object o;
+			if (!TryGetValue(key, out o))
+				o = null;
 
 			/*
 			*  $$$ GMJ
 			*  FIXME : post 1.0 release, we need to not assume
-			*  that a scalar is a String - it can be an Object
+			*  that a scalar is a string - it can be an object
 			*  so we should make a little vector-like class
 			*  say, Foo that wraps (not extends Vector),
 			*  so we can do things like
@@ -525,18 +532,18 @@ namespace Commons.Collections
 			*  to the vector
 			*/
 
-			if (o is String)
+			if (o is string oldSingleValue)
 			{
-				ArrayList v = new(2)
+				List<string> v = new()
 				{
-						o,
+						oldSingleValue,
 						token
 				};
-				CollectionsUtil.PutElement(this, key, v);
+				this[key] = v;
 			}
-			else if (o is ArrayList)
+			else if (o is List<string> list)
 			{
-				((ArrayList)o).Add(token);
+				list.Add(token);
 			}
 			else
 			{
@@ -550,7 +557,7 @@ namespace Commons.Collections
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="value"></param>
-		public void SetProperty(String key, Object value)
+		public void SetProperty(string key, object value)
 		{
 			ClearProperty(key);
 			AddProperty(key, value);
@@ -560,11 +567,11 @@ namespace Commons.Collections
 		/// </summary>
 		/// <param name="output">An OutputStream.
 		/// </param>
-		/// <param name="Header">A String.
+		/// <param name="Header">A string.
 		/// </param>
 		/// <exception cref="IOException">
 		/// </exception>
-		public void Save(TextWriter output, String Header)
+		public void Save(TextWriter output, string Header)
 		{
 			lock (this)
 			{
@@ -576,21 +583,21 @@ namespace Commons.Collections
 						textWriter.WriteLine(Header);
 					}
 
-					foreach (String key in Keys)
+					foreach (string key in Keys)
 					{
-						Object value = this[key];
+						object value = this[key];
 						if (value == null)
 						{
 							continue;
 						}
 
-						if (value is String)
+						if (value is string)
 						{
-							WriteKeyOutput(textWriter, key, (String)value);
+							WriteKeyOutput(textWriter, key, (string)value);
 						}
 						else if (value is IEnumerable)
 						{
-							foreach (String currentElement in (IEnumerable)value)
+							foreach (string currentElement in (IEnumerable)value)
 								WriteKeyOutput(textWriter, key, currentElement);
 						}
 
@@ -601,14 +608,14 @@ namespace Commons.Collections
 			}
 		}
 
-		private void WriteKeyOutput(TextWriter textWriter, String key, String value)
+		private void WriteKeyOutput(TextWriter textWriter, string key, string value)
 		{
 			StringBuilder currentOutput = new();
 			currentOutput.Append(key).Append('=').Append(value);
 			textWriter.WriteLine(currentOutput.ToString());
 		}
 
-		/// <summary> Combines an existing Hashtable with this Hashtable.
+		/// <summary> Combines an existing ExtendedProperties with this ExtendedProperties.
 		/// *
 		/// Warning: It will overwrite previous entries without warning.
 		/// *
@@ -618,15 +625,13 @@ namespace Commons.Collections
 		/// </param>
 		public void Combine(ExtendedProperties c)
 		{
-			foreach (String key in c.Keys)
+			foreach (string key in c.Keys)
 			{
-				Object o = c[key];
-				// if the value is a String, escape it so that if there are delimiters that the value is not converted to a list
-				if (o is String)
-				{
-					o = ((String)o).Replace(",", @"\,");
-				}
-
+				object o = c[key];
+				// if the value is a string, escape it so that if there are delimiters that the value is not converted to a list
+				if (o is string v)
+					o = v.Replace(",", @"\,");
+				
 				SetProperty(key, o);
 			}
 		}
@@ -637,7 +642,7 @@ namespace Commons.Collections
 		/// <param name="key">key to remove along with corresponding value.
 		///
 		/// </param>
-		public void ClearProperty(String key)
+		public void ClearProperty(string key)
 		{
 			if (ContainsKey(key))
 			{
@@ -648,7 +653,7 @@ namespace Commons.Collections
 
 				for (int i = 0; i < keysAsListed.Count; i++)
 				{
-					if (((String)keysAsListed[i]).Equals(key))
+					if (((string)keysAsListed[i]).Equals(key))
 					{
 						keysAsListed.RemoveAt(i);
 						break;
@@ -675,18 +680,9 @@ namespace Commons.Collections
 		/// <returns>An Iterator of keys that match the prefix.
 		///
 		/// </returns>
-		public IEnumerable GetKeys(String prefix)
+		public IEnumerable<string> GetKeys(string prefix)
 		{
-			ArrayList matchingKeys = new();
-
-			foreach (Object key in Keys)
-			{
-				if (key is String && ((String)key).StartsWith(prefix))
-				{
-					matchingKeys.Add(key);
-				}
-			}
-			return matchingKeys;
+			return Keys.Where(k => k.StartsWith(prefix));
 		}
 
 		/// <summary> Create an ExtendedProperties object that is a subset
@@ -697,19 +693,19 @@ namespace Commons.Collections
 		/// <param name="prefix">prefix
 		///
 		/// </param>
-		public ExtendedProperties Subset(String prefix)
+		public ExtendedProperties Subset(string prefix)
 		{
 			ExtendedProperties c = new();
 			bool validSubset = false;
 
-			foreach (Object key in Keys)
+			foreach (string key in Keys)
 			{
-				if (key is String && ((String)key).StartsWith(prefix))
+				if (key.StartsWith(prefix))
 				{
 					if (!validSubset)
 						validSubset = true;
 
-					String newKey;
+					string newKey;
 
 					/*
 					* Check to make sure that c.subset(prefix) doesn't
@@ -717,13 +713,13 @@ namespace Commons.Collections
 					* with the key prefix. This is not a useful
 					* subset but it is a valid subset.
 					*/
-					if (((String)key).Length == prefix.Length)
+					if (key.Length == prefix.Length)
 					{
 						newKey = prefix;
 					}
 					else
 					{
-						newKey = ((String)key)[(prefix.Length + 1)..];
+						newKey = key[(prefix.Length + 1)..];
 					}
 
 					/*
@@ -749,31 +745,33 @@ namespace Commons.Collections
 		/// <summary> Display the configuration for debugging
 		/// purposes.
 		/// </summary>
-		public override String ToString()
+		public override string ToString()
 		{
 			StringBuilder sb = new();
-			foreach (String key in Keys)
+			foreach (string key in Keys)
 			{
-				Object value = this[key];
+				object value = this[key];
 				sb.AppendFormat("{0} => {1}", key, ValueToString(value)).Append(Environment.NewLine);
 			}
 			return sb.ToString();
 		}
 
-		private String ValueToString(Object value)
+		private string ValueToString(object value)
 		{
-			if (value is ArrayList)
+			if (value is List<string> list)
 			{
-				String s = "ArrayList :: ";
-				foreach (Object o in (ArrayList)value)
+				var s = new StringBuilder();
+				foreach (string o in list)
 				{
-					if (!s.EndsWith(", "))
+					if (s.Length > 0)
 					{
-						s += ", ";
+						s.Append(", ");
 					}
-					s += string.Format("[{0}]", o);
+					s.Append("[").Append(o).Append("]");
 				}
-				return s;
+
+				s.Insert(0, "List<string> :: ");
+				return s.ToString();
 			}
 			else
 			{
@@ -789,10 +787,10 @@ namespace Commons.Collections
 		/// <returns>The associated string.
 		/// </returns>
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a String.
+		/// object that is not a string.
 		///
 		/// </exception>
-		public String GetString(String key)
+		public string GetString(string key)
 		{
 			return GetString(key, null);
 		}
@@ -808,16 +806,18 @@ namespace Commons.Collections
 		/// default value otherwise.
 		/// </returns>
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a String.
+		/// object that is not a string.
 		///
 		/// </exception>
-		public String GetString(String key, String defaultValue)
+		public string GetString(string key, string defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is String)
+			if (value is string)
 			{
-				return (String)value;
+				return (string)value;
 			}
 			else if (value == null)
 			{
@@ -830,13 +830,13 @@ namespace Commons.Collections
 					return defaults.GetString(key, defaultValue);
 				}
 			}
-			else if (value is ArrayList)
+			else if (value is List<string> list)
 			{
-				return (String)((ArrayList)value)[0];
+				return list.FirstOrDefault();
 			}
 			else
 			{
-				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a String object", '\'', key));
+				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a string object", '\'', key));
 			}
 		}
 
@@ -849,16 +849,16 @@ namespace Commons.Collections
 		/// <returns>The associated properties if key is found.
 		/// </returns>
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a String/Vector.
+		/// object that is not a string/Vector.
 		/// </exception>
 		/// <exception cref="ArgumentException"> if one of the tokens is
 		/// malformed (does not contain an equals sign).
 		///
 		/// </exception>
-		public Hashtable GetProperties(String key)
+		public Dictionary<string, string> GetProperties(string key)
 		{
 			//UPGRADE_TODO: Format of property file may need to be changed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1089"'
-			return GetProperties(key, new Hashtable());
+			return GetProperties(key, new Dictionary<string, string>());
 		}
 
 		/// <summary> Get a list of properties associated with the given
@@ -872,32 +872,32 @@ namespace Commons.Collections
 		/// <returns>The associated properties if key is found.
 		/// </returns>
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a String/Vector.
+		/// object that is not a string/Vector.
 		/// </exception>
 		/// <exception cref="ArgumentException"> if one of the tokens is
 		/// malformed (does not contain an equals sign).
 		///
 		/// </exception>
-		public Hashtable GetProperties(String key, Hashtable defaultProps)
+		public Dictionary<string, string> GetProperties(string key, Dictionary<string, string> defaultProps)
 		{
 			/*
 			* Grab an array of the tokens for this key.
 			*/
-			String[] tokens = GetStringArray(key);
+			var tokens = GetStringList(key);
 
 			/*
 			* Each token is of the form 'key=value'.
 			*/
-			Hashtable props = new(defaultProps);
-			for (int i = 0; i < tokens.Length; i++)
+			Dictionary<string, string> props = new(defaultProps);
+			for (int i = 0; i < tokens.Count; i++)
 			{
-				String token = tokens[i];
+				string token = tokens[i];
 				int equalSign = token.IndexOf('=');
 				if (equalSign > 0)
 				{
-					String pkey = token[..equalSign].Trim();
-					String pvalue = token[(equalSign + 1)..].Trim();
-					CollectionsUtil.PutElement(props, pkey, pvalue);
+					string pkey = token[..equalSign].Trim();
+					string pvalue = token[(equalSign + 1)..].Trim();
+					props[pkey] = pvalue;
 				}
 				else
 				{
@@ -907,86 +907,14 @@ namespace Commons.Collections
 			return props;
 		}
 
-		/// <summary> Get an array of strings associated with the given configuration
-		/// key.
-		/// *
-		/// </summary>
-		/// <param name="key">The configuration key.
-		/// </param>
-		/// <returns>The associated string array if key is found.
-		/// </returns>
-		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a String/Vector.
-		///
-		/// </exception>
-		public String[] GetStringArray(String key)
-		{
-			Object value = this[key];
-
-			// What's your vector, Victor?
-			ArrayList vector;
-			if (value is String)
-			{
-				vector = new ArrayList(1)
-				{
-						value
-				};
-			}
-			else if (value is ArrayList)
-			{
-				vector = (ArrayList)value;
-			}
-			else if (value == null)
-			{
-				if (defaults == null)
-				{
-					return Array.Empty<string>();
-				}
-				else
-				{
-					return defaults.GetStringArray(key);
-				}
-			}
-			else
-			{
-				throw new InvalidCastException(string.Format("{0}{1}' doesn't map to a String/Vector object", '\'', key));
-			}
-
-			String[] tokens = new String[vector.Count];
-			for (int i = 0; i < tokens.Length; i++)
-			{
-				tokens[i] = (String)vector[i];
-			}
-
-			return tokens;
-		}
-
-		/// <summary> Get a Vector of strings associated with the given configuration
-		/// key.
-		/// *
-		/// </summary>
-		/// <param name="key">The configuration key.
-		/// </param>
-		/// <returns>The associated Vector.
-		/// </returns>
-		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
-		/// object that is not a Vector.
-		///
-		/// </exception>
-		public ArrayList GetVector(String key)
-		{
-			return GetVector(key, null);
-		}
-
 		/// <summary>
 		/// Gets the string list.
 		/// </summary>
 		/// <param name="key">The key.</param>
 		/// <returns></returns>
-		public List<string> GetStringList(String key)
+		public List<string> GetStringList(string key)
 		{
-			Object value = this[key];
-			return (List<string>)value;
+			return GetStringList(key, null);
 		}
 
 		/// <summary> Get a Vector of strings associated with the given configuration
@@ -1003,32 +931,34 @@ namespace Commons.Collections
 		/// object that is not a Vector.
 		///
 		/// </exception>
-		public ArrayList GetVector(String key, ArrayList defaultValue)
+		public List<string> GetStringList(string key, List<string> defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is ArrayList)
+			if (value is List<string> l)
 			{
-				return (ArrayList)value;
+				return l;
 			}
-			else if (value is String)
+			else if (value is string s)
 			{
-				ArrayList v = new(1)
+				List<string> v = new(1)
 				{
-						value
+						s
 				};
-				CollectionsUtil.PutElement(this, key, v);
+				this[key] = v;
 				return v;
 			}
 			else if (value == null)
 			{
 				if (defaults == null)
 				{
-					return (defaultValue ?? new ArrayList());
+					return (defaultValue ?? new List<string>());
 				}
 				else
 				{
-					return defaults.GetVector(key, defaultValue);
+					return defaults.GetStringList(key, defaultValue);
 				}
 			}
 			else
@@ -1051,17 +981,9 @@ namespace Commons.Collections
 		/// object that is not a Boolean.
 		///
 		/// </exception>
-		public bool GetBoolean(String key)
+		public bool GetBoolean(string key)
 		{
-			Boolean b = GetBoolean(key, DEFAULT_BOOLEAN);
-			if ((Object)b == null)
-			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
-			}
-			else
-			{
-				return b;
-			}
+			return GetBoolean(key, DEFAULT_BOOLEAN);
 		}
 
 		/// <summary> Get a boolean associated with the given configuration key.
@@ -1078,19 +1000,21 @@ namespace Commons.Collections
 		/// object that is not a Boolean.
 		///
 		/// </exception>
-		public Boolean GetBoolean(String key, Boolean defaultValue)
+		public bool GetBoolean(string key, bool defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is Boolean)
+			if (value is bool)
 			{
-				return (Boolean)value;
+				return (bool)value;
 			}
-			else if (value is String)
+			else if (value is string)
 			{
-				String s = TestBoolean((String)value);
-				Boolean b = s.ToUpper().Equals("TRUE");
-				CollectionsUtil.PutElement(this, key, b);
+				string s = TestBoolean((string)value);
+				var b = s.ToUpper().Equals("TRUE");
+				this[key] = b;
 				return b;
 			}
 			else if (value == null)
@@ -1124,9 +1048,9 @@ namespace Commons.Collections
 		/// text maps to a boolean value, or <code>null</code> otherwise.
 		///
 		/// </returns>
-		public static String TestBoolean(String value)
+		public static string TestBoolean(string value)
 		{
-			String s = value.ToLower();
+			string s = value.ToLower();
 
 			if (s.Equals("true") || s.Equals("on") || s.Equals("yes"))
 			{
@@ -1156,11 +1080,11 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Byte.
 		/// </exception>
-		public sbyte GetByte(String key)
+		public sbyte GetByte(string key)
 		{
 			if (ContainsKey(key))
 			{
-				Byte b = GetByte(key, DEFAULT_BYTE);
+				byte b = GetByte(key, DEFAULT_BYTE);
 				return (sbyte)b;
 			}
 			else
@@ -1182,7 +1106,7 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Byte.
 		/// </exception>
-		public static sbyte GetByte(String key, sbyte defaultValue)
+		public static sbyte GetByte(string key, sbyte defaultValue)
 		{
 			return GetByte(key, defaultValue);
 		}
@@ -1200,18 +1124,20 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Byte.
 		/// </exception>
-		public Byte GetByte(String key, Byte defaultValue)
+		public byte GetByte(string key, byte defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is Byte)
+			if (value is byte)
 			{
-				return (Byte)value;
+				return (byte)value;
 			}
-			else if (value is String)
+			else if (value is string)
 			{
-				Byte b = Byte.Parse((String)value);
-				CollectionsUtil.PutElement(this, key, b);
+				byte b = byte.Parse((string)value);
+				this[key] = b;
 				return b;
 			}
 			else if (value == null)
@@ -1240,7 +1166,7 @@ namespace Commons.Collections
 		/// <returns>The value of the resource as an integer.
 		///
 		/// </returns>
-		public Int32 GetInt(String name)
+		public int GetInt(string name)
 		{
 			return GetInteger(name);
 		}
@@ -1256,7 +1182,7 @@ namespace Commons.Collections
 		/// <returns>The value of the resource as an integer.
 		///
 		/// </returns>
-		public Int32 GetInt(String name, int def)
+		public int GetInt(string name, int def)
 		{
 			return GetInteger(name, def);
 		}
@@ -1275,17 +1201,9 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Integer.
 		/// </exception>
-		public Int32 GetInteger(String key)
+		public int GetInteger(string key)
 		{
-			Int32 i = GetInteger(key, DEFAULT_INT32);
-			if ((Object)i == null)
-			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
-			}
-			else
-			{
-				return i;
-			}
+			return GetInteger(key, DEFAULT_INT32);
 		}
 
 		/// <summary> Get a int associated with the given configuration key.
@@ -1304,18 +1222,19 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Integer.
 		/// </exception>
-		public Int32 GetInteger(String key, Int32 defaultValue)
+		public int GetInteger(string key, int defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is Int32)
+			if (value is int)
 			{
-				return (Int32)value;
+				return (int)value;
 			}
-			else if (value is String)
+			else if (value is string s && int.TryParse(s, out int i))
 			{
-				Int32 i = Int32.Parse((String)value);
-				CollectionsUtil.PutElement(this, key, i);
+				this[key] = i;
 				return i;
 			}
 			else if (value == null)
@@ -1349,17 +1268,9 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Long.
 		/// </exception>
-		public Int64 GetLong(String key)
+		public long GetLong(string key)
 		{
-			Int64 l = GetLong(key, DEFAULT_INT64);
-			if ((Object)l == null)
-			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
-			}
-			else
-			{
-				return l;
-			}
+			return GetLong(key, DEFAULT_INT64);
 		}
 
 		/// <summary> Get a long associated with the given configuration key.
@@ -1375,18 +1286,19 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Long.
 		/// </exception>
-		public Int64 GetLong(String key, Int64 defaultValue)
+		public long GetLong(string key, long defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is Int64)
+			if (value is long)
 			{
-				return (Int64)value;
+				return (long)value;
 			}
-			else if (value is String)
+			else if (value is string s && long.TryParse(s, out long l))
 			{
-				Int64 l = Int64.Parse((String)value);
-				CollectionsUtil.PutElement(this, key, l);
+				this[key] = l;
 				return l;
 			}
 			else if (value == null)
@@ -1420,17 +1332,9 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Float.
 		/// </exception>
-		public float GetFloat(String key)
+		public float GetFloat(string key)
 		{
-			Single f = GetFloat(key, DEFAULT_SINGLE);
-			if ((Object)f == null)
-			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
-			}
-			else
-			{
-				return f;
-			}
+			return GetFloat(key, DEFAULT_SINGLE);
 		}
 
 		/// <summary> Get a float associated with the given configuration key.
@@ -1446,19 +1350,19 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Float.
 		/// </exception>
-		public Single GetFloat(String key, Single defaultValue)
+		public float GetFloat(string key, float defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null;
 
-			if (value is Single)
+			if (value is float)
 			{
-				return (Single)value;
+				return (float)value;
 			}
-			else if (value is String)
+			else if (value is string s && float.TryParse(s, out float f))
 			{
-				//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Float.Float' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-				Single f = Single.Parse((String)value);
-				CollectionsUtil.PutElement(this, key, f);
+				this[key] = f;
 				return f;
 			}
 			else if (value == null)
@@ -1492,17 +1396,9 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Double.
 		/// </exception>
-		public Double GetDouble(String key)
+		public double GetDouble(string key)
 		{
-			Double d = GetDouble(key, DEFAULT_DOUBLE);
-			if ((Object)d == null)
-			{
-				throw new Exception(string.Format("{0}{1}' doesn't map to an existing object", '\'', key));
-			}
-			else
-			{
-				return d;
-			}
+			return GetDouble(key, DEFAULT_DOUBLE);
 		}
 
 		/// <summary> Get a double associated with the given configuration key.
@@ -1518,19 +1414,19 @@ namespace Commons.Collections
 		/// <exception cref="InvalidCastException"> is thrown if the key maps to an
 		/// object that is not a Double.
 		/// </exception>
-		public Double GetDouble(String key, Double defaultValue)
+		public double GetDouble(string key, double defaultValue)
 		{
-			Object value = this[key];
+			object value;
+			if (!TryGetValue(key, out value))
+				value = null; ;
 
-			if (value is Double)
+			if (value is double)
 			{
-				return (Double)value;
+				return (double)value;
 			}
-			else if (value is String)
+			else if (value is string s && double.TryParse(s, out double d))
 			{
-				//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Double.Double' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-				Double d = Double.Parse((String)value);
-				CollectionsUtil.PutElement(this, key, d);
+				this[key] = d;
 				return d;
 			}
 			else if (value == null)
@@ -1559,12 +1455,12 @@ namespace Commons.Collections
 		{
 			ExtendedProperties c = new();
 
-			foreach (String key in p.Keys)
+			foreach (string key in p.Keys)
 			{
-				Object value = p.GetProperty(key);
+				object value = p.GetProperty(key);
 
-				// if the value is a String, escape it so that if there are delimiters that the value is not converted to a list
-				if (value is String)
+				// if the value is a string, escape it so that if there are delimiters that the value is not converted to a list
+				if (value is string)
 					value = value.ToString().Replace(",", @"\,");
 				c.SetProperty(key, value);
 			}

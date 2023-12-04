@@ -20,7 +20,7 @@ namespace NVelocity.Test
 
 	public class AjaxHelper2
 	{
-		public String LinkToRemote(String name, String url, IDictionary options)
+		public string LinkToRemote(string name, string url, IDictionary options)
 		{
 			if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -41,7 +41,7 @@ namespace NVelocity.Test
 			return sb.ToString();
 		}
 
-		public String LinkToRemote(String name, String url, string options)
+		public string LinkToRemote(string name, string url, string options)
 		{
 			if (options == null) throw new ArgumentNullException(nameof(options));
 

@@ -23,23 +23,23 @@ namespace NVelocity.App.Events
 	///// 
 	///// Please return what you want rendered into the output stream.
 	///// </summary>
-	//public delegate void MethodExceptionEventHandler(Object sender, MethodExceptionEventArgs e);
+	//public delegate void MethodExceptionEventHandler(object sender, MethodExceptionEventArgs e);
 
 	public class MethodExceptionEventArgs : EventArgs
 	{
-		private Object valueToRender;
+		private object valueToRender;
 		private readonly Exception exceptionThrown;
 		private readonly Type targetClass;
-		private readonly String targetMethod;
+		private readonly string targetMethod;
 
-		public MethodExceptionEventArgs(Type targetClass, String targetMethod, Exception exceptionThrown)
+		public MethodExceptionEventArgs(Type targetClass, string targetMethod, Exception exceptionThrown)
 		{
 			this.targetClass = targetClass;
 			this.targetMethod = targetMethod;
 			this.exceptionThrown = exceptionThrown;
 		}
 
-		public Object ValueToRender
+		public object ValueToRender
 		{
 			get { return valueToRender; }
 			set { valueToRender = value; }
@@ -55,7 +55,7 @@ namespace NVelocity.App.Events
 			get { return targetClass; }
 		}
 
-		public String TargetMethod
+		public string TargetMethod
 		{
 			get { return targetMethod; }
 		}

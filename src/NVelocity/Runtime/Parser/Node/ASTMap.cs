@@ -3,6 +3,7 @@ namespace NVelocity.Runtime.Parser.Node
 	using Context;
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// AST Node for creating a map / dictionary.
@@ -22,7 +23,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor. 
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -30,19 +31,19 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Evaluate the node.
 		/// </summary>
-		public override Object Value(IInternalContextAdapter context)
+		public override object Value(IInternalContextAdapter context)
 		{
 			int size = ChildrenCount;
 
-			IDictionary objectMap = new Hashtable();
+			var objectMap = new Dictionary<object, object>();
 
 			for (int i = 0; i < size; i += 2)
 			{
 				SimpleNode keyNode = (SimpleNode)GetChild(i);
 				SimpleNode valueNode = (SimpleNode)GetChild(i + 1);
 
-				Object key = (keyNode?.Value(context));
-				Object value = (valueNode?.Value(context));
+				object key = (keyNode?.Value(context));
+				object value = (valueNode?.Value(context));
 
 				objectMap.Add(key, value);
 			}

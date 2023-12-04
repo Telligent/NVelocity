@@ -14,17 +14,17 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class BooleanPropertyExecutor : PropertyExecutor
 	{
-		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type type, String propertyName)
+		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type type, string propertyName)
 			: base(r, i, type, propertyName)
 		{
 		}
 
-		protected internal override void Discover(Type type, String propertyName)
+		protected internal override void Discover(Type type, string propertyName)
 		{
 			try
 			{
 				property = introspector.GetProperty(type, propertyName);
-				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
+				if (property != null && property.PropertyType.Equals(typeof(bool)))
 				{
 					return;
 				}
@@ -32,7 +32,7 @@ namespace NVelocity.Runtime.Parser.Node
 				// now the convenience, flip the 1st character
 				propertyName = propertyName[..1].ToUpper() + propertyName[1..];
 				property = introspector.GetProperty(type, propertyName);
-				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
+				if (property != null && property.PropertyType.Equals(typeof(bool)))
 				{
 					return;
 				}

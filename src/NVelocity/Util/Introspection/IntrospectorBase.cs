@@ -17,26 +17,27 @@ namespace NVelocity.Util.Introspection
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.Collections.Concurrent;
 
 	/// <summary>
 	/// This basic function of this class is to return a Method
 	/// object for a particular class given the name of a method
-	/// and the parameters to the method in the form of an Object[]
+	/// and the parameters to the method in the form of an object[]
 	///
 	/// The first time the Introspector sees a
 	/// class it creates a class method map for the
 	/// class in question. Basically the class method map
-	/// is a Hashtable where Method objects are keyed by a
+	/// is a dictionary where Method objects are keyed by a
 	/// concatenation of the method name and the names of
 	/// classes that make up the parameters.
 	///
 	/// For example, a method with the following signature:
 	///
-	/// public void method(String a, StringBuffer b)
+	/// public void method(string a, StringBuffer b)
 	///
 	/// would be mapped by the key:
 	///
-	/// "method" + "java.lang.String" + "java.lang.StringBuffer"
+	/// "method" + "java.lang.string" + "java.lang.StringBuffer"
 	///
 	/// This mapping is performed for all the methods in a class
 	/// and stored for
@@ -51,13 +52,7 @@ namespace NVelocity.Util.Introspection
 		/// Holds the method maps for the classes we know about, keyed by
 		/// Class object.
 		/// </summary>
-		protected internal Hashtable classMethodMaps = new();
-
-		/// <summary>
-		/// Holds the qualified class names for the classes
-		/// we hold in the classMethodMaps hash
-		/// </summary>
-		protected internal IList cachedClassNames = new ArrayList();
+		private ConcurrentDictionary<Type, IClassMap> classMethodMaps = new();
 
 		/// <summary>
 		/// Gets the method defined by <code>name</code> and
@@ -67,25 +62,14 @@ namespace NVelocity.Util.Introspection
 		/// <param name="name">Name of the method being searched for</param>
 		/// <param name="parameters">An array of Objects (not Classes) that describe the the parameters</param>
 		/// <returns>The desired <see cref="MethodInfo"/> object.</returns>
-		public virtual MethodInfo GetMethod(Type c, String name, Object[] parameters)
+		public virtual MethodInfo GetMethod(Type c, string name, object[] parameters)
 		{
 			if (c == null)
 			{
 				throw new Exception(string.Format("Introspector.getMethod(): Class method key was null: {0}", name));
 			}
 
-			IClassMap classMap;
-
-			lock (classMethodMaps)
-			{
-				classMap = (IClassMap)classMethodMaps[c];
-
-				// if we don't have this, check to see if we have it
-				// by name.  if so, then we have a classLoader change
-				// so dump our caches.
-				classMap ??= CreateClassMap(c);
-			}
-
+			IClassMap classMap = classMethodMaps.GetOrAdd(c, CreateClassMap);
 			return classMap.FindMethod(name, parameters);
 		}
 
@@ -96,26 +80,14 @@ namespace NVelocity.Util.Introspection
 		/// <param name="c">Class in which the method search is taking place</param>
 		/// <param name="name">Name of the method being searched for</param>
 		/// <returns>The desired <see cref="PropertyInfo"/> object.</returns>
-		public virtual PropertyInfo GetProperty(Type c, String name)
+		public virtual PropertyInfo GetProperty(Type c, string name)
 		{
 			if (c == null)
 			{
 				throw new Exception(string.Format("Introspector.getMethod(): Class method key was null: {0}", name));
 			}
 
-			IClassMap classMap;
-
-			lock (classMethodMaps)
-			{
-				classMap = (IClassMap)classMethodMaps[c];
-
-				// if we don't have this, check to see if we have it
-				// by name.  if so, then we have a classloader change
-				// so dump our caches.
-
-				classMap ??= CreateClassMap(c);
-			}
-
+			IClassMap classMap = classMethodMaps.GetOrAdd(c, CreateClassMap);
 			return classMap.FindProperty(name);
 		}
 
@@ -131,9 +103,6 @@ namespace NVelocity.Util.Introspection
 				classMap = new DynamicClassMap(c);
 			else
 				classMap = new ClassMap(c);
-
-			classMethodMaps[c] = classMap;
-			cachedClassNames.Add(c.FullName);
 
 			return classMap;
 		}

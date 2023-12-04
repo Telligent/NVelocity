@@ -16,7 +16,7 @@ namespace NVelocity.Runtime.Resource
 {
 	using Commons.Collections;
 	using System;
-	using System.Collections;
+	using System.Collections.Concurrent;
 
 	/// <summary>
 	/// Default implementation of the resource cache for the default
@@ -38,11 +38,7 @@ namespace NVelocity.Runtime.Resource
 	/// </version>
 	public class ResourceCacheImpl : ResourceCache
 	{
-		/// <summary>
-		/// Cache storage, assumed to be thread-safe.
-		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'cache' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		protected internal IDictionary cache = Hashtable.Synchronized(new Hashtable());
+		protected internal SegmentedLruCache<string, Resource> cache = new(1000);
 
 		/// <summary>
 		/// Runtime services, generally initialized by the
@@ -56,40 +52,28 @@ namespace NVelocity.Runtime.Resource
 			runtimeServices = rs;
 
 			int maxSize = runtimeServices.GetInt(RuntimeConstants.RESOURCE_MANAGER_DEFAULTCACHE_SIZE, 89);
-			if (maxSize > 0)
-			{
-				// Create a whole new Map here to avoid hanging on to a
-				// handle to the unsynch'd LRUMap for our lifetime.
-				LRUMap lruCache = LRUMap.Synchronized(new LRUMap(maxSize));
-				lruCache.AddAll(cache);
-				cache = lruCache;
-			}
+			if (maxSize > 0 && maxSize != cache.Capacity)
+				cache = new SegmentedLruCache<string, Resource>(maxSize);
 
 			runtimeServices.Info(string.Format("ResourceCache : initialized. ({0})", GetType()));
 		}
 
-		public Resource get(Object key)
+		public Resource get(string key)
 		{
-			return (Resource)cache[key];
+			return cache.Get(key);
 		}
 
-		public Resource put(Object key, Resource value)
+		public Resource put(string key, Resource value)
 		{
-			Object o = cache[key];
-			cache[key] = value;
-			return (Resource)o;
+			cache.Put(key, value);
+			return value;
 		}
 
-		public Resource remove(Object key)
+		public Resource remove(string key)
 		{
-			Object o = cache[key];
+			var resource = cache.Get(key);
 			cache.Remove(key);
-			return (Resource)o;
-		}
-
-		public IEnumerator enumerateKeys()
-		{
-			return cache.Keys.GetEnumerator();
+			return resource;
 		}
 	}
 }

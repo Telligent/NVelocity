@@ -53,7 +53,7 @@ namespace NVelocity.Runtime
 	/// If Runtime.init() is called by itself the Runtime will
 	/// initialize with a set of default values.
 	/// -----------------------------------------------------------------------
-	/// RuntimeSingleton.init(String/Properties)
+	/// RuntimeSingleton.init(string/Properties)
 	/// 
 	/// In this case the default velocity properties are layed down
 	/// first to provide a solid base, then any properties provided
@@ -101,7 +101,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="key">property key</param>
 		/// <param name="value">property value</param>
-		public static void SetProperty(String key, Object value)
+		public static void SetProperty(string key, object value)
 		{
 			ri.SetProperty(key, value);
 		}
@@ -116,14 +116,14 @@ namespace NVelocity.Runtime
 		/// 
 		/// <code>addProperty("resource.loader", "classpath")</code>
 		/// 
-		/// Then you will end up with an ArrayList like the
+		/// Then you will end up with an list like the
 		/// following:
 		/// 
 		/// ["file", "classpath"]
 		/// </summary>
 		/// <param name="key">key</param>
 		/// <param name="value">value</param>
-		public static void AddProperty(String key, Object value)
+		public static void AddProperty(string key, object value)
 		{
 			ri.AddProperty(key, value);
 		}
@@ -132,7 +132,7 @@ namespace NVelocity.Runtime
 		/// Clear the values pertaining to a particular property.
 		/// </summary>
 		/// <param name="key">key of property to clear</param>
-		public static void ClearProperty(String key)
+		public static void ClearProperty(string key)
 		{
 			ri.ClearProperty(key);
 		}
@@ -140,10 +140,10 @@ namespace NVelocity.Runtime
 		/// <summary>
 		/// Allows an external caller to get a property.  The calling
 		/// routine is required to know the type, as this routine
-		/// will return an Object, as that is what properties can be.
+		/// will return an object, as that is what properties can be.
 		/// </summary>
 		/// <param name="key">property to return</param>
-		public static Object GetProperty(String key)
+		public static object GetProperty(string key)
 		{
 			return ri.GetProperty(key);
 		}
@@ -159,7 +159,7 @@ namespace NVelocity.Runtime
 
 		/// <summary> Initialize the Velocity Runtime with a configuration file.</summary>
 		/// <param name="configurationFile">configuration file</param>
-		public static void Init(String configurationFile)
+		public static void Init(string configurationFile)
 		{
 			ri.Init(configurationFile);
 		}
@@ -187,7 +187,7 @@ namespace NVelocity.Runtime
 		/// </remarks>
 		/// <param name="reader">TextReader retrieved by a resource loader</param>
 		/// <param name="templateName">name of the template being parsed</param>
-		public static SimpleNode Parse(TextReader reader, String templateName)
+		public static SimpleNode Parse(TextReader reader, string templateName)
 		{
 			return ri.Parse(reader, templateName);
 		}
@@ -198,7 +198,7 @@ namespace NVelocity.Runtime
 		/// <param name="reader">TextReader retrieved by a resource loader</param>
 		/// <param name="templateName">name of the template being parsed</param>
 		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template</param>
-		public static SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace)
+		public static SimpleNode Parse(TextReader reader, string templateName, bool dumpNamespace)
 		{
 			return ri.Parse(reader, templateName, dumpNamespace);
 		}
@@ -220,7 +220,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		public static Template GetTemplate(String name)
+		public static Template GetTemplate(string name)
 		{
 			return ri.GetTemplate(name);
 		}
@@ -240,7 +240,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		public static Template GetTemplate(String name, String encoding)
+		public static Template GetTemplate(string name, string encoding)
 		{
 			return ri.GetTemplate(name, encoding);
 		}
@@ -257,7 +257,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		public static ContentResource GetContent(String name)
+		public static ContentResource GetContent(string name)
 		{
 			return ri.GetContent(name);
 		}
@@ -275,7 +275,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		public static ContentResource GetContent(String name, String encoding)
+		public static ContentResource GetContent(string name, string encoding)
 		{
 			return ri.GetContent(name, encoding);
 		}
@@ -292,7 +292,7 @@ namespace NVelocity.Runtime
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		public static String GetLoaderNameForResource(String resourceName)
+		public static string GetLoaderNameForResource(string resourceName)
 		{
 			return ri.GetLoaderNameForResource(resourceName);
 		}
@@ -302,7 +302,7 @@ namespace NVelocity.Runtime
 		/// Log a warning message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Warn(Object message)
+		public static void Warn(object message)
 		{
 			ri.Warn(message);
 		}
@@ -312,7 +312,7 @@ namespace NVelocity.Runtime
 		/// Log an info message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Info(Object message)
+		public static void Info(object message)
 		{
 			ri.Info(message);
 		}
@@ -321,7 +321,7 @@ namespace NVelocity.Runtime
 		/// Log an error message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Error(Object message)
+		public static void Error(object message)
 		{
 			ri.Error(message);
 		}
@@ -330,12 +330,12 @@ namespace NVelocity.Runtime
 		/// Log a debug message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Debug(Object message)
+		public static void Debug(object message)
 		{
 			ri.Debug(message);
 		}
 
-		/// <summary> String property accessor method with default to hide the
+		/// <summary> string property accessor method with default to hide the
 		/// configuration implementation.
 		///
 		/// </summary>
@@ -344,10 +344,10 @@ namespace NVelocity.Runtime
 		/// <param name="defaultValue">default value to return if key not
 		/// found in resource manager.
 		/// </param>
-		/// <returns>String  value of key or default
+		/// <returns>string  value of key or default
 		///
 		/// </returns>
-		public static String getString(String key, String defaultValue)
+		public static string getString(string key, string defaultValue)
 		{
 			return ri.GetString(key, defaultValue);
 		}
@@ -359,7 +359,7 @@ namespace NVelocity.Runtime
 		/// <param name="vmName">Name of velocimacro requested</param>
 		/// <param name="templateName">Template Name</param>
 		/// <returns>VelocimacroProxy</returns>
-		public static Directive.Directive GetVelocimacro(String vmName, String templateName)
+		public static Directive.Directive GetVelocimacro(string vmName, string templateName)
 		{
 			return ri.GetVelocimacro(vmName, templateName);
 		}
@@ -368,7 +368,7 @@ namespace NVelocity.Runtime
 		/// Adds a new Velocimacro. Usually called by Macro only while parsing.
 		/// </summary>
 		/// <param name="name">Name of velocimacro</param>
-		/// <param name="macro">String form of macro body</param>
+		/// <param name="macro">string form of macro body</param>
 		/// <param name="argArray">Array of strings, containing the 
 		/// <code>#macro()</code> arguments. The 0th is the name.
 		/// </param>
@@ -376,7 +376,7 @@ namespace NVelocity.Runtime
 		/// <returns>True if added, false if rejected for some
 		/// reason (either parameters or permission settings)
 		/// </returns>
-		public static bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
+		public static bool AddVelocimacro(string name, string macro, string[] argArray, string sourceTemplate)
 		{
 			return ri.AddVelocimacro(name, macro, argArray, sourceTemplate);
 		}
@@ -387,7 +387,7 @@ namespace NVelocity.Runtime
 		/// <param name="vmName">Name of velocimacro</param>
 		/// <param name="templateName">Template Name</param>
 		/// <returns>True if VM by that name exists, false if not</returns>
-		public static bool IsVelocimacro(String vmName, String templateName)
+		public static bool IsVelocimacro(string vmName, string templateName)
 		{
 			return ri.IsVelocimacro(vmName, templateName);
 		}
@@ -397,7 +397,7 @@ namespace NVelocity.Runtime
 		/// This is to support clearing the VM list when in 
 		/// inline-VM-local-scope mode
 		/// </summary>
-		public static bool DumpVMNamespace(String ns)
+		public static bool DumpVMNamespace(string ns)
 		{
 			return ri.DumpVMNamespace(ns);
 		}
@@ -415,11 +415,11 @@ namespace NVelocity.Runtime
 		*/
 
 		/// <summary>
-		/// String property accessor method to hide the configuration implementation.
+		/// string property accessor method to hide the configuration implementation.
 		/// </summary>
 		/// <param name="key">property key</param>
 		/// <returns>Value of key or <c>null</c></returns>
-		public static String GetString(String key)
+		public static string GetString(string key)
 		{
 			return ri.GetString(key);
 		}
@@ -429,7 +429,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="key">property key</param>
 		/// <returns>value</returns>
-		public static int GetInt(String key)
+		public static int GetInt(string key)
 		{
 			return ri.GetInt(key);
 		}
@@ -440,7 +440,7 @@ namespace NVelocity.Runtime
 		/// <param name="key">property key</param>
 		/// <param name="defaultValue">default value</param>
 		/// <returns>value</returns>
-		public static int GetInt(String key, int defaultValue)
+		public static int GetInt(string key, int defaultValue)
 		{
 			return ri.GetInt(key, defaultValue);
 		}
@@ -451,7 +451,7 @@ namespace NVelocity.Runtime
 		/// <param name="key">property key</param>
 		/// <param name="def">default value if property not found</param>
 		/// <returns>value of key or default value</returns>
-		public static bool GetBoolean(String key, bool def)
+		public static bool GetBoolean(string key, bool def)
 		{
 			return ri.GetBoolean(key, def);
 		}
@@ -504,7 +504,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="key">key</param>
 		/// <returns>value</returns>
-		public static Object GetApplicationAttribute(Object key)
+		public static object GetApplicationAttribute(object key)
 		{
 			return ri.GetApplicationAttribute(key);
 		}

@@ -113,16 +113,16 @@ namespace NVelocity.Test
 			StringWriter sw = new();
 			bool ok = Velocity.Evaluate(c, sw, string.Empty, "$firstName is my first name, my last name is $lastName");
 			Assert.IsTrue(ok, "Evaluation returned failure");
-			String s = sw.ToString();
+												string s = sw.ToString();
 			Assert.AreEqual("Cort is my first name, my last name is Schaefer", s, "test simple objects (no nesting)");
 
 			// test nested object
 			sw = new StringWriter();
-			String template = "These are the individual properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back";
+												string template = "These are the individual properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back";
 			ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
-			Assert.IsFalse(String.Empty.Equals(s), "test nested object");
+			Assert.IsFalse(string.Empty.Equals(s), "test nested object");
 
 			// test hashtable
 			sw = new StringWriter();
@@ -146,7 +146,7 @@ namespace NVelocity.Test
 			ok = Velocity.Evaluate(c, sw, string.Empty, template);
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			s = sw.ToString();
-			Assert.AreEqual(String.Empty, s, "test key not found in context");
+			Assert.AreEqual(string.Empty, s, "test key not found in context");
 
 			sw = new StringWriter();
 			ok = Velocity.Evaluate(c, sw, string.Empty, "#if($enumValue == \"Value2\")equal#end");
@@ -173,10 +173,10 @@ namespace NVelocity.Test
 
 		public class ContactData
 		{
-			private String name = String.Empty;
+			private string name = string.Empty;
 			private AddressData address = new();
 
-			public String Name
+			public string Name
 			{
 				get { return name; }
 				set { name = value; }
@@ -191,16 +191,16 @@ namespace NVelocity.Test
 
 		public class AddressData
 		{
-			private String address1 = String.Empty;
-			private String address2 = String.Empty;
+			private string address1 = string.Empty;
+			private string address2 = string.Empty;
 
-			public String Address1
+			public string Address1
 			{
 				get { return address1; }
 				set { address1 = value; }
 			}
 
-			public String Address2
+			public string Address2
 			{
 				get { return address2; }
 				set { address2 = value; }

@@ -28,7 +28,7 @@ namespace NVelocity.Test.Provider
 	/// <version> $Id: Person.cs,v 1.3 2003/10/27 13:54:11 corts Exp $</version>
 	public class Person
 	{
-		public virtual String Name
+		public virtual string Name
 		{
 			get { return "Person"; }
 		}

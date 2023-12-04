@@ -78,7 +78,7 @@ namespace NVelocity.Runtime.Resource
 	/// <version> $Id: ResourceFactory.cs,v 1.3 2003/10/27 13:54:11 corts Exp $ </version>
 	public class ResourceFactory
 	{
-		public static Resource GetResource(String resourceName, ResourceType resourceType)
+		public static Resource GetResource(string resourceName, ResourceType resourceType)
 		{
 			Resource resource = null;
 

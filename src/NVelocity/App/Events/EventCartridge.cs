@@ -17,7 +17,7 @@ namespace NVelocity.App.Events
 	using Context;
 	using Exception;
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// 'Package' of event handlers...
@@ -36,9 +36,9 @@ namespace NVelocity.App.Events
 		/// <param name="reference">reference from template about to be inserted</param>
 		/// <param name="value"> value about to be inserted (after toString() )</param>
 		/// <returns>
-		/// Object on which toString() should be called for output.
+		/// object on which toString() should be called for output.
 		/// </returns>
-		internal Object ReferenceInsert(Stack referenceStack, String reference, Object value)
+		internal object ReferenceInsert(Stack<object> referenceStack, string reference, object value)
 		{
 			if (ReferenceInsertion != null)
 			{
@@ -56,7 +56,7 @@ namespace NVelocity.App.Events
 		/// is logged.
 		/// </summary>
 		/// <returns>true if to be logged, false otherwise</returns>
-		internal bool ShouldLogOnNullSet(String lhs, String rhs)
+		internal bool ShouldLogOnNullSet(string lhs, string rhs)
 		{
 			if (NullSet == null)
 			{
@@ -75,9 +75,9 @@ namespace NVelocity.App.Events
 		/// <param name="type">Class that is causing the exception</param>
 		/// <param name="method">method called that causes the exception</param>
 		/// <param name="e">Exception thrown by the method</param>
-		/// <returns>Object to return as method result</returns>
+		/// <returns>object to return as method result</returns>
 		/// <exception cref="Exception">exception to be wrapped and propagated to app</exception>
-		internal Object HandleMethodException(Type type, String method, Exception e)
+		internal object HandleMethodException(Type type, string method, Exception e)
 		{
 			// if we don't have a handler, just throw what we were handed
 			if (MethodExceptionEvent == null)

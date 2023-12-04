@@ -31,9 +31,9 @@ namespace NVelocity.Tool
 	/// </version>
 	public interface IToolInfo
 	{
-		String Key { get; }
+		string Key { get; }
 
-		String Classname { get; }
+		string Classname { get; }
 
 		/// <returns>the context key for the tool
 		///
@@ -55,6 +55,6 @@ namespace NVelocity.Tool
 		/// <returns>an instance of the tool
 		///
 		/// </returns>
-		Object getInstance(Object initData);
+		object getInstance(object initData);
 	}
 }

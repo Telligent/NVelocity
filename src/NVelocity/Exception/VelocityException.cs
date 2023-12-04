@@ -23,7 +23,7 @@ namespace NVelocity.Exception
 	[Serializable]
 	public class VelocityException : Exception
 	{
-		public VelocityException(String exceptionMessage) : base(exceptionMessage)
+		public VelocityException(string exceptionMessage) : base(exceptionMessage)
 		{
 		}
 

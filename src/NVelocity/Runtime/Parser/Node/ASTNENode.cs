@@ -30,15 +30,15 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
 		public override bool Evaluate(IInternalContextAdapter context)
 		{
-			Object left = GetChild(0).Value(context);
-			Object right = GetChild(1).Value(context);
+			object left = GetChild(0).Value(context);
+			object right = GetChild(1).Value(context);
 
 			try
 			{

@@ -46,7 +46,7 @@ namespace NVelocity.Runtime.Resource
 		/// <returns>Resource specified or null if not found
 		///
 		/// </returns>
-		Resource get(Object resourceKey);
+		Resource get(string resourceKey);
 
 		/// <summary>  stores a Resource in the cache
 		/// *
@@ -58,17 +58,13 @@ namespace NVelocity.Runtime.Resource
 		/// <returns>existing Resource stored under this key, or null if none
 		///
 		/// </returns>
-		Resource put(Object resourceKey, Resource resource);
+		Resource put(string resourceKey, Resource resource);
 
 		/// <summary>  removes a Resource from the cache
 		/// *
 		/// </summary>
 		/// <param name="resourceKey">resource to be removed
 		/// </param>
-		Resource remove(Object resourceKey);
-
-		/// <summary>  returns an Iterator of Keys in the cache
-		/// </summary>
-		IEnumerator enumerateKeys();
+		Resource remove(string resourceKey);
 	}
 }

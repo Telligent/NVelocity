@@ -42,7 +42,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// Class name for this loader, for logging/debugging
 		/// purposes.
 		/// </summary>
-		protected internal String className = null;
+		protected internal string className = null;
 
 		protected internal IRuntimeServices runtimeServices = null;
 
@@ -78,7 +78,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// Get the InputStream that the Runtime will parse
 		/// to create a template.
 		/// </summary>
-		public abstract Stream GetResourceStream(String source);
+		public abstract Stream GetResourceStream(string source);
 
 		/// <summary>
 		/// Given a template, check to see if the source of InputStream
@@ -97,7 +97,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary>
 		/// Return the class name of this resource Loader
 		/// </summary>
-		public String ClassName
+		public string ClassName
 		{
 			get { return className; }
 		}

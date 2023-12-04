@@ -26,14 +26,14 @@ namespace NVelocity
 		/// </summary>
 		/// <param name="propName">Property name.</param>
 		/// <returns>value back to the template</returns>
-		object GetInvoke(String propName);
+		object GetInvoke(string propName);
 
 		/// <summary>
 		/// Defines the behavior when a property is written
 		/// </summary>
 		/// <param name="propName">Property name.</param>
 		/// <param name="value">The value to assign.</param>
-		void SetInvoke(String propName, object value);
+		void SetInvoke(string propName, object value);
 
 		/// <summary>
 		/// Invokes the specified method.
@@ -41,6 +41,6 @@ namespace NVelocity
 		/// <param name="method">The method name.</param>
 		/// <param name="args">The method arguments.</param>
 		/// <returns>value back to the template</returns>
-		object Invoke(String method, params object[] args);
+		object Invoke(string method, params object[] args);
 	}
 }

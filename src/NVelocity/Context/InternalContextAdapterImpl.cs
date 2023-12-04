@@ -105,12 +105,12 @@ namespace NVelocity.Context
 			}
 		}
 
-		public String CurrentTemplateName
+		public string CurrentTemplateName
 		{
 			get { return internalHousekeepingContext.CurrentTemplateName; }
 		}
 
-		public Object[] TemplateNameStack
+		public object[] TemplateNameStack
 		{
 			get { return internalHousekeepingContext.TemplateNameStack; }
 		}
@@ -122,7 +122,7 @@ namespace NVelocity.Context
 			set { internalHousekeepingContext.CurrentResource = value; }
 		}
 
-		public Object[] Keys
+		public string[] Keys
 		{
 			get { return context.Keys; }
 		}
@@ -136,12 +136,12 @@ namespace NVelocity.Context
 		{
 			get
 			{
-				object[] keys = Keys;
+				var keys = Keys;
 				object[] values = new object[keys.Length];
 
 				for (int i = 0; i < values.Length; i++)
 				{
-					values[i] = Get(keys[i].ToString());
+					values[i] = Get(keys[i]);
 				}
 
 				return values;
@@ -189,7 +189,7 @@ namespace NVelocity.Context
 
 		/* --- InternalHousekeepingContext interface methods --- */
 
-		public void PushCurrentTemplateName(String s)
+		public void PushCurrentTemplateName(string s)
 		{
 			internalHousekeepingContext.PushCurrentTemplateName(s);
 		}
@@ -199,12 +199,12 @@ namespace NVelocity.Context
 			internalHousekeepingContext.PopCurrentTemplateName();
 		}
 
-		public IntrospectionCacheData ICacheGet(Object key)
+		public IntrospectionCacheData ICacheGet(object key)
 		{
 			return internalHousekeepingContext.ICacheGet(key);
 		}
 
-		public void ICachePut(Object key, IntrospectionCacheData o)
+		public void ICachePut(object key, IntrospectionCacheData o)
 		{
 			internalHousekeepingContext.ICachePut(key, o);
 		}
@@ -212,23 +212,27 @@ namespace NVelocity.Context
 
 		/* ---  Context interface methods --- */
 
-		public Object Put(String key, Object value)
+		public object Put(string key, object value)
 		{
 			return context.Put(key, value);
 		}
 
-		public Object Get(String key)
+		public object Get(string key)
 		{
 			return context.Get(key);
 		}
 
-		public bool ContainsKey(Object key)
+		public bool ContainsKey(string key)
 		{
 			return context.ContainsKey(key);
 		}
 
+		bool IDictionary.Contains(object key)
+		{
+			return ContainsKey(key.ToString());
+		}
 
-		public Object Remove(Object key)
+		public object Remove(string key)
 		{
 			return context.Remove(key);
 		}
@@ -255,9 +259,9 @@ namespace NVelocity.Context
 			return null;
 		}
 
-		void IDictionary.Remove(Object key)
+		void IDictionary.Remove(object key)
 		{
-			context.Remove(key);
+			context.Remove(key.ToString());
 		}
 
 		public void CopyTo(Array array, int index)
@@ -283,7 +287,7 @@ namespace NVelocity.Context
 			get { return false; }
 		}
 
-		public bool Contains(object key)
+		public bool Contains(string key)
 		{
 			return context.ContainsKey(key);
 		}

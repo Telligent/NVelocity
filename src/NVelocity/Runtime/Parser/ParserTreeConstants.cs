@@ -68,8 +68,8 @@ namespace NVelocity.Runtime.Parser
 		public const int MOD_NODE = 36;
 		public const int NOT_NODE = 37;
 
-		public static readonly String[] NodeName =
-			new String[]
+		public static readonly string[] NodeName =
+			new string[]
 				{
 					"process", "void", "EscapedDirective", "Escape", "Comment", "NumberLiteral", "StringLiteral", "Identifier", "Word",
 					"Directive", "Block", "ObjectArray", "IntegerRange", "Method", "Reference", "True", "False", "Text", "IfStatement",

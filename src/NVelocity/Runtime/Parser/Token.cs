@@ -38,7 +38,7 @@ namespace NVelocity.Runtime.Parser
 		public int BeginLine, BeginColumn, EndLine, EndColumn;
 
 		/// <summary> The string image of the token. </summary>
-		public String Image;
+		public string Image;
 
 		/// <summary>
 		/// A reference to the next regular (non-special) token from the input
@@ -67,7 +67,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary>
 		/// Returns the image.
 		/// </summary>
-		public override String ToString()
+		public override string ToString()
 		{
 			return Image;
 		}

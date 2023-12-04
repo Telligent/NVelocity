@@ -63,7 +63,7 @@ namespace NVelocity.App
 		/// file containing properties to use to initialize
 		/// the Velocity runtime
 		/// </param>
-		public static void Init(String propsFilename)
+		public static void Init(string propsFilename)
 		{
 			RuntimeSingleton.Init(propsFilename);
 		}
@@ -85,7 +85,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="key">key</param>
 		/// <param name="value">value</param>
-		public static void SetProperty(String key, Object value)
+		public static void SetProperty(string key, object value)
 		{
 			RuntimeSingleton.SetProperty(key, value);
 		}
@@ -95,7 +95,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="key">key</param>
 		/// <param name="value">value</param>
-		public static void AddProperty(String key, Object value)
+		public static void AddProperty(string key, object value)
 		{
 			RuntimeSingleton.AddProperty(key, value);
 		}
@@ -104,7 +104,7 @@ namespace NVelocity.App
 		/// Clear a NVelocity Runtime property.
 		/// </summary>
 		/// <param name="key">of property to clear</param>
-		public static void ClearProperty(String key)
+		public static void ClearProperty(string key)
 		{
 			RuntimeSingleton.ClearProperty(key);
 		}
@@ -125,7 +125,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="key">property to retrieve</param>
 		/// <returns>property value or null if the property not currently set</returns>
-		public static Object GetProperty(String key)
+		public static object GetProperty(string key)
 		{
 			return RuntimeSingleton.GetProperty(key);
 		}
@@ -140,7 +140,7 @@ namespace NVelocity.App
 		/// <param name="logTag"> string to be used as the template name for log messages in case of error</param>
 		/// <param name="inString">input string containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
-		public static bool Evaluate(IContext context, TextWriter writer, String logTag, String inString)
+		public static bool Evaluate(IContext context, TextWriter writer, string logTag, string inString)
 		{
 			return Evaluate(context, writer, logTag, new StringReader(inString));
 		}
@@ -156,9 +156,9 @@ namespace NVelocity.App
 		/// <param name="instream">input stream containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
 		[Obsolete("Use the overload that takes a TextReader")]
-		public static bool Evaluate(IContext context, TextWriter writer, String logTag, Stream instream)
+		public static bool Evaluate(IContext context, TextWriter writer, string logTag, Stream instream)
 		{
-			String encoding = null;
+			string encoding = null;
 
 			// first, parse - convert ParseException if thrown
 			TextReader reader;
@@ -169,7 +169,7 @@ namespace NVelocity.App
 			}
 			catch (IOException ioException)
 			{
-				String msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
+				string msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
 				throw new ParseErrorException(msg, ioException);
 			}
 
@@ -186,7 +186,7 @@ namespace NVelocity.App
 		/// <param name="logTag"> string to be used as the template name for log messages in case of error</param>
 		/// <param name="reader">Reader containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
-		public static bool Evaluate(IContext context, TextWriter writer, String logTag, TextReader reader)
+		public static bool Evaluate(IContext context, TextWriter writer, string logTag, TextReader reader)
 		{
 			SimpleNode nodeTree;
 			try
@@ -245,7 +245,7 @@ namespace NVelocity.App
 		/// <param name="context">Context object containing data/objects used for rendering.</param>
 		/// <param name="writer"> Writer for output stream</param>
 		/// <returns>true if Velocimacro exists and successfully invoked, false otherwise.</returns>
-		public static bool InvokeVelocimacro(String vmName, String logTag, String[] parameters, IContext context,
+		public static bool InvokeVelocimacro(string vmName, string logTag, string[] parameters, IContext context,
 																					TextWriter writer)
 		{
 			// check parameters
@@ -297,7 +297,7 @@ namespace NVelocity.App
 		/// <param name="writer"> writer to write template into</param>
 		/// <returns>true if successful, false otherwise.  Errors logged to velocity log.</returns>
 		[Obsolete("Use the overload that takes an encoding")]
-		public static bool MergeTemplate(String templateName, IContext context, TextWriter writer)
+		public static bool MergeTemplate(string templateName, IContext context, TextWriter writer)
 		{
 			return
 				MergeTemplate(templateName,
@@ -313,7 +313,7 @@ namespace NVelocity.App
 		/// <param name="context"> filled context to be used in merge</param>
 		/// <param name="writer"> writer to write template into</param>
 		/// <returns>true if successful, false otherwise.  Errors logged to velocity log</returns>
-		public static bool MergeTemplate(String templateName, String encoding, IContext context, TextWriter writer)
+		public static bool MergeTemplate(string templateName, string encoding, IContext context, TextWriter writer)
 		{
 			Template template = RuntimeSingleton.GetTemplate(templateName, encoding);
 
@@ -342,7 +342,7 @@ namespace NVelocity.App
 		/// to syntax (or other) error.
 		/// @throws Exception if an error occurs in template initialization
 		/// </returns>
-		public static Template GetTemplate(String name)
+		public static Template GetTemplate(string name)
 		{
 			return RuntimeSingleton.GetTemplate(name);
 		}
@@ -363,7 +363,7 @@ namespace NVelocity.App
 		/// <exception cref="Exception">
 		/// If an error occurs in template initialization.
 		/// </exception>
-		public static Template GetTemplate(String name, String encoding)
+		public static Template GetTemplate(string name, string encoding)
 		{
 			return RuntimeSingleton.GetTemplate(name, encoding);
 		}
@@ -380,7 +380,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="templateName"> name of the template to search for</param>
 		/// <returns>Whether the resource was located.</returns>
-		public static bool ResourceExists(String templateName)
+		public static bool ResourceExists(string templateName)
 		{
 			return (RuntimeSingleton.GetLoaderNameForResource(templateName) != null);
 		}
@@ -390,7 +390,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="message">message to log
 		/// </param>
-		public static void Warn(Object message)
+		public static void Warn(object message)
 		{
 			RuntimeSingleton.Warn(message);
 		}
@@ -399,7 +399,7 @@ namespace NVelocity.App
 		/// Log an info message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Info(Object message)
+		public static void Info(object message)
 		{
 			RuntimeSingleton.Info(message);
 		}
@@ -408,7 +408,7 @@ namespace NVelocity.App
 		/// Log an error message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Error(Object message)
+		public static void Error(object message)
 		{
 			RuntimeSingleton.Error(message);
 		}
@@ -417,14 +417,14 @@ namespace NVelocity.App
 		/// Log a debug message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public static void Debug(Object message)
+		public static void Debug(object message)
 		{
 			RuntimeSingleton.Debug(message);
 		}
 
 		/// <summary>
 		/// <p>
-		/// Set the an ApplicationAttribute, which is an Object
+		/// Set the an ApplicationAttribute, which is an object
 		/// set by the application which is accessible from
 		/// any component of the system that gets a RuntimeServices.
 		/// This allows communication between the application
@@ -443,16 +443,16 @@ namespace NVelocity.App
 		/// </param>
 		/// <param name="value">object to store under this key
 		/// </param>
-		public static void SetApplicationAttribute(Object key, Object value)
+		public static void SetApplicationAttribute(object key, object value)
 		{
 			RuntimeSingleton.RuntimeServices.SetApplicationAttribute(key, value);
 		}
 
 		/// <summary>
-		/// <see>#ResourceExists(String)</see>
+		/// <see>#ResourceExists(string)</see>
 		/// </summary>
-		[Obsolete("Use ResourceExists(String) instead")]
-		public static Boolean TemplateExists(String resourceName)
+		[Obsolete("Use ResourceExists(string) instead")]
+		public static bool TemplateExists(string resourceName)
 		{
 			return ResourceExists(resourceName);
 		}

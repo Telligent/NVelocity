@@ -47,7 +47,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// Return name of this directive.
 		/// </summary>
-		public override String Name
+		public override string Name
 		{
 			get { return "parse"; }
 			set { throw new NotSupportedException(); }
@@ -79,7 +79,7 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// get the path
-			String arg = value.ToString();
+			string arg = value.ToString();
 
 			AssertTemplateStack(context);
 
@@ -87,11 +87,11 @@ namespace NVelocity.Runtime.Directive
 
 			// get the resource, and assume that we use the encoding of the current template
 			// the 'current resource' can be null if we are processing a stream....
-			String encoding;
+			string encoding;
 
 			if (current == null)
 			{
-				encoding = (String)runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
+				encoding = (string)runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
 			else
 			{
@@ -124,7 +124,7 @@ namespace NVelocity.Runtime.Directive
 			return result;
 		}
 
-		private bool AssertNodeHasValue(INode node, IInternalContextAdapter context, out Object value)
+		private bool AssertNodeHasValue(INode node, IInternalContextAdapter context, out object value)
 		{
 			bool result = true;
 
@@ -145,7 +145,7 @@ namespace NVelocity.Runtime.Directive
 		private bool AssertTemplateStack(IInternalContextAdapter context)
 		{
 			bool result = true;
-			Object[] templateStack = context.TemplateNameStack;
+			object[] templateStack = context.TemplateNameStack;
 
 			if (templateStack.Length >= runtimeServices.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
 			{
@@ -163,7 +163,7 @@ namespace NVelocity.Runtime.Directive
 		}
 
 
-		private Template GetTemplate(String arg, String encoding, IInternalContextAdapter context)
+		private Template GetTemplate(string arg, string encoding, IInternalContextAdapter context)
 		{
 			Template result;
 			try
@@ -196,7 +196,7 @@ namespace NVelocity.Runtime.Directive
 			return result;
 		}
 
-		private bool RenderTemplate(Template template, String arg, TextWriter writer, IInternalContextAdapter context)
+		private bool RenderTemplate(Template template, string arg, TextWriter writer, IInternalContextAdapter context)
 		{
 			bool result = true;
 			try

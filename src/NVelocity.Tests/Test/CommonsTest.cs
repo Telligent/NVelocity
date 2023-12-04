@@ -18,11 +18,12 @@ namespace NVelocity.Test
 	using NUnit.Framework;
 	using System;
 	using System.Collections;
-	using System.IO;
+				using System.Collections.Generic;
+				using System.IO;
 
-	/// <summary>
-	/// Make sure that properties files are loaded correctly
-	/// </summary>
+				/// <summary>
+				/// Make sure that properties files are loaded correctly
+				/// </summary>
 	[TestFixture]
 	public class CommonsTest
 	{
@@ -67,7 +68,7 @@ namespace NVelocity.Test
 			sw.Close();
 
 			StreamReader sr = file.OpenText();
-			String s = sr.ReadToEnd();
+												string s = sr.ReadToEnd();
 			sr.Close();
 
 			ExtendedProperties props = new(file.FullName);
@@ -86,7 +87,7 @@ namespace NVelocity.Test
 			VerifyProperties(p2, string.Empty);
 		}
 
-		private void VerifyProperties(ExtendedProperties props, String prefix)
+		private void VerifyProperties(ExtendedProperties props, string prefix)
 		{
 			Assert.IsTrue(props.Count == 5, "expected to have 5 properties, had " + props.Count);
 
@@ -97,15 +98,15 @@ namespace NVelocity.Test
 			Assert.IsTrue(props.GetString(prefix + "commas.excaped").Equals("Hi, what'up?"),
 										"commas.excaped was not correct: " + props.GetString(prefix + "commas.excaped"));
 
-			// make sure that multiple tokens on a single line are parsed correctly
-			Object o = props.GetProperty(prefix + "tokens_on_a_line");
-			Assert.IsTrue((o is ArrayList), prefix + "tokens_on_a_line was expected to be an ArrayList");
-			Assert.IsTrue(((ArrayList)o).Count == 2, prefix + "tokens_on_a_line was expected to be an ArrayList with 2 elements");
+												// make sure that multiple tokens on a single line are parsed correctly
+												object o = props.GetProperty(prefix + "tokens_on_a_line");
+			Assert.IsTrue((o is List<string>), prefix + "tokens_on_a_line was expected to be an ArrayList");
+			Assert.IsTrue(((List<string>)o).Count == 2, prefix + "tokens_on_a_line was expected to be an ArrayList with 2 elements");
 
 			// make sure that tokens specified on multiple lines get put together correctly
 			o = props.GetProperty(prefix + "tokens_on_multiple_lines");
-			Assert.IsTrue((o is ArrayList), prefix + "tokens_on_multiple_lines was expected to be an ArrayList");
-			Assert.IsTrue(((ArrayList)o).Count == 2,
+			Assert.IsTrue((o is List<string>), prefix + "tokens_on_multiple_lines was expected to be an ArrayList");
+			Assert.IsTrue(((List<string>)o).Count == 2,
 										prefix + "tokens_on_multiple_lines was expected to be an ArrayList with 2 elements");
 		}
 	}

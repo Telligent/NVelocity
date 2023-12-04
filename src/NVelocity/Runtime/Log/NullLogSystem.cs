@@ -39,7 +39,7 @@ namespace NVelocity.Runtime.Log
 		/// </summary>
 		/// <param name="level">severity level</param>
 		/// <param name="message">complete error message</param>
-		public void LogVelocityMessage(LogLevel level, String message)
+		public void LogVelocityMessage(LogLevel level, string message)
 		{
 		}
 	}

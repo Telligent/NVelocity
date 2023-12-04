@@ -17,7 +17,7 @@ namespace NVelocity.Tool
 	using System;
 
 	/// <summary> ToolInfo implementation to handle "primitive" data types.
-	/// It currently supports String, Number, and Boolean data.
+	/// It currently supports string, Number, and Boolean data.
 	/// *
 	/// </summary>
 	/// <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a>
@@ -28,12 +28,12 @@ namespace NVelocity.Tool
 	/// </version>
 	public class DataInfo : IToolInfo
 	{
-		public static readonly String TYPE_STRING = "string";
-		public static readonly String TYPE_NUMBER = "number";
-		public static readonly String TYPE_BOOLEAN = "boolean";
+		public static readonly string TYPE_STRING = "string";
+		public static readonly string TYPE_NUMBER = "number";
+		public static readonly string TYPE_BOOLEAN = "boolean";
 
-		private readonly String key;
-		private readonly Object data;
+		private readonly string key;
+		private readonly object data;
 
 		/// <summary> Parses the value string into a recognized type. If
 		/// the type specified is not supported, the data will
@@ -47,24 +47,24 @@ namespace NVelocity.Tool
 		/// <param name="value">the data
 		///
 		/// </param>
-		public DataInfo(String key, String type, String value)
+		public DataInfo(string key, string type, string value)
 		{
 			this.key = key;
 
 			if (type.ToUpper().Equals(TYPE_BOOLEAN.ToUpper()))
 			{
-				data = Boolean.Parse(value);
+				data = bool.Parse(value);
 			}
 			else if (type.ToUpper().Equals(TYPE_NUMBER.ToUpper()))
 			{
 				if (value.IndexOf('.') >= 0)
 				{
 					//UPGRADE_TODO: Format of parameters of constructor 'java.lang.Double.Double' are different in the equivalent in .NET. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1092"'
-					data = Double.Parse(value);
+					data = double.Parse(value);
 				}
 				else
 				{
-					data = Int32.Parse(value);
+					data = int.Parse(value);
 				}
 			}
 			else
@@ -73,12 +73,12 @@ namespace NVelocity.Tool
 			}
 		}
 
-		public String Key
+		public string Key
 		{
 			get { return key; }
 		}
 
-		public String Classname
+		public string Classname
 		{
 			get { return data.GetType().FullName; }
 		}
@@ -87,7 +87,7 @@ namespace NVelocity.Tool
 		/// object since the data is a constant. Initialization
 		/// data is ignored.
 		/// </summary>
-		public Object getInstance(Object initData)
+		public object getInstance(object initData)
 		{
 			return data;
 		}

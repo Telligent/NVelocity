@@ -84,17 +84,10 @@
     <Compile Include="App\VelocityEngine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commons\Collections\CollectionsUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commons\Collections\ExtendedProperties.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commons\Collections\IOrderedDictionary.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commons\Collections\KeyedListEnumerator.cs" />
-    <Compile Include="Commons\Collections\LRUMap.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commons\Collections\PropertiesReader.cs">
@@ -471,7 +464,7 @@
     <Compile Include="Util\Introspection\MethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\Introspection\SegmentedLruCache.cs" />
+    <Compile Include="Commons\Collections\SegmentedLruCache.cs" />
     <Compile Include="Util\Introspection\UberspectImpl.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -35,12 +35,12 @@ namespace NVelocity.Tool
 		/// <param name="className">the fully qualified class name of the object</param>
 		/// <returns>an instance of the specified class or null if the class
 		/// could not be instantiated.</returns>
-		public Object Load(String className)
+		public object Load(string className)
 		{
 			try
 			{
 				Type type = Type.GetType(className);
-				Object o = Activator.CreateInstance(type);
+				object o = Activator.CreateInstance(type);
 				return o;
 			}
 			catch (Exception)

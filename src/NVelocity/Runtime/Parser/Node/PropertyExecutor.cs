@@ -8,10 +8,10 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class PropertyExecutor : AbstractExecutor
 	{
-		private String propertyUsed = null;
+		private string propertyUsed = null;
 		protected Introspector introspector = null;
 
-		public PropertyExecutor(IRuntimeLogger r, Introspector i, Type type, String propertyName)
+		public PropertyExecutor(IRuntimeLogger r, Introspector i, Type type, string propertyName)
 		{
 			runtimeLogger = r;
 			introspector = i;
@@ -19,7 +19,7 @@ namespace NVelocity.Runtime.Parser.Node
 			Discover(type, propertyName);
 		}
 
-		protected internal virtual void Discover(Type type, String propertyName)
+		protected internal virtual void Discover(Type type, string propertyName)
 		{
 			// this is gross and linear, but it keeps it straightforward.
 			try
@@ -84,7 +84,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Execute property against context.
 		/// </summary>
-		public override Object Execute(Object o)
+		public override object Execute(object o)
 		{
 			if (invoker == null)
 				return null;

@@ -15,7 +15,7 @@ namespace NVelocity.Runtime.Parser.Node
 	public class ASTDirective : SimpleNode
 	{
 		private Directive directive;
-		private String directiveName = string.Empty;
+		private string directiveName = string.Empty;
 
 		public ASTDirective(int id) : base(id)
 		{
@@ -28,12 +28,12 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			base.Init(context, data);
 
@@ -73,7 +73,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// dig it out of the token stream and gives the parse 
 		/// the change to override.
 		/// </summary>
-		public String DirectiveName
+		public string DirectiveName
 		{
 			get { return directiveName; }
 			set { directiveName = value; }

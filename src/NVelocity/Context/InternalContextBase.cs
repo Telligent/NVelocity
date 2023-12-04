@@ -68,7 +68,7 @@ namespace NVelocity.Context
 			templateNameStack = new Stack<string>();
 		}
 
-		public String CurrentTemplateName
+		public string CurrentTemplateName
 		{
 			get
 			{
@@ -83,7 +83,7 @@ namespace NVelocity.Context
 			}
 		}
 
-		public Object[] TemplateNameStack
+		public object[] TemplateNameStack
 		{
 			get { return templateNameStack.ToArray(); }
 		}
@@ -103,7 +103,7 @@ namespace NVelocity.Context
 		/// set the current template name on top of stack
 		/// </summary>
 		/// <param name="s">current template name</param>
-		public void PushCurrentTemplateName(String s)
+		public void PushCurrentTemplateName(string s)
 		{
 			templateNameStack.Push(s);
 		}
@@ -114,12 +114,12 @@ namespace NVelocity.Context
 			templateNameStack.Pop();
 		}
 
-		public IntrospectionCacheData ICacheGet(Object key)
+		public IntrospectionCacheData ICacheGet(object key)
 		{
 			return (IntrospectionCacheData)introspectionCache[key];
 		}
 
-		public void ICachePut(Object key, IntrospectionCacheData o)
+		public void ICachePut(object key, IntrospectionCacheData o)
 		{
 			introspectionCache[key] = o;
 		}

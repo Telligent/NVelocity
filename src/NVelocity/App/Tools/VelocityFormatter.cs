@@ -54,8 +54,8 @@ namespace NVelocity.App.Tools
 		/// Formats a date in 'short' style.
 		/// </summary>
 		/// <param name="date">A Date.</param>
-		/// <returns>A String.</returns>
-		public String FormatShortDate(DateTime date)
+		/// <returns>A string.</returns>
+		public string FormatShortDate(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(3, -1, CultureInfo.CurrentCulture), date);
 		}
@@ -64,8 +64,8 @@ namespace NVelocity.App.Tools
 		/// Formats a date in 'long' style.
 		/// </summary>
 		/// <param name="date">A Date.</param>
-		/// <returns>A String.</returns>
-		public String FormatLongDate(DateTime date)
+		/// <returns>A string.</returns>
+		public string FormatLongDate(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(1, -1, CultureInfo.CurrentCulture), date);
 		}
@@ -74,8 +74,8 @@ namespace NVelocity.App.Tools
 		/// Formats a date/time in 'short' style.
 		/// </summary>
 		/// <param name="date">A Date.</param>
-		/// <returns>A String.</returns>
-		public String FormatShortDateTime(DateTime date)
+		/// <returns>A string.</returns>
+		public string FormatShortDateTime(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(3, 3, CultureInfo.CurrentCulture), date);
 		}
@@ -84,8 +84,8 @@ namespace NVelocity.App.Tools
 		/// Formats a date/time in 'long' style.
 		/// </summary>
 		/// <param name="date">A Date.</param>
-		/// <returns>A String.</returns>
-		public String FormatLongDateTime(DateTime date)
+		/// <returns>A string.</returns>
+		public string FormatLongDateTime(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(1, 1, CultureInfo.CurrentCulture), date);
 		}
@@ -93,9 +93,9 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Formats an array into the form "A, B and C".
 		/// </summary>
-		/// <param name="array">An Object.</param>
-		/// <returns>A String.</returns>
-		public String FormatArray(Object array)
+		/// <param name="array">An object.</param>
+		/// <returns>A string.</returns>
+		public string FormatArray(object array)
 		{
 			return FormatArray(array, ", ", " and ");
 		}
@@ -104,10 +104,10 @@ namespace NVelocity.App.Tools
 		/// Formats an array into the form
 		/// "A&lt;delim&gt;B&lt;delim&gt;C".
 		/// </summary>
-		/// <param name="array">An Object.</param>
-		/// <param name="delim">A String.</param>
-		/// <returns>A String.</returns>
-		public String FormatArray(Object array, String delim)
+		/// <param name="array">An object.</param>
+		/// <param name="delim">A string.</param>
+		/// <returns>A string.</returns>
+		public string FormatArray(object array, string delim)
 		{
 			return FormatArray(array, delim, delim);
 		}
@@ -116,11 +116,11 @@ namespace NVelocity.App.Tools
 		/// Formats an array into the form
 		/// "A&lt;delim&gt;B&lt;finalDelimiter&gt;C".
 		/// </summary>
-		/// <param name="array">An Object.</param>
-		/// <param name="delim">A String.</param>
-		/// <param name="finalDelimiter">A String.</param>
-		/// <returns>A String.</returns>
-		public String FormatArray(Object array, String delim, String finalDelimiter)
+		/// <param name="array">An object.</param>
+		/// <param name="delim">A string.</param>
+		/// <param name="finalDelimiter">A string.</param>
+		/// <returns>A string.</returns>
+		public string FormatArray(object array, string delim, string finalDelimiter)
 		{
 			// TODO: if this is not right - it will blow up
 			Array a = (Array)array;
@@ -130,9 +130,9 @@ namespace NVelocity.App.Tools
 			for (int i = 0; i < arrayLen; i++)
 			{
 				// Use the Array.get method as this will automatically
-				// wrap primitive types in a suitable Object-derived
+				// wrap primitive types in a suitable object-derived
 				// wrapper if necessary.
-				//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
+				//UPGRADE_TODO: The equivalent in .NET for method 'java.object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 				//UPGRADE_ISSUE: Method 'java.lang.reflect.Array.get' was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1000_javalangreflectArrayget_javalangObject_int"'
 
 				//TODO: not sure if this is right
@@ -155,8 +155,8 @@ namespace NVelocity.App.Tools
 		/// Formats a list into the form "A, B and C".
 		/// </summary>
 		/// <param name="list">A list.</param>
-		/// <returns>A String.</returns>
-		public String FormatVector(IList list)
+		/// <returns>A string.</returns>
+		public string FormatVector(IList list)
 		{
 			return FormatVector(list, ", ", " and ");
 		}
@@ -165,9 +165,9 @@ namespace NVelocity.App.Tools
 		/// Formats a list into the form "A&lt;delim&gt;B&lt;delim&gt;C".
 		/// </summary>
 		/// <param name="list">A list.</param>
-		/// <param name="delim">A String.</param>
-		/// <returns>A String.</returns>
-		public String FormatVector(IList list, String delim)
+		/// <param name="delim">A string.</param>
+		/// <returns>A string.</returns>
+		public string FormatVector(IList list, string delim)
 		{
 			return FormatVector(list, delim, delim);
 		}
@@ -177,13 +177,13 @@ namespace NVelocity.App.Tools
 		/// "Adelim&gt;B&lt;finalDelimiter&gt;C".
 		/// </summary>
 		/// <param name="list">A list.</param>
-		/// <param name="delim">A String.</param>
-		/// <param name="finalDelimiter">A String.</param>
-		/// <returns>A String.</returns>
-		public String FormatVector(IList list, String delim, String finalDelimiter)
+		/// <param name="delim">A string.</param>
+		/// <param name="finalDelimiter">A string.</param>
+		/// <returns>A string.</returns>
+		public string FormatVector(IList list, string delim, string finalDelimiter)
 		{
 			StringBuilder sb = new();
-			Int32 size = list.Count;
+												int size = list.Count;
 			for (int i = 0; i < size; i++)
 			{
 				sb.Append(list[i].ToString());
@@ -204,9 +204,9 @@ namespace NVelocity.App.Tools
 		/// curtailed, "..." is appended to it.
 		/// </summary>
 		/// <param name="maximumLength">An int with the maximum length.</param>
-		/// <param name="value">A String.</param>
-		/// <returns>A String.</returns>
-		public String LimitLen(int maximumLength, String value)
+		/// <param name="value">A string.</param>
+		/// <returns>A string.</returns>
+		public string LimitLen(int maximumLength, string value)
 		{
 			return LimitLen(maximumLength, value, "...");
 		}
@@ -216,12 +216,12 @@ namespace NVelocity.App.Tools
 		/// curtailed, 'suffix' is appended to it.
 		/// </summary>
 		/// <param name="maximumLength">An int with the maximum length.</param>
-		/// <param name="value">A String.</param>
-		/// <param name="suffix">A String.</param>
-		/// <returns>A String.</returns>
-		public String LimitLen(int maximumLength, String value, String suffix)
+		/// <param name="value">A string.</param>
+		/// <param name="suffix">A string.</param>
+		/// <returns>A string.</returns>
+		public string LimitLen(int maximumLength, string value, string suffix)
 		{
-			String ret = value;
+			string ret = value;
 			if (value.Length > maximumLength)
 			{
 				ret = value[..(maximumLength - suffix.Length)] + suffix;
@@ -239,15 +239,15 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		public class VelocityAlternator
 		{
-			protected internal String[] alternates = null;
+			protected internal string[] alternates = null;
 			protected internal int current = 0;
 
 			/// <summary>
 			/// Constructor takes an array of Strings.
 			/// </summary>
-			/// <param name="alternates">A String[].
+			/// <param name="alternates">A string[].
 			/// </param>
-			public VelocityAlternator(params String[] alternates)
+			public VelocityAlternator(params string[] alternates)
 			{
 				this.alternates = alternates;
 			}
@@ -256,7 +256,7 @@ namespace NVelocity.App.Tools
 			/// Alternates to the next in the list.
 			/// </summary>
 			/// <returns>The current alternate in the sequence.</returns>
-			public String Alternate()
+			public string Alternate()
 			{
 				current++;
 				current %= alternates.Length;
@@ -266,8 +266,8 @@ namespace NVelocity.App.Tools
 			/// <summary>
 			/// Returns the current alternate.
 			/// </summary>
-			/// <returns>A String.</returns>
-			public override String ToString()
+			/// <returns>A string.</returns>
+			public override string ToString()
 			{
 				return alternates[current];
 			}
@@ -282,10 +282,10 @@ namespace NVelocity.App.Tools
 			/// <summary>
 			/// Constructor takes an array of Strings.
 			/// </summary>
-			/// <param name="alternates">A String[].
+			/// <param name="alternates">A string[].
 			///
 			/// </param>
-			public VelocityAutoAlternator(params String[] alternates)
+			public VelocityAutoAlternator(params string[] alternates)
 				: base(alternates)
 			{
 			}
@@ -296,9 +296,9 @@ namespace NVelocity.App.Tools
 			/// rendering).
 			/// </summary>
 			/// <returns>The current alternate in the sequence.</returns>
-			public override String ToString()
+			public override string ToString()
 			{
-				String s = alternates[current];
+				string s = alternates[current];
 				Alternate();
 				return s;
 			}
@@ -324,7 +324,7 @@ namespace NVelocity.App.Tools
 		/// <param name="alt1">The first alternate.</param>
 		/// <param name="alt2">The second alternate.</param>
 		/// <returns>The newly created instance.</returns>
-		public String MakeAlternator(String name, String alt1, String alt2)
+		public string MakeAlternator(string name, string alt1, string alt2)
 		{
 			context.Put(name, new VelocityAlternator(alt1, alt2));
 			return string.Empty;
@@ -333,7 +333,7 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Makes an alternator object that alternates between three values.
 		/// </summary>
-		public String MakeAlternator(String name, String alt1, String alt2, String alt3)
+		public string MakeAlternator(string name, string alt1, string alt2, string alt3)
 		{
 			context.Put(name, new VelocityAlternator(alt1, alt2, alt3));
 			return string.Empty;
@@ -342,7 +342,7 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Makes an alternator object that alternates between four values.
 		/// </summary>
-		public String MakeAlternator(String name, String alt1, String alt2, String alt3, String alt4)
+		public string MakeAlternator(string name, string alt1, string alt2, string alt3, string alt4)
 		{
 			context.Put(name, new VelocityAlternator(alt1, alt2, alt3, alt4));
 			return string.Empty;
@@ -352,7 +352,7 @@ namespace NVelocity.App.Tools
 		/// Makes an alternator object that alternates between two values
 		/// automatically.
 		/// </summary>
-		public String MakeAutoAlternator(String name, String alt1, String alt2)
+		public string MakeAutoAlternator(string name, string alt1, string alt2)
 		{
 			context.Put(name, new VelocityAutoAlternator(alt1, alt2));
 			return string.Empty;
@@ -361,7 +361,7 @@ namespace NVelocity.App.Tools
 		/// <summary>
 		/// Returns a default value if the object passed is null.
 		/// </summary>
-		public Object IsNull(Object o, Object defaultValue)
+		public object IsNull(object o, object defaultValue)
 		{
 			if (o == null)
 				return defaultValue;

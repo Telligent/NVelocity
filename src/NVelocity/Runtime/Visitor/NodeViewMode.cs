@@ -40,7 +40,7 @@ namespace NVelocity.Runtime.Visitor
 		/// <summary>Indent child nodes to help visually identify
 		/// the structure of the AST.
 		/// </summary>
-		private String IndentString()
+		private string IndentString()
 		{
 			StringBuilder sb = new();
 			for (int i = 0; i < indent; ++i)
@@ -53,10 +53,10 @@ namespace NVelocity.Runtime.Visitor
 		/// <summary> Display the type of nodes and optionally the
 		/// first token.
 		/// </summary>
-		private Object ShowNode(INode node, Object data)
+		private object ShowNode(INode node, object data)
 		{
-			String tokens = string.Empty;
-			String special = string.Empty;
+			string tokens = string.Empty;
+			string special = string.Empty;
 			Token t;
 
 			if (showTokens)
@@ -80,230 +80,230 @@ namespace NVelocity.Runtime.Visitor
 
 		/// <summary>Display a SimpleNode
 		/// </summary>
-		public override Object Visit(SimpleNode node, Object data)
+		public override object Visit(SimpleNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTprocess node
 		/// </summary>
-		public override Object Visit(ASTprocess node, Object data)
+		public override object Visit(ASTprocess node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTExpression node
 		/// </summary>
-		public override Object Visit(ASTExpression node, Object data)
+		public override object Visit(ASTExpression node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTAssignment node ( = )
 		/// </summary>
-		public override Object Visit(ASTAssignment node, Object data)
+		public override object Visit(ASTAssignment node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTOrNode ( || )
 		/// </summary>
-		public override Object Visit(ASTOrNode node, Object data)
+		public override object Visit(ASTOrNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTAndNode ( &amp;&amp; )
 		/// </summary>
-		public override Object Visit(ASTAndNode node, Object data)
+		public override object Visit(ASTAndNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTEQNode ( == )
 		/// </summary>
-		public override Object Visit(ASTEQNode node, Object data)
+		public override object Visit(ASTEQNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTNENode ( != )
 		/// </summary>
-		public override Object Visit(ASTNENode node, Object data)
+		public override object Visit(ASTNENode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTLTNode ( &lt; )
 		/// </summary>
-		public override Object Visit(ASTLTNode node, Object data)
+		public override object Visit(ASTLTNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTGTNode ( &gt; )
 		/// </summary>
-		public override Object Visit(ASTGTNode node, Object data)
+		public override object Visit(ASTGTNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTLENode ( &lt;= )
 		/// </summary>
-		public override Object Visit(ASTLENode node, Object data)
+		public override object Visit(ASTLENode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTGENode ( &gt;= )
 		/// </summary>
-		public override Object Visit(ASTGENode node, Object data)
+		public override object Visit(ASTGENode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTAddNode ( + )
 		/// </summary>
-		public override Object Visit(ASTAddNode node, Object data)
+		public override object Visit(ASTAddNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTSubtractNode ( - )
 		/// </summary>
-		public override Object Visit(ASTSubtractNode node, Object data)
+		public override object Visit(ASTSubtractNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTMulNode ( * )
 		/// </summary>
-		public override Object Visit(ASTMulNode node, Object data)
+		public override object Visit(ASTMulNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTDivNode ( / )
 		/// </summary>
-		public override Object Visit(ASTDivNode node, Object data)
+		public override object Visit(ASTDivNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTModNode ( % )
 		/// </summary>
-		public override Object Visit(ASTModNode node, Object data)
+		public override object Visit(ASTModNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTNotNode ( ! )
 		/// </summary>
-		public override Object Visit(ASTNotNode node, Object data)
+		public override object Visit(ASTNotNode node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTNumberLiteral node
 		/// </summary>
-		public override Object Visit(ASTNumberLiteral node, Object data)
+		public override object Visit(ASTNumberLiteral node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTStringLiteral node
 		/// </summary>
-		public override Object Visit(ASTStringLiteral node, Object data)
+		public override object Visit(ASTStringLiteral node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTIdentifier node
 		/// </summary>
-		public override Object Visit(ASTIdentifier node, Object data)
+		public override object Visit(ASTIdentifier node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTMethod node
 		/// </summary>
-		public override Object Visit(ASTMethod node, Object data)
+		public override object Visit(ASTMethod node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTReference node
 		/// </summary>
-		public override Object Visit(ASTReference node, Object data)
+		public override object Visit(ASTReference node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTTrue node
 		/// </summary>
-		public override Object Visit(ASTTrue node, Object data)
+		public override object Visit(ASTTrue node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTFalse node
 		/// </summary>
-		public override Object Visit(ASTFalse node, Object data)
+		public override object Visit(ASTFalse node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTBlock node
 		/// </summary>
-		public override Object Visit(ASTBlock node, Object data)
+		public override object Visit(ASTBlock node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTText node
 		/// </summary>
-		public override Object Visit(ASTText node, Object data)
+		public override object Visit(ASTText node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTIfStatement node
 		/// </summary>
-		public override Object Visit(ASTIfStatement node, Object data)
+		public override object Visit(ASTIfStatement node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTElseStatement node
 		/// </summary>
-		public override Object Visit(ASTElseStatement node, Object data)
+		public override object Visit(ASTElseStatement node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
 		/// <summary>Display an ASTElseIfStatement node
 		/// </summary>
-		public override Object Visit(ASTElseIfStatement node, Object data)
+		public override object Visit(ASTElseIfStatement node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
-		public override Object Visit(ASTObjectArray node, Object data)
+		public override object Visit(ASTObjectArray node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
-		public override Object Visit(ASTDirective node, Object data)
+		public override object Visit(ASTDirective node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
-		public override Object Visit(ASTWord node, Object data)
+		public override object Visit(ASTWord node, object data)
 		{
 			return ShowNode(node, data);
 		}
 
-		public override Object Visit(ASTSetDirective node, Object data)
+		public override object Visit(ASTSetDirective node, object data)
 		{
 			return ShowNode(node, data);
 		}

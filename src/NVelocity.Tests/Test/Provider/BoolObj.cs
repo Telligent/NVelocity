@@ -26,7 +26,7 @@ namespace NVelocity.Test.Provider
 	/// <author> <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a></author>
 	public class BoolObj
 	{
-		public Boolean isBoolean
+		public bool isBoolean
 		{
 			get { return true; }
 		}
@@ -36,7 +36,7 @@ namespace NVelocity.Test.Provider
 	*  boolean return valued...
 	*/
 
-		public String isNotboolean
+		public string isNotboolean
 		{
 			get { return "hello"; }
 		}

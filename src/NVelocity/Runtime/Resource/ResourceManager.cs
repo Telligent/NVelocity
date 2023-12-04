@@ -68,6 +68,6 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		/// <param name="resourceName">Name of template or content resource</param>
 		/// <returns>class name of loader than can provide it</returns>
-		String GetLoaderNameForResource(String resourceName);
+		string GetLoaderNameForResource(string resourceName);
 	}
 }

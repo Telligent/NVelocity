@@ -30,7 +30,7 @@ namespace NVelocity.Util.Introspection
 	{
 		private readonly int line;
 		private readonly int column;
-		private readonly String templateName;
+		private readonly string templateName;
 
 		/// <param name="source">Usually a template name.
 		/// </param>
@@ -39,14 +39,14 @@ namespace NVelocity.Util.Introspection
 		/// <param name="column">The column number from <code>source</code>.
 		/// 
 		/// </param>
-		public Info(String source, int line, int column)
+		public Info(string source, int line, int column)
 		{
 			templateName = source;
 			this.line = line;
 			this.column = column;
 		}
 
-		public String TemplateName
+		public string TemplateName
 		{
 			get { return templateName; }
 		}
@@ -64,7 +64,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary> Formats a textual representation of this object as <code>SOURCE
 		/// [line X, column Y]</code>.
 		/// </summary>
-		public override String ToString()
+		public override string ToString()
 		{
 			return string.Format("{0} [line {1}, column {2}{3}", TemplateName, Line, Column, ']');
 		}

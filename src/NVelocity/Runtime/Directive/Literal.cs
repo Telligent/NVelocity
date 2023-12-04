@@ -30,7 +30,7 @@ namespace NVelocity.Runtime.Directive
 	public class Literal : Directive
 	{
 		/// <summary>Return name of this directive.</summary>
-		public override String Name
+		public override string Name
 		{
 			get { return "literal"; }
 			set { throw new NotSupportedException(); }
@@ -42,7 +42,7 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.BLOCK; }
 		}
 
-		internal String literalText;
+		internal string literalText;
 
 		/// <summary>
 		/// Store the literal rendition of a node using

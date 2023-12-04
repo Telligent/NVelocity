@@ -36,12 +36,12 @@ namespace NVelocity.Runtime.Resource
 		/// <summary>
 		/// Resource might require ancillary storage of some kind
 		/// </summary>
-		protected internal Object data = null;
+		protected internal object data = null;
 
 		/// <summary>
 		/// Character encoding of this resource
 		/// </summary>
-		protected internal String encoding = RuntimeConstants.ENCODING_DEFAULT;
+		protected internal string encoding = RuntimeConstants.ENCODING_DEFAULT;
 
 		/// <summary>
 		/// The file modification time (in milliseconds) for the cached template.
@@ -56,7 +56,7 @@ namespace NVelocity.Runtime.Resource
 		/// <summary>
 		/// Name of the resource
 		/// </summary>
-		protected internal String name;
+		protected internal string name;
 
 		/// <summary>
 		/// The next time the file modification time will be checked (in milliseconds).
@@ -132,7 +132,7 @@ namespace NVelocity.Runtime.Resource
 		/// Get arbitrary data object that might be used
 		/// by the resource.
 		/// </summary>
-		public Object Data
+		public object Data
 		{
 			get { return data; }
 			set { data = value; }
@@ -145,7 +145,7 @@ namespace NVelocity.Runtime.Resource
 		/// get the encoding of this resource
 		/// for example, "ISO-8859-1"
 		/// </summary>
-		public String Encoding
+		public string Encoding
 		{
 			get { return encoding; }
 			set { encoding = value; }
@@ -174,7 +174,7 @@ namespace NVelocity.Runtime.Resource
 		/// 
 		/// Get the name of this template.
 		/// </summary>
-		public String Name
+		public string Name
 		{
 			get { return name; }
 			set { name = value; }

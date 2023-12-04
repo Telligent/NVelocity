@@ -71,7 +71,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="key">property key</param>
 		/// <param name="value">property value</param>
-		void SetProperty(String key, Object value);
+		void SetProperty(string key, object value);
 
 		/// <summary> Add a property to the configuration. If it already
 		/// exists then the value stated here will be added
@@ -91,30 +91,30 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="key">key</param>
 		/// <param name="value">value</param>
-		void AddProperty(String key, Object value);
+		void AddProperty(string key, object value);
 
 		/// <summary>
 		/// Clear the values pertaining to a particular property.
 		/// </summary>
 		/// <param name="key">key of property to clear</param>
-		void ClearProperty(String key);
+		void ClearProperty(string key);
 
 		/// <summary>  Allows an external caller to get a property.  The calling
 		/// routine is required to know the type, as this routine
-		/// will return an Object, as that is what properties can be.
+		/// will return an object, as that is what properties can be.
 		/// *
 		/// </summary>
 		/// <param name="key">property to return
 		///
 		/// </param>
-		Object GetProperty(String key);
+		object GetProperty(string key);
 
 		/// <summary>
 		/// Initialize the Velocity Runtime with the name of
 		/// ExtendedProperties object.
 		/// </summary>
 		/// <param name="configurationFile">Properties</param>
-		void Init(String configurationFile);
+		void Init(string configurationFile);
 
 		/// <summary>
 		/// Parse the input and return the root of
@@ -131,7 +131,7 @@ namespace NVelocity.Runtime
 		/// </remarks>
 		/// <param name="reader">inputStream retrieved by a resource loader</param>
 		/// <param name="templateName">name of the template being parsed</param>
-		SimpleNode Parse(TextReader reader, String templateName);
+		SimpleNode Parse(TextReader reader, string templateName);
 
 		/// <summary>
 		/// Parse the input and return the root of the AST node structure.
@@ -139,7 +139,7 @@ namespace NVelocity.Runtime
 		/// <param name="reader">inputStream retrieved by a resource loader</param>
 		/// <param name="templateName">name of the template being parsed</param>
 		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template</param>
-		SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace);
+		SimpleNode Parse(TextReader reader, string templateName, bool dumpNamespace);
 
 		/// <summary> Returns a <code>Template</code> from the resource manager.
 		/// This method assumes that the character encoding of the
@@ -157,7 +157,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		Template GetTemplate(String name);
+		Template GetTemplate(string name);
 
 		/// <summary> Returns a <code>Template</code> from the resource manager
 		/// *
@@ -174,7 +174,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		Template GetTemplate(String name, String encoding);
+		Template GetTemplate(string name, string encoding);
 
 		/// <summary> Returns a static content resource from the
 		/// resource manager.  Uses the current value
@@ -188,7 +188,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		ContentResource GetContent(String name);
+		ContentResource GetContent(string name);
 
 		/// <summary> Returns a static content resource from the
 		/// resource manager.
@@ -203,7 +203,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		ContentResource GetContent(String name, String encoding);
+		ContentResource GetContent(string name, string encoding);
 
 		/// <summary>  Determines is a template exists, and returns name of the loader that
 		/// provides it.  This is a slightly less hokey way to support
@@ -216,10 +216,10 @@ namespace NVelocity.Runtime
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		String GetLoaderNameForResource(String resourceName);
+		string GetLoaderNameForResource(string resourceName);
 
 		/// <summary>
-		/// String property accessor method with default to hide the
+		/// string property accessor method with default to hide the
 		/// configuration implementation.
 		/// </summary>
 		/// <param name="key">key property key</param>
@@ -227,7 +227,7 @@ namespace NVelocity.Runtime
 		/// found in resource manager.
 		/// </param>
 		/// <returns>value of key or default</returns>
-		String GetString(String key, String defaultValue);
+		string GetString(string key, string defaultValue);
 
 		/// <summary>
 		/// Returns the appropriate VelocimacroProxy object if vmName
@@ -236,13 +236,13 @@ namespace NVelocity.Runtime
 		/// <param name="vmName">Name of velocimacro requested</param>
 		/// <param name="templateName">Template Name</param>
 		/// <returns>VelocimacroProxy</returns>
-		Directive.Directive GetVelocimacro(String vmName, String templateName);
+		Directive.Directive GetVelocimacro(string vmName, string templateName);
 
 		/// <summary>
 		/// Adds a new Velocimacro. Usually called by Macro only while parsing.
 		/// </summary>
 		/// <param name="name">name  Name of velocimacro</param>
-		/// <param name="macro">macro  String form of macro body</param>
+		/// <param name="macro">macro  string form of macro body</param>
 		/// <param name="argArray">argArray  Array of strings, containing the
 		/// <c>#macro()</c> arguments.  the 0th is the name.</param>
 		/// <param name="sourceTemplate">Source Template</param>
@@ -250,7 +250,7 @@ namespace NVelocity.Runtime
 		/// True if added, false if rejected for some
 		/// reason (either parameters or permission settings)
 		/// </returns>
-		bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate);
+		bool AddVelocimacro(string name, string macro, string[] argArray, string sourceTemplate);
 
 		/// <summary>
 		/// Checks to see if a VM exists
@@ -258,26 +258,26 @@ namespace NVelocity.Runtime
 		/// <param name="vmName">Name of velocimacro</param>
 		/// <param name="templateName">Template Name</param>
 		/// <returns>True if VM by that name exists, false if not</returns>
-		bool IsVelocimacro(String vmName, String templateName);
+		bool IsVelocimacro(string vmName, string templateName);
 
 		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
 		/// clearing the VM list when in inline-VM-local-scope mode
 		/// </summary>
-		bool DumpVMNamespace(String ns);
+		bool DumpVMNamespace(string ns);
 
 		/// <summary>
-		/// String property accessor method to hide the configuration implementation.
+		/// string property accessor method to hide the configuration implementation.
 		/// </summary>
 		/// <param name="key">property key</param>
 		/// <returns>value</returns>
-		String GetString(String key);
+		string GetString(string key);
 
 		/// <summary>
 		/// Int property accessor method to hide the configuration implementation.
 		/// </summary>
 		/// <param name="key">property key</param>
 		/// <returns>value</returns>
-		int GetInt(String key);
+		int GetInt(string key);
 
 		/// <summary>
 		/// Int property accessor method to hide the configuration implementation.
@@ -285,7 +285,7 @@ namespace NVelocity.Runtime
 		/// <param name="key">property key</param>
 		/// <param name="defaultValue">default value</param>
 		/// <returns>value</returns>
-		int GetInt(String key, int defaultValue);
+		int GetInt(string key, int defaultValue);
 
 		/// <summary>
 		/// Boolean property accessor method to hide the configuration implementation.
@@ -293,20 +293,20 @@ namespace NVelocity.Runtime
 		/// <param name="key">property key</param>
 		/// <param name="def">default value</param>
 		/// <returns>value</returns>
-		bool GetBoolean(String key, bool def);
+		bool GetBoolean(string key, bool def);
 
 		/// <summary>
 		/// Return the specified application attribute
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		Object GetApplicationAttribute(Object key);
+		object GetApplicationAttribute(object key);
 
 		/// <summary>
 		/// Sets the specified application attribute.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="value"></param>
-		Object SetApplicationAttribute(Object key, Object value);
+		object SetApplicationAttribute(object key, object value);
 	}
 }

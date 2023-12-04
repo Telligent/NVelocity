@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		public override String Name
+		public override string Name
 		{
 			get { return "blockcomponent"; }
 			set { }

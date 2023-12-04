@@ -27,7 +27,7 @@ namespace NVelocity.Exception
 	[Serializable]
 	public class ResourceNotFoundException : VelocityException
 	{
-		public ResourceNotFoundException(String exceptionMessage) : base(exceptionMessage)
+		public ResourceNotFoundException(string exceptionMessage) : base(exceptionMessage)
 		{
 		}
 

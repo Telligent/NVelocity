@@ -28,8 +28,8 @@ namespace NVelocity.Test
 	[TestFixture]
 	public class VelocimacroTestCase
 	{
-		private readonly String template1 = "#macro(fooz $a)$a#end#macro(bar $b)#fooz($b)#end#foreach($i in [1..3])#bar($i)#end";
-		private readonly String result1 = "123";
+		private readonly string template1 = "#macro(fooz $a)$a#end#macro(bar $b)#fooz($b)#end#foreach($i in [1..3])#bar($i)#end";
+		private readonly string result1 = "123";
 
 		public VelocimacroTestCase()
 		{
@@ -55,7 +55,7 @@ namespace NVelocity.Test
 			StringWriter writer = new();
 			Velocity.Evaluate(context, writer, "vm_chain1", template1);
 
-			String output = writer.ToString();
+												string output = writer.ToString();
 
 			Assert.AreEqual(result1, output);
 		}

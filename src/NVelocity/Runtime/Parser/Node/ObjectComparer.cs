@@ -31,7 +31,7 @@ namespace NVelocity.Runtime.Parser.Node
 		public const int Equal = 0;
 		public const int Greater = 1;
 
-		private static readonly IDictionary comparers = new Hashtable();
+		private static readonly Dictionary<string, IObjectComparer> comparers = new();
 		private static readonly ObjectComparer instance = new();
 
 		private static readonly Dictionary<Type, bool> _reTypeToLong = new Dictionary<Type, bool> {
@@ -126,7 +126,7 @@ namespace NVelocity.Runtime.Parser.Node
 				return (x as IComparable).CompareTo(y);
 			}
 
-			if (comparers[string.Format("{0}:{1}", typeX, typeY)] is IObjectComparer cmp)
+			if (comparers.TryGetValue(string.Format("{0}:{1}", typeX, typeY), out IObjectComparer cmp))
 			{
 				return cmp.Compare(x, y);
 			}
@@ -151,7 +151,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private interface IObjectComparer
 		{
-			void Register(IDictionary map);
+			void Register(Dictionary<string, IObjectComparer> map);
 			int Compare(object x, object y);
 		}
 
@@ -161,7 +161,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private class DoubleComparer : IObjectComparer
 		{
-			public void Register(IDictionary map)
+			public void Register(Dictionary<string, IObjectComparer> map)
 			{
 				map[string.Format("{0}:{1}", typeof(double), typeof(long))] = this;
 				map[string.Format("{0}:{1}", typeof(long), typeof(double))] = this;
@@ -208,7 +208,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private class FloatComparer : IObjectComparer
 		{
-			public void Register(IDictionary map)
+			public void Register(Dictionary<string, IObjectComparer> map)
 			{
 				map[string.Format("{0}:{1}", typeof(float), typeof(ulong))] = this;
 				map[string.Format("{0}:{1}", typeof(ulong), typeof(float))] = this;
@@ -248,7 +248,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private class ULongComparer : IObjectComparer
 		{
-			public void Register(IDictionary map)
+			public void Register(Dictionary<string, IObjectComparer> map)
 			{
 				map[string.Format("{0}:{1}", typeof(long), typeof(ulong))] = this;
 				map[string.Format("{0}:{1}", typeof(ulong), typeof(long))] = this;

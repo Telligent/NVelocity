@@ -49,7 +49,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary> Replaces unprintable characters by their escaped (or unicode escaped)
 		/// equivalents in the given string
 		/// </summary>
-		protected internal static String AddEscapes(String str)
+		protected internal static string AddEscapes(string str)
 		{
 			StringBuilder retval = new();
 			char ch;
@@ -95,7 +95,7 @@ namespace NVelocity.Runtime.Parser
 					default:
 						if ((ch = str[i]) < 0x20 || ch > 0x7e)
 						{
-							String s = string.Format("0000{0}", Convert.ToString(ch, 16));
+							string s = string.Format("0000{0}", Convert.ToString(ch, 16));
 							retval.AppendFormat("\\u{0}", s[^4..]);
 						}
 						else
@@ -145,7 +145,7 @@ namespace NVelocity.Runtime.Parser
 		{
 		}
 
-		public TokenMgrError(String message, int reason) : base(message)
+		public TokenMgrError(string message, int reason) : base(message)
 		{
 			errorCode = reason;
 		}

@@ -50,12 +50,12 @@ namespace NVelocity.Runtime.Directive
 			//				node.jjtGetChild(i).init(context, rs);
 		}
 
-		public virtual bool SupportsNestedDirective(String name)
+		public virtual bool SupportsNestedDirective(string name)
 		{
 			return false;
 		}
 
-		public virtual Directive CreateNestedDirective(String name)
+		public virtual Directive CreateNestedDirective(string name)
 		{
 			return null;
 		}
@@ -63,7 +63,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// Return the name of this directive
 		/// </summary>
-		public abstract String Name { get; set; }
+		public abstract string Name { get; set; }
 
 		/// <summary>
 		/// Get the directive type BLOCK/LINE

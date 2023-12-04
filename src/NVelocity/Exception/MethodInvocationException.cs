@@ -29,24 +29,24 @@ namespace NVelocity.Exception
 	[Serializable]
 	public class MethodInvocationException : VelocityException
 	{
-		private readonly String methodName = string.Empty;
-		private String referenceName = string.Empty;
+		private readonly string methodName = string.Empty;
+		private string referenceName = string.Empty;
 
 		/// <summary>
 		/// Wraps the passed in exception for examination later
 		/// </summary>
-		public MethodInvocationException(String message, Exception innerException, String methodName)
+		public MethodInvocationException(string message, Exception innerException, string methodName)
 			: base(message, innerException)
 		{
 			this.methodName = methodName;
 		}
 
-		public String MethodName
+		public string MethodName
 		{
 			get { return methodName; }
 		}
 
-		public String ReferenceName
+		public string ReferenceName
 		{
 			get { return referenceName; }
 			set { referenceName = value; }

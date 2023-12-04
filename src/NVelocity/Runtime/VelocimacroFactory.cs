@@ -17,18 +17,20 @@ namespace NVelocity.Runtime
 	using Directive;
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
+				using System.Text;
 
-	/// <summary>  VelocimacroFactory.java
-	/// *
-	/// manages the set of VMs in a running Velocity engine.
-	/// *
-	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: VelocimacroFactory.cs,v 1.5 2003/10/27 15:37:24 corts Exp $
-	///
-	/// </version>
-	public class VelocimacroFactory
+				/// <summary>  VelocimacroFactory.java
+				/// *
+				/// manages the set of VMs in a running Velocity engine.
+				/// *
+				/// </summary>
+				/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+				/// </author>
+				/// <version> $Id: VelocimacroFactory.cs,v 1.5 2003/10/27 15:37:24 corts Exp $
+				///
+				/// </version>
+				public class VelocimacroFactory
 	{
 		/// <summary>  runtime services for this instance
 		/// </summary>
@@ -64,14 +66,14 @@ namespace NVelocity.Runtime
 		/// </summary>
 		private bool autoReloadLibrary = false;
 
-		/// <summary>  vector of the library names
+		/// <summary>  list of the library names
 		/// </summary>
-		private ArrayList macroLibVec = null;
+		private List<string> macroLibVec = null;
 
 		/// <summary>  map of the library Template objects
 		/// used for reload determination
 		/// </summary>
-		private readonly Hashtable libModMap;
+		private readonly Dictionary<string, Twonk> libModMap;
 
 		/// <summary>  CTOR : requires a runtime services from now
 		/// on
@@ -84,7 +86,7 @@ namespace NVelocity.Runtime
 		*  we always access in a synchronized(), so we 
 		*  can use an unsynchronized hashmap
 		*/
-			libModMap = new Hashtable();
+			libModMap = new();
 			velocimacroManager = new VelocimacroManager(runtimeServices);
 		}
 
@@ -157,25 +159,25 @@ namespace NVelocity.Runtime
 		*  All we have to do is get the template. The template will be parsed;
 		*  VM's  are added during the parse phase
 		*/
-				Object libraryFiles = runtimeServices.GetProperty(RuntimeConstants.VM_LIBRARY);
+				object libraryFiles = runtimeServices.GetProperty(RuntimeConstants.VM_LIBRARY);
 
 				if (libraryFiles != null)
 				{
-					if (libraryFiles is ArrayList)
+					if (libraryFiles is List<string> list)
 					{
-						macroLibVec = (ArrayList)libraryFiles;
+						macroLibVec = list;
 					}
-					else if (libraryFiles is String)
+					else if (libraryFiles is string s)
 					{
-						macroLibVec = new ArrayList
+						macroLibVec = new List<string>
 						{
-								libraryFiles
+							s
 						};
 					}
 
 					for (int i = 0; i < macroLibVec.Count; i++)
 					{
-						String lib = (String)macroLibVec[i];
+						string lib = macroLibVec[i];
 
 						/*
 			* only if it's a non-empty string do we bother
@@ -321,7 +323,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  adds a macro to the factory.
 		/// </summary>
-		public bool AddVelocimacro(String name, String macroBody, String[] argArray, String sourceTemplate)
+		public bool AddVelocimacro(string name, string macroBody, string[] argArray, string sourceTemplate)
 		{
 			/*
 			* maybe we should throw an exception, maybe just tell 
@@ -358,17 +360,18 @@ namespace NVelocity.Runtime
 			*/
 			if (blather)
 			{
-				String s = string.Format("#{0}", argArray[0]);
-				s += "(";
+				StringBuilder s = new StringBuilder();
+				s.Append("#").Append(argArray[0]);
+				s.Append("(");
 
 				for (int i = 1; i < argArray.Length; i++)
 				{
-					s += " ";
-					s += argArray[i];
+					s.Append(" ");
+					s.Append(argArray[i]);
 				}
 
-				s += " ) : source = ";
-				s += sourceTemplate;
+				s.Append(" ) : source = ");
+				s.Append(sourceTemplate);
 
 				LogVMMessageInfo(string.Format("Velocimacro : added new VM : {0}", s));
 			}
@@ -387,7 +390,7 @@ namespace NVelocity.Runtime
 		/// <returns>true if it is allowed to be added, false otherwise
 		///
 		/// </returns>
-		private bool CanAddVelocimacro(String name, String sourceTemplate)
+		private bool CanAddVelocimacro(string name, string sourceTemplate)
 		{
 			/*
 			*  short circuit and do it if autoloader is on, and the
@@ -402,7 +405,7 @@ namespace NVelocity.Runtime
 
 				for (int i = 0; i < macroLibVec.Count; i++)
 				{
-					String lib = (String)macroLibVec[i];
+					string lib = (string)macroLibVec[i];
 
 					if (lib.Equals(sourceTemplate))
 					{
@@ -450,7 +453,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  localization of the logging logic
 		/// </summary>
-		private void LogVMMessageInfo(String s)
+		private void LogVMMessageInfo(string s)
 		{
 			if (blather)
 				runtimeServices.Info(s);
@@ -458,7 +461,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  localization of the logging logic
 		/// </summary>
-		private void LogVMMessageWarn(String s)
+		private void LogVMMessageWarn(string s)
 		{
 			if (blather)
 				runtimeServices.Warn(s);
@@ -466,7 +469,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  Tells the world if a given directive string is a Velocimacro
 		/// </summary>
-		public bool IsVelocimacro(String vm, String sourceTemplate)
+		public bool IsVelocimacro(string vm, string sourceTemplate)
 		{
 			lock (this)
 			{
@@ -484,7 +487,7 @@ namespace NVelocity.Runtime
 		/// behave correctly wrt getting the framework to
 		/// dig out the correct # of args
 		/// </summary>
-		public Directive.Directive GetVelocimacro(String vmName, String sourceTemplate)
+		public Directive.Directive GetVelocimacro(string vmName, string sourceTemplate)
 		{
 			VelocimacroProxy velocimacroProxy = null;
 
@@ -508,7 +511,7 @@ namespace NVelocity.Runtime
 				*  in the event namespaces are set, as it could be masked by local
 				*/
 
-					String lib = velocimacroManager.GetLibraryName(vmName, sourceTemplate);
+					string lib = velocimacroManager.GetLibraryName(vmName, sourceTemplate);
 
 					if (lib != null)
 					{
@@ -517,10 +520,7 @@ namespace NVelocity.Runtime
 							/*
 					*  get the template from our map
 					*/
-
-							Twonk twonk = (Twonk)libModMap[lib];
-
-							if (twonk != null)
+							if (libModMap.TryGetValue(lib, out Twonk twonk))
 							{
 								Template template = twonk.template;
 
@@ -585,7 +585,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  tells the velocimacroManager to dump the specified namespace
 		/// </summary>
-		public bool DumpVMNamespace(String ns)
+		public bool DumpVMNamespace(string ns)
 		{
 			return velocimacroManager.DumpNamespace(ns);
 		}

@@ -40,7 +40,7 @@ namespace NVelocity.Util.Introspection
 
 		/// <summary>  returns the method name used
 		/// </summary>
-		String MethodName { get; }
+		string MethodName { get; }
 
 		/// <summary>  returns the return type of the method invoked
 		/// </summary>
@@ -49,6 +49,6 @@ namespace NVelocity.Util.Introspection
 		/// <summary>  invocation method - called when the method invocation should be
 		/// performed and a value returned
 		/// </summary>
-		Object Invoke(Object o, Object[] paramsRenamed);
+		object Invoke(object o, object[] paramsRenamed);
 	}
 }

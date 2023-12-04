@@ -41,7 +41,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Execute method against context.
 		/// </summary>
-		public abstract Object Execute(Object o);
+		public abstract object Execute(object o);
 
 		public bool IsAlive
 		{

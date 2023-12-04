@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Parser
 	/// All the methods except backup can be implemented in any fashion. backup
 	/// needs to be implemented correctly for the correct operation of the lexer.
 	/// Rest of the methods are all used to get information like line number,
-	/// column number and the String that constitutes a token and are not used
+	/// column number and the string that constitutes a token and are not used
 	/// by the lexer. Hence their implementation won't affect the generated lexer's
 	/// operation.
 	/// </summary>
@@ -61,7 +61,7 @@ namespace NVelocity.Runtime.Parser
 		/// anything that they want to. For example, for efficiency, one might decide
 		/// to just return null, which is a valid implementation.
 		/// </summary>
-		String GetImage();
+		string GetImage();
 
 		/// <summary> 
 		/// Returns an array of characters that make up the suffix of length 'len' for
@@ -70,7 +70,7 @@ namespace NVelocity.Runtime.Parser
 		/// implementation of this is as follows :
 		///
 		/// {
-		/// String t = GetImage();
+		/// string t = GetImage();
 		/// return t.substring(t.length() - len, t.length()).toCharArray();
 		/// }
 		/// </summary>

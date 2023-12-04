@@ -20,12 +20,12 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Container to hold the 'key' part of get(key).
 		/// </summary>
-		private readonly Object[] arguments = new Object[1];
+		private readonly object[] arguments = new object[1];
 
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public GetExecutor(IRuntimeLogger r, Introspector i, Type c, String key)
+		public GetExecutor(IRuntimeLogger r, Introspector i, Type c, string key)
 		{
 			runtimeLogger = r;
 			arguments[0] = key;
@@ -49,7 +49,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Execute method against context.
 		/// </summary>
-		public override Object Execute(Object o)
+		public override object Execute(object o)
 		{
 			if (invoker == null)
 				return null;

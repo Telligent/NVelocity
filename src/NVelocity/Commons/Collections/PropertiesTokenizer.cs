@@ -27,13 +27,13 @@ namespace Commons.Collections
 		/// <summary>
 		/// The property delimiter used while parsing (a comma).
 		/// </summary>
-		internal const String DELIMITER = ",";
+		internal const string DELIMITER = ",";
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="str">A String</param>
-		public PropertiesTokenizer(String str) : base(str, DELIMITER)
+		/// <param name="str">A string</param>
+		public PropertiesTokenizer(string str) : base(str, DELIMITER)
 		{
 		}
 
@@ -41,14 +41,14 @@ namespace Commons.Collections
 		/// <summary>
 		/// Get next token.
 		/// </summary>
-		/// <returns>A String</returns>
-		public override String NextToken()
+		/// <returns>A string</returns>
+		public override string NextToken()
 		{
 			StringBuilder buffer = new();
 
 			while (HasMoreTokens())
 			{
-				String token = base.NextToken();
+				string token = base.NextToken();
 				if (token.EndsWith(@"\"))
 				{
 					buffer.Append(token[..^1]);

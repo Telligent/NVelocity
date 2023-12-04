@@ -27,7 +27,7 @@ namespace NVelocity.Test
 	{
 		public class A
 		{
-			public String T1
+			public string T1
 			{
 				get { return "0"; }
 			}
@@ -61,7 +61,7 @@ namespace NVelocity.Test
 
 			// modified version so Bernhard could continue
 			StringWriter sw = new();
-			Boolean ok = velocityEngine.Evaluate(c, sw, "VTLTest1", "#set($hash = \"#\"):=t${hash}${A.T1}ms");
+												bool ok = velocityEngine.Evaluate(c, sw, "VTLTest1", "#set($hash = \"#\"):=t${hash}${A.T1}ms");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual(":=t#0ms", sw.ToString());
 
@@ -82,7 +82,7 @@ namespace NVelocity.Test
 			c.Put("A", new A());
 
 			StringWriter sw = new();
-			Boolean ok = velocityEngine.Evaluate(c, sw, "HashBeforeExplicitVariableDuplication", "#${A.T1}_2");
+												bool ok = velocityEngine.Evaluate(c, sw, "HashBeforeExplicitVariableDuplication", "#${A.T1}_2");
 			Assert.IsTrue(ok, "Evaluation returned failure");
 			Assert.AreEqual("#0_2", sw.ToString());
 		}

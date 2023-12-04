@@ -19,7 +19,8 @@ namespace NVelocity.Runtime.Resource
 	using NVelocity.Exception;
 	using System;
 	using System.Collections;
-	using System.IO;
+				using System.Collections.Generic;
+				using System.IO;
 
 	/// <summary> 
 	/// Class to manage the text resource for the Velocity Runtime.
@@ -28,17 +29,17 @@ namespace NVelocity.Runtime.Resource
 	{
 		public ResourceManagerImpl()
 		{
-			resourceLoaders = new ArrayList();
-			sourceInitializerList = new ArrayList();
+			resourceLoaders = new();
+			sourceInitializerList = new();
 		}
 
 		/// <summary>
 		/// token used to identify the loader internally
 		/// </summary>
-		private const String RESOURCE_LOADER_IDENTIFIER = "_RESOURCE_LOADER_IDENTIFIER_";
+		private const string RESOURCE_LOADER_IDENTIFIER = "_RESOURCE_LOADER_IDENTIFIER_";
 
 		/// <summary>
-		/// Object implementing ResourceCache to
+		/// object implementing ResourceCache to
 		/// be our resource manager's Resource cache.
 		/// </summary>
 		protected internal ResourceCache globalCache = null;
@@ -47,7 +48,7 @@ namespace NVelocity.Runtime.Resource
 		/// The List of templateLoaders that the Runtime will
 		/// use to locate the InputStream source of a template.
 		/// </summary>
-		protected internal ArrayList resourceLoaders;
+		protected internal List<ResourceLoader> resourceLoaders;
 
 		/// <summary>
 		/// This is a list of the template input stream source
@@ -56,7 +57,7 @@ namespace NVelocity.Runtime.Resource
 		/// reflects numbering of the properties i.e.
 		/// &lt;loader-id&gt;.resource.loader.&lt;property&gt; = &lt;value&gt;
 		/// </summary>
-		private readonly ArrayList sourceInitializerList;
+		private readonly List<ExtendedProperties> sourceInitializerList;
 
 		/// <summary>
 		/// Each loader needs a configuration object for
@@ -89,8 +90,8 @@ namespace NVelocity.Runtime.Resource
 
 			for (int i = 0; i < sourceInitializerList.Count; i++)
 			{
-				ExtendedProperties configuration = (ExtendedProperties)sourceInitializerList[i];
-				String loaderClass = configuration.GetString("class");
+				ExtendedProperties configuration = sourceInitializerList[i];
+				string loaderClass = configuration.GetString("class");
 
 				if (loaderClass == null)
 				{
@@ -111,8 +112,8 @@ namespace NVelocity.Runtime.Resource
 			logWhenFound = runtimeServices.GetBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND, true);
 
 			// now, is a global cache specified?
-			String resourceManagerCacheClassName = runtimeServices.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
-			Object o = null;
+			string resourceManagerCacheClassName = runtimeServices.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
+			object o = null;
 
 			if (resourceManagerCacheClassName != null && resourceManagerCacheClassName.Length > 0)
 			{
@@ -123,7 +124,7 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch (Exception)
 				{
-					String err =
+					string err =
 						string.Format(
 							"The specified class for ResourceCache ({0}) does not exist (or is not accessible to the current classLoader).",
 							resourceManagerCacheClassName);
@@ -133,7 +134,7 @@ namespace NVelocity.Runtime.Resource
 
 				if (o is not ResourceCache)
 				{
-					String err =
+					string err =
 						string.Format(
 							"The specified class for ResourceCache ({0}) does not implement NVelocity.Runtime.Resource.ResourceCache. Using default ResourceCache implementation.",
 							resourceManagerCacheClassName);
@@ -150,13 +151,6 @@ namespace NVelocity.Runtime.Resource
 			runtimeServices.Info("Default ResourceManager initialization complete.");
 		}
 
-		/// <summary>
-		/// This will produce a List of Hashtables, each
-		/// hashtable contains the initialization info for
-		/// a particular resource loader. This Hashtable
-		/// will be passed in when initializing the
-		/// the template loader.
-		/// </summary>
 		private void AssembleResourceLoaderInitializers()
 		{
 			if (resourceLoaderInitializersActive)
@@ -164,7 +158,7 @@ namespace NVelocity.Runtime.Resource
 				return;
 			}
 
-			ArrayList resourceLoaderNames = runtimeServices.Configuration.GetVector(RuntimeConstants.RESOURCE_LOADER);
+			var resourceLoaderNames = runtimeServices.Configuration.GetStringList(RuntimeConstants.RESOURCE_LOADER);
 
 			for (int i = 0; i < resourceLoaderNames.Count; i++)
 			{
@@ -176,7 +170,7 @@ namespace NVelocity.Runtime.Resource
 					* The loader id is the prefix used for all properties
 					* pertaining to a particular loader.
 					*/
-				String loaderID = string.Format("{0}.{1}", resourceLoaderNames[i], RuntimeConstants.RESOURCE_LOADER);
+				string loaderID = string.Format("{0}.{1}", resourceLoaderNames[i], RuntimeConstants.RESOURCE_LOADER);
 
 				ExtendedProperties loaderConfiguration = runtimeServices.Configuration.Subset(loaderID);
 
@@ -324,7 +318,7 @@ namespace NVelocity.Runtime.Resource
 		/// to syntax (or other) error.
 		/// @throws Exception if a problem in parse
 		/// </returns>
-		protected internal Resource LoadResource(String resourceName, ResourceType resourceType, String encoding)
+		protected internal Resource LoadResource(string resourceName, ResourceType resourceType, string encoding)
 		{
 			Resource resource = ResourceFactory.GetResource(resourceName, resourceType);
 
@@ -425,7 +419,7 @@ namespace NVelocity.Runtime.Resource
 		///
 		/// </param>
 		/// <param name="encoding"></param>
-		protected internal void RefreshResource(Resource resource, String encoding)
+		protected internal void RefreshResource(Resource resource, string encoding)
 		{
 			/*
 			* The resource knows whether it needs to be checked
@@ -500,11 +494,11 @@ namespace NVelocity.Runtime.Resource
 		/// *
 		/// </returns>
 		/// <deprecated>Use
-		/// {@link #GetResource(String resourceName, int resourceType,
-		/// String encoding )}
+		/// {@link #GetResource(string resourceName, int resourceType,
+		/// string encoding )}
 		///
 		/// </deprecated>
-		public Resource GetResource(String resourceName, ResourceType resourceType)
+		public Resource GetResource(string resourceName, ResourceType resourceType)
 		{
 			return GetResource(resourceName, resourceType, RuntimeConstants.ENCODING_DEFAULT);
 		}
@@ -519,7 +513,7 @@ namespace NVelocity.Runtime.Resource
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		public String GetLoaderNameForResource(String resourceName)
+		public string GetLoaderNameForResource(string resourceName)
 		{
 			ResourceLoader resourceLoader;
 

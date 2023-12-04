@@ -36,7 +36,7 @@ namespace NVelocity.Test
 			Assert.IsNotNull(mi, "Expected to find VelocityTest.Test_Evaluate");
 			Assert.IsTrue(mi.ToString().Equals("Void Test_Evaluate()"), "method not found");
 
-			mi = i.GetMethod(typeof(ExtendedProperties), "GetString", new Object[] { "parm1", "parm2" });
+			mi = i.GetMethod(typeof(ExtendedProperties), "GetString", new object[] { "parm1", "parm2" });
 			Assert.IsNotNull(mi, "Expected to find ExtendedProperties.GetString(String, String)");
 			Assert.IsTrue(mi.ToString().Equals("System.String GetString(System.String, System.String)"), "method not found");
 		}

@@ -17,6 +17,7 @@ namespace NVelocity.Util.Introspection
 	using System;
 	using System.Collections;
 	using System.Collections.Concurrent;
+	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Text;
 
@@ -30,7 +31,7 @@ namespace NVelocity.Util.Introspection
 		private static readonly MethodInfo CACHE_MISS =
 			typeof(ClassMap).GetMethod("MethodMiss", BindingFlags.Static | BindingFlags.NonPublic);
 
-		private static readonly Object OBJECT = new();
+		private static readonly object OBJECT = new();
 
 		private readonly Type type;
 
@@ -82,9 +83,9 @@ namespace NVelocity.Util.Introspection
 		/// <returns>
 		/// the class object whose methods are cached by this map.
 		/// </returns>
-		public MethodInfo FindMethod(String name, Object[] parameters)
+		public MethodInfo FindMethod(string name, object[] parameters)
 		{
-			String methodKey = MakeMethodKey(name, parameters);
+			string methodKey = MakeMethodKey(name, parameters);
 
 			if (methodCache.TryGetValue(methodKey, out MethodInfo cacheEntry))
 			{
@@ -126,7 +127,7 @@ namespace NVelocity.Util.Introspection
 		/// If nothing is found, then we must actually go
 		/// and introspect the method from the MethodMap.
 		/// </summary>
-		public PropertyInfo FindProperty(String name)
+		public PropertyInfo FindProperty(string name)
 		{
 
 			if (propertyCache.TryGetValue(name, out MemberInfo cacheEntry))
@@ -177,7 +178,7 @@ namespace NVelocity.Util.Introspection
 		/// the concatenation of the name and the
 		/// types of the method parameters.
 		/// </summary>
-		private static String MakeMethodKey(MethodInfo method)
+		private static string MakeMethodKey(MethodInfo method)
 		{
 			StringBuilder methodKey = new(method.Name);
 
@@ -189,7 +190,7 @@ namespace NVelocity.Util.Introspection
 			return methodKey.ToString();
 		}
 
-		private static String MakeMethodKey(String method, Object[] parameters)
+		private static string MakeMethodKey(string method, object[] parameters)
 		{
 			StringBuilder methodKey = new(method);
 
@@ -197,7 +198,7 @@ namespace NVelocity.Util.Introspection
 			{
 				for (int j = 0; j < parameters.Length; j++)
 				{
-					Object arg = parameters[j];
+					object arg = parameters[j];
 
 					arg ??= OBJECT;
 
@@ -213,7 +214,7 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		private static MethodInfo[] GetAccessibleMethods(Type type)
 		{
-			ArrayList methods = new();
+			List<MethodInfo> methods = new();
 
 			foreach (Type interfaceType in type.GetInterfaces())
 			{
@@ -222,12 +223,12 @@ namespace NVelocity.Util.Introspection
 
 			methods.AddRange(type.GetMethods());
 
-			return (MethodInfo[])methods.ToArray(typeof(MethodInfo));
+			return methods.ToArray();
 		}
 
 		private static PropertyInfo[] GetAccessibleProperties(Type type)
 		{
-			ArrayList props = new();
+			List<PropertyInfo> props = new();
 
 			foreach (Type interfaceType in type.GetInterfaces())
 			{
@@ -236,7 +237,7 @@ namespace NVelocity.Util.Introspection
 
 			props.AddRange(type.GetProperties());
 
-			return (PropertyInfo[])props.ToArray(typeof(PropertyInfo));
+			return props.ToArray();
 		}
 	}
 }

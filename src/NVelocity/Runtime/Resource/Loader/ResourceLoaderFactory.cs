@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// Gets the loader specified in the configuration file.
 		/// </summary>
 		/// <returns>TemplateLoader</returns>
-		public static ResourceLoader getLoader(IRuntimeServices rs, String loaderClassName)
+		public static ResourceLoader getLoader(IRuntimeServices rs, string loaderClassName)
 		{
 			try
 			{
@@ -34,7 +34,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				// something else needed to be used
 				loaderClassName = loaderClassName.Replace(';', ',');
 				Type loaderType = Type.GetType(loaderClassName);
-				Object o = Activator.CreateInstance(loaderType);
+				object o = Activator.CreateInstance(loaderType);
 				ResourceLoader loader = (ResourceLoader)o;
 
 				rs.Info(string.Format("Resource Loader Instantiated: {0}", loader.GetType().FullName));

@@ -37,7 +37,7 @@ namespace NVelocity.Test
 		[Test, Ignore("Does not pass, but would be easier to rewrite NVelocity than fix it")]
 		public void RecursiveMacroHaveArgsStacked()
 		{
-			String template =
+												string template =
 				"## A comment \r\n" +
 				"#macro(rec $someparam $level)\r\n" +
 				"#if($level == 3)\r\n" +

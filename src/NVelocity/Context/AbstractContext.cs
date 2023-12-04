@@ -84,7 +84,7 @@ namespace NVelocity.Context
 			}
 		}
 
-		public Object[] Keys
+		public string[] Keys
 		{
 			get { return InternalGetKeys(); }
 		}
@@ -107,7 +107,7 @@ namespace NVelocity.Context
 		/// <returns>object stored in the context
 		///
 		/// </returns>
-		public abstract Object InternalGet(String key);
+		public abstract object InternalGet(string key);
 
 		///
 		/// <summary>  Implement to put a value into the context storage.
@@ -124,7 +124,7 @@ namespace NVelocity.Context
 		/// <returns>previously stored value if exists, or null
 		///
 		/// </returns>
-		public abstract Object InternalPut(String key, Object value);
+		public abstract object InternalPut(string key, object value);
 
 		///
 		/// <summary>  Implement to determine if a key is in the storage.
@@ -138,7 +138,7 @@ namespace NVelocity.Context
 		/// <returns>true if found, false if not
 		///
 		/// </returns>
-		public abstract bool InternalContainsKey(Object key);
+		public abstract bool InternalContainsKey(string key);
 
 		///
 		/// <summary>  Implement to return an object array of key
@@ -151,7 +151,7 @@ namespace NVelocity.Context
 		/// <returns>array of keys
 		///
 		/// </returns>
-		public abstract Object[] InternalGetKeys();
+		public abstract string[] InternalGetKeys();
 
 		///
 		/// <summary>  Implement to remove an item from your storage.
@@ -165,7 +165,7 @@ namespace NVelocity.Context
 		/// <returns>object removed if exists, else null
 		///
 		/// </returns>
-		public abstract Object InternalRemove(Object key);
+		public abstract object InternalRemove(string key);
 
 		/// <summary> Adds a name/value pair to the context.
 		///
@@ -174,11 +174,11 @@ namespace NVelocity.Context
 		/// </param>
 		/// <param name="value">The corresponding value.
 		/// </param>
-		/// <returns>Object that was replaced in the the Context if
+		/// <returns>object that was replaced in the the Context if
 		/// applicable or null if not.
 		///
 		/// </returns>
-		public Object Put(String key, Object value)
+		public object Put(string key, object value)
 		{
 			/*
 			* don't even continue if key or value is null
@@ -208,7 +208,7 @@ namespace NVelocity.Context
 		/// the key param is null.
 		///
 		/// </returns>
-		public Object Get(String key)
+		public object Get(string key)
 		{
 			/*
 			*  punt if key is null
@@ -224,7 +224,7 @@ namespace NVelocity.Context
 			*  call the get() on it.
 			*/
 
-			Object o = InternalGet(key);
+			object o = InternalGet(key);
 
 			if (o == null && innerContext != null)
 			{
@@ -243,7 +243,7 @@ namespace NVelocity.Context
 		/// <returns>true if the key is in the context, false if not.
 		///
 		/// </returns>
-		public bool ContainsKey(Object key)
+		public bool ContainsKey(string key)
 		{
 			if (key == null)
 			{
@@ -255,7 +255,7 @@ namespace NVelocity.Context
 
 		/// <summary>  Get all the keys for the values in the context
 		/// </summary>
-		/// <returns>Object[] of keys in the Context. Does not return
+		/// <returns>object[] of keys in the Context. Does not return
 		/// keys in chained context.
 		///
 		/// </returns>
@@ -268,7 +268,7 @@ namespace NVelocity.Context
 		/// if unmapped.
 		///
 		/// </returns>
-		public Object Remove(Object key)
+		public object Remove(string key)
 		{
 			if (key == null)
 			{

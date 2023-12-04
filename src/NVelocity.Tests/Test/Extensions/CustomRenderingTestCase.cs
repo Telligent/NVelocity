@@ -57,7 +57,7 @@ namespace NVelocity.Test.Extensions
 
 			StringWriter sw = new();
 
-			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
+												bool ok = velocityEngine.Evaluate(velocityContext, sw,
 																						"ExtensionsTest.EscapeEscapableSimpleObject",
 																						@"$escString | $normal");
 
@@ -73,7 +73,7 @@ namespace NVelocity.Test.Extensions
 
 			StringWriter sw = new();
 
-			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
+												bool ok = velocityEngine.Evaluate(velocityContext, sw,
 																						"ExtensionsTest.EscapeEscapableComplexObject",
 																						@"$escComplex.name $escComplex.value | $normal");
 
@@ -90,7 +90,7 @@ namespace NVelocity.Test.Extensions
 
 			StringWriter sw = new();
 
-			Boolean ok = velocityEngine.Evaluate(velocityContext, sw,
+												bool ok = velocityEngine.Evaluate(velocityContext, sw,
 																						"ExtensionsTest.EscapeEscapableComplexMixedObject",
 																						@"$escMixed.name $escMixed.value | $normal");
 
@@ -132,10 +132,10 @@ namespace NVelocity.Test.Extensions
 		/// </summary>
 		private void EventCartridge_ReferenceInsertion(object sender, ReferenceInsertionEventArgs e)
 		{
-			Stack rs = e.GetCopyOfReferenceStack();
+			var rs = e.GetCopyOfReferenceStack();
 			while (rs.Count > 0)
 			{
-				Object current = rs.Pop();
+				object current = rs.Pop();
 				if (current is INotEscapable)
 					return;
 
@@ -185,9 +185,9 @@ namespace NVelocity.Test.Extensions
 
 		public class EscapableString : IEscapable
 		{
-			private readonly String value;
+			private readonly string value;
 
-			public EscapableString(String value)
+			public EscapableString(string value)
 			{
 				this.value = value;
 			}
@@ -200,9 +200,9 @@ namespace NVelocity.Test.Extensions
 
 		public class NotEscapableString : INotEscapable
 		{
-			private readonly String value;
+			private readonly string value;
 
-			public NotEscapableString(String value)
+			public NotEscapableString(string value)
 			{
 				this.value = value;
 			}
@@ -215,21 +215,21 @@ namespace NVelocity.Test.Extensions
 
 		public class EscapableComplexObject : IEscapable
 		{
-			private readonly Object name;
-			private readonly Object value;
+			private readonly object name;
+			private readonly object value;
 
-			public EscapableComplexObject(Object name, Object value)
+			public EscapableComplexObject(object name, object value)
 			{
 				this.name = name;
 				this.value = value;
 			}
 
-			public Object Name
+			public object Name
 			{
 				get { return name; }
 			}
 
-			public Object Value
+			public object Value
 			{
 				get { return value; }
 			}

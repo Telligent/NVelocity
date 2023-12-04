@@ -10,7 +10,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class ASTSetDirective : SimpleNode
 	{
-		private String leftReference = string.Empty;
+		private string leftReference = string.Empty;
 		private INode right;
 		private ASTReference left;
 		internal bool blather = false;
@@ -35,14 +35,14 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  simple init.  We can get the RHS and LHS as the the tree structure is static
 		/// </summary>
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			/*
 			*  init the tree correctly
@@ -71,7 +71,7 @@ namespace NVelocity.Runtime.Parser.Node
 			*  get the RHS node, and it's value
 			*/
 
-			Object value = right.Value(context);
+			object value = right.Value(context);
 
 			/*
 			* it's an error if we don't have a value of some sort

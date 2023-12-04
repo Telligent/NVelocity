@@ -15,14 +15,14 @@
 namespace NVelocity.Runtime.Directive
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
+	using System.Collections.Concurrent;
 
 	public class DirectiveManager : IDirectiveManager
 	{
-		private readonly IDictionary name2Type = Hashtable.Synchronized(new Hashtable());
+		private readonly ConcurrentDictionary<string, Type> name2Type = new();
 
-
-		public virtual void Register(String directiveTypeName)
+		public virtual void Register(string directiveTypeName)
 		{
 			directiveTypeName = directiveTypeName.Replace(';', ',');
 
@@ -32,15 +32,17 @@ namespace NVelocity.Runtime.Directive
 			name2Type[directive.Name] = type;
 		}
 
-		public virtual Directive Create(String name, Stack directiveStack)
+		public virtual Directive Create(string name, Stack<Directive> directiveStack)
 		{
-			Type type = (Type)name2Type[name];
-
-			if (type == null)
+			if (name2Type.TryGetValue(name, out Type type))
+			{
+				return (Directive)Activator.CreateInstance(type);
+			}
+			else
 			{
 				if (directiveStack.Count != 0)
 				{
-					Directive parent = (Directive)directiveStack.Peek();
+					Directive parent = directiveStack.Peek();
 
 					if (parent.SupportsNestedDirective(name))
 					{
@@ -48,17 +50,13 @@ namespace NVelocity.Runtime.Directive
 					}
 				}
 			}
-			else
-			{
-				return (Directive)Activator.CreateInstance(type);
-			}
 
 			return null;
 		}
 
-		public virtual bool Contains(String name)
+		public virtual bool Contains(string name)
 		{
-			return name2Type.Contains(name);
+			return name2Type.ContainsKey(name);
 		}
 	}
 }

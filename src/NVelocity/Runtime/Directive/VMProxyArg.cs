@@ -80,7 +80,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>reference for the object if we proxy for a static arg like an NumberLiteral
 		/// </summary>
-		private Object staticObject = null;
+		private object staticObject = null;
 
 		/// <summary>not used in this impl : carries the appropriate user context
 		/// </summary>
@@ -92,15 +92,15 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>our identity in the current context
 		/// </summary>
-		private readonly String contextReference = null;
+		private readonly string contextReference = null;
 
 		/// <summary>the reference we are proxying for
 		/// </summary>
-		private readonly String callerReference = null;
+		private readonly string callerReference = null;
 
 		/// <summary>the 'de-dollared' reference if we are a ref but don't have a method attached
 		/// </summary>
-		private readonly String singleLevelRef = null;
+		private readonly string singleLevelRef = null;
 
 		/// <summary>by default, we are dynamic.  safest
 		/// </summary>
@@ -127,7 +127,7 @@ namespace NVelocity.Runtime.Directive
 		/// <param name="t"> type of arg : JJTREFERENCE, JJTTRUE, etc
 		///
 		/// </param>
-		public VMProxyArg(IRuntimeServices rs, String contextRef, String callerRef, int t)
+		public VMProxyArg(IRuntimeServices rs, string contextRef, string callerRef, int t)
 		{
 			runtimeServices = rs;
 
@@ -158,12 +158,12 @@ namespace NVelocity.Runtime.Directive
 			}
 		}
 
-		public String CallerReference
+		public string CallerReference
 		{
 			get { return callerReference; }
 		}
 
-		public String ContextReference
+		public string ContextReference
 		{
 			get { return contextReference; }
 		}
@@ -173,7 +173,7 @@ namespace NVelocity.Runtime.Directive
 			get { return nodeTree; }
 		}
 
-		public Object StaticObject
+		public object StaticObject
 		{
 			get { return staticObject; }
 		}
@@ -202,10 +202,10 @@ namespace NVelocity.Runtime.Directive
 		/// </param>
 		/// <param name="o"> new value of reference
 		/// </param>
-		/// <returns>Object currently null
+		/// <returns>object currently null
 		///
 		/// </returns>
-		public Object setObject(IInternalContextAdapter context, Object o)
+		public object setObject(IInternalContextAdapter context, object o)
 		{
 			/*
 			*  if we are a reference, we could be updating a property
@@ -269,11 +269,11 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		/// <param name="context">Context to use for getting current value
 		/// </param>
-		/// <returns>Object value
+		/// <returns>object value
 		/// *
 		///
 		/// </returns>
-		public Object getObject(IInternalContextAdapter context)
+		public object getObject(IInternalContextAdapter context)
 		{
 			try
 			{
@@ -281,7 +281,7 @@ namespace NVelocity.Runtime.Directive
 		*  we need to output based on our type
 		*/
 
-				Object retObject = null;
+				object retObject = null;
 
 				if (type == ParserTreeConstants.REFERENCE)
 				{
@@ -404,7 +404,7 @@ namespace NVelocity.Runtime.Directive
 					*   as if inline in schmoo
 					*/
 
-							String buff = string.Format("#include({0} ) ", callerReference);
+							string buff = string.Format("#include({0} ) ", callerReference);
 
 							//ByteArrayInputStream inStream = new ByteArrayInputStream( buff.getBytes() );
 
@@ -459,7 +459,7 @@ namespace NVelocity.Runtime.Directive
 				case ParserTreeConstants.NUMBER_LITERAL:
 					{
 						constant = true;
-						staticObject = Int32.Parse(callerReference);
+						staticObject = int.Parse(callerReference);
 						break;
 					}
 
@@ -474,7 +474,7 @@ namespace NVelocity.Runtime.Directive
 								"Unsupported arg type : {0}  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())",
 								callerReference));
 						constant = true;
-						staticObject = new String(callerReference.ToCharArray());
+						staticObject = new string(callerReference.ToCharArray());
 
 						break;
 					}

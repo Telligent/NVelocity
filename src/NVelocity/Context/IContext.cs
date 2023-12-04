@@ -42,32 +42,32 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key">The name to key the provided value with.</param>
 		/// <param name="value">The corresponding value.</param>
-		Object Put(String key, Object value);
+		object Put(string key, object value);
 
 		/// <summary>
 		/// Gets the value corresponding to the provided key from the context.
 		/// </summary>
 		/// <param name="key">The name of the desired value.</param>
 		/// <returns>The value corresponding to the provided key.</returns>
-		Object Get(String key);
+		object Get(string key);
 
 		/// <summary>
 		/// Indicates whether the specified key is in the context.
 		/// </summary>
 		/// <param name="key">The key to look for.</param>
 		/// <returns>Whether the key is in the context.</returns>
-		Boolean ContainsKey(Object key);
+		bool ContainsKey(string key);
 
 		/// <summary>
 		/// Get all the keys for the values in the context
 		/// </summary>
-		Object[] Keys { get; }
+		string[] Keys { get; }
 
 		/// <summary>
 		/// Removes the value associated with the specified key from the context.
 		/// </summary>
 		/// <param name="key">The name of the value to remove.</param>
 		/// <returns>The value that the key was mapped to, or <code>null</code> if unmapped.</returns>
-		Object Remove(Object key);
+		object Remove(string key);
 	}
 }

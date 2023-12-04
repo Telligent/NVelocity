@@ -33,14 +33,14 @@ namespace NVelocity.Util.Introspection
 
 		/// <summary>  Returns a general method, corresponding to $foo.bar( $woogie )
 		/// </summary>
-		IVelMethod GetMethod(Object obj, String method, Object[] args, Info info);
+		IVelMethod GetMethod(object obj, string method, object[] args, Info info);
 
 		/// <summary> Property getter - returns VelPropertyGet appropos for #set($foo = $bar.woogie)
 		/// </summary>
-		IVelPropertyGet GetPropertyGet(Object obj, String identifier, Info info);
+		IVelPropertyGet GetPropertyGet(object obj, string identifier, Info info);
 
 		/// <summary> Property setter - returns VelPropertySet appropos for #set($foo.bar = "geir")
 		/// </summary>
-		IVelPropertySet GetPropertySet(Object obj, String identifier, Object arg, Info info);
+		IVelPropertySet GetPropertySet(object obj, string identifier, object arg, Info info);
 	}
 }

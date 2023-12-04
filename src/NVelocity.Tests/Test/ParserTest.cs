@@ -57,10 +57,10 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_VelocityTryCharStream()
 		{
-			String s1 = "this is a test";
+												string s1 = "this is a test";
 			VelocityCharStream vcs = new(new StringReader(s1), 1, 1);
 
-			String s2 = String.Empty;
+												string s2 = string.Empty;
 
 			while (vcs.ReadChar())
 			{
@@ -77,8 +77,8 @@ namespace NVelocity.Test
 
 			SimpleNode root = p.Process();
 
-			String javaNodes = "19,18,9,5,23,56,23,42,23,24,6,18,56,18,9,5,23,56,23,42,23,25,6,18,44,23,5,56,6,18,46,18,43,0";
-			String nodes = String.Empty;
+												string javaNodes = "19,18,9,5,23,56,23,42,23,24,6,18,56,18,9,5,23,56,23,42,23,25,6,18,44,23,5,56,6,18,46,18,43,0";
+												string nodes = string.Empty;
 
 			if (root != null)
 			{
@@ -122,7 +122,7 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_Example1()
 		{
-			String templateFile = "example1.vm";
+												string templateFile = "example1.vm";
 			try
 			{
 				/*

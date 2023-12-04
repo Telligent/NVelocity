@@ -15,7 +15,7 @@
 namespace NVelocity
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
 	using System.Reflection;
@@ -38,15 +38,6 @@ namespace NVelocity
 			for (int index = 0; index < sbyteArray.Length; index++)
 				byteArray[index] = (byte)sbyteArray[index];
 			return byteArray;
-		}
-
-		/*******************************/
-
-		public static Object PutElement(Hashtable hashTable, Object key, Object newValue)
-		{
-			Object element = hashTable[key];
-			hashTable[key] = newValue;
-			return element;
 		}
 
 		/*******************************/
@@ -153,9 +144,9 @@ namespace NVelocity
 
 
 
-			public override bool Equals(Object textNumberObject)
+			public override bool Equals(object textNumberObject)
 			{
-				return Equals((Object)this, textNumberObject);
+				return Equals((object)this, textNumberObject);
 			}
 
 			public string FormatDouble(double number)
@@ -260,50 +251,52 @@ namespace NVelocity
 		{
 			public static DateTimeFormatHashTable manager = new();
 
-			public class DateTimeFormatHashTable : Hashtable
+			public class DateTimeFormatHashTable
 			{
-				public void SetDateFormatPattern(DateTimeFormatInfo format, String newPattern)
+				Dictionary<DateTimeFormatInfo, DateTimeFormatProperties> formats = new ();
+
+				public void SetDateFormatPattern(DateTimeFormatInfo format, string newPattern)
 				{
-					if (this[format] != null)
-						((DateTimeFormatProperties)this[format]).DateFormatPattern = newPattern;
+					if (formats.TryGetValue(format, out DateTimeFormatProperties p))
+						p.DateFormatPattern = newPattern;
 					else
 					{
 						DateTimeFormatProperties tempProps = new()
 						{
 							DateFormatPattern = newPattern
 						};
-						Add(format, tempProps);
+						formats[format] = tempProps;
 					}
 				}
 
 				public string GetDateFormatPattern(DateTimeFormatInfo format)
 				{
-					if (this[format] == null)
-						return "d-MMM-yy";
+					if (formats.TryGetValue(format, out DateTimeFormatProperties p))
+						return p.DateFormatPattern;
 					else
-						return ((DateTimeFormatProperties)this[format]).DateFormatPattern;
+						return "d-MMM-yy";
 				}
 
-				public void SetTimeFormatPattern(DateTimeFormatInfo format, String newPattern)
+				public void SetTimeFormatPattern(DateTimeFormatInfo format, string newPattern)
 				{
-					if (this[format] != null)
-						((DateTimeFormatProperties)this[format]).TimeFormatPattern = newPattern;
+					if (formats.TryGetValue(format, out DateTimeFormatProperties p))
+						p.TimeFormatPattern = newPattern;
 					else
 					{
 						DateTimeFormatProperties tempProps = new()
 						{
 							TimeFormatPattern = newPattern
 						};
-						Add(format, tempProps);
+						formats[format] = tempProps;
 					}
 				}
 
 				public string GetTimeFormatPattern(DateTimeFormatInfo format)
 				{
-					if (this[format] == null)
-						return "h:mm:ss tt";
+					if (formats.TryGetValue(format, out DateTimeFormatProperties p))
+						return p.TimeFormatPattern;
 					else
-						return ((DateTimeFormatProperties)this[format]).TimeFormatPattern;
+						return "h:mm:ss tt";
 				}
 
 				private class DateTimeFormatProperties
@@ -312,6 +305,8 @@ namespace NVelocity
 					public string TimeFormatPattern = "h:mm:ss tt";
 				}
 			}
+
+			
 		}
 
 		/*******************************/
@@ -384,8 +379,8 @@ namespace NVelocity
 		/// Creates an instance of a received Type
 		/// </summary>
 		/// <param name="classType">The Type of the new class instance to return</param>
-		/// <returns>An Object containing the new instance</returns>
-		public static Object CreateNewInstance(Type classType)
+		/// <returns>An object containing the new instance</returns>
+		public static object CreateNewInstance(Type classType)
 		{
 			ConstructorInfo[] constructors = classType.GetConstructors();
 

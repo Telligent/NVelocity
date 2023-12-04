@@ -54,18 +54,18 @@ namespace NVelocity.App
 		}
 
 		/// <summary>
-		/// CTOR that invokes an init(String), initializing
+		/// CTOR that invokes an init(string), initializing
 		/// the engine using the properties file specified
 		/// </summary>
 		/// <exception cref="Exception"></exception>
 		/// <param name="propsFilename">name of properties file to init with</param>
-		public VelocityEngine(String propsFilename)
+		public VelocityEngine(string propsFilename)
 		{
 			runtimeInstance.Init(propsFilename);
 		}
 
 		/// <summary>
-		/// CTOR that invokes an init(String), initializing
+		/// CTOR that invokes an init(string), initializing
 		/// the engine using the Properties specified
 		/// </summary>
 		/// <param name="p">name of properties to init with</param>
@@ -100,7 +100,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="propsFilename">file containing properties to use to initialize
 		/// the Velocity runtime</param>
-		public void Init(String propsFilename)
+		public void Init(string propsFilename)
 		{
 			runtimeInstance.Init(propsFilename);
 		}
@@ -118,7 +118,7 @@ namespace NVelocity.App
 		/// <summary>
 		/// Set a Velocity Runtime property.
 		/// </summary>
-		public void SetProperty(String key, Object value)
+		public void SetProperty(string key, object value)
 		{
 			runtimeInstance.SetProperty(key, value);
 		}
@@ -126,7 +126,7 @@ namespace NVelocity.App
 		/// <summary>
 		/// Add a Velocity Runtime property.
 		/// </summary>
-		public void AddProperty(String key, Object value)
+		public void AddProperty(string key, object value)
 		{
 			runtimeInstance.AddProperty(key, value);
 		}
@@ -135,7 +135,7 @@ namespace NVelocity.App
 		/// Clear a Velocity Runtime property.
 		/// </summary>
 		/// <param name="key">key of property to clear</param>
-		public void ClearProperty(String key)
+		public void ClearProperty(string key)
 		{
 			runtimeInstance.ClearProperty(key);
 		}
@@ -147,7 +147,7 @@ namespace NVelocity.App
 		/// <returns>
 		/// property value or null if the property not currently set
 		/// </returns>
-		public Object GetProperty(String key)
+		public object GetProperty(string key)
 		{
 			return runtimeInstance.GetProperty(key);
 		}
@@ -162,7 +162,7 @@ namespace NVelocity.App
 		/// <param name="logTag"> string to be used as the template name for log messages in case of error</param>
 		/// <param name="inString">input string containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
-		public bool Evaluate(IContext context, TextWriter writer, String logTag, String inString)
+		public bool Evaluate(IContext context, TextWriter writer, string logTag, string inString)
 		{
 			return Evaluate(context, writer, logTag, new StringReader(inString));
 		}
@@ -178,9 +178,9 @@ namespace NVelocity.App
 		/// <param name="instream">input stream containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
 		[Obsolete("Use the overload that takes an TextReader")]
-		public bool Evaluate(IContext context, TextWriter writer, String logTag, Stream instream)
+		public bool Evaluate(IContext context, TextWriter writer, string logTag, Stream instream)
 		{
-			String encoding = null;
+			string encoding = null;
 
 			// first, parse - convert ParseException if thrown
 			TextReader br;
@@ -191,7 +191,7 @@ namespace NVelocity.App
 			}
 			catch (IOException ioException)
 			{
-				String msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
+				string msg = string.Format("Unsupported input encoding : {0} for template {1}", encoding, logTag);
 				throw new ParseErrorException(msg, ioException);
 			}
 
@@ -208,7 +208,7 @@ namespace NVelocity.App
 		/// <param name="logTag"> string to be used as the template name for log messages in case of error</param>
 		/// <param name="reader">Reader containing the VTL to be rendered</param>
 		/// <returns>true if successful, false otherwise.  If false, see Velocity runtime log</returns>
-		public bool Evaluate(IContext context, TextWriter writer, String logTag, TextReader reader)
+		public bool Evaluate(IContext context, TextWriter writer, string logTag, TextReader reader)
 		{
 			SimpleNode nodeTree;
 			try
@@ -266,7 +266,7 @@ namespace NVelocity.App
 		/// <param name="context">Context object containing data/objects used for rendering.</param>
 		/// <param name="writer"> Writer for output stream</param>
 		/// <returns>true if Velocimacro exists and successfully invoked, false otherwise.</returns>
-		public bool InvokeVelocimacro(String vmName, String logTag, String[] parameters, IContext context, TextWriter writer)
+		public bool InvokeVelocimacro(string vmName, string logTag, string[] parameters, IContext context, TextWriter writer)
 		{
 			// check parameters
 			if (vmName == null || parameters == null || context == null || writer == null || logTag == null)
@@ -317,7 +317,7 @@ namespace NVelocity.App
 		/// <param name="writer"> writer to write template into</param>
 		/// <returns>true if successful, false otherwise.  Errors logged to velocity log.</returns>
 		[Obsolete("Use the overload that takes the encoding as parameter")]
-		public bool MergeTemplate(String templateName, IContext context, TextWriter writer)
+		public bool MergeTemplate(string templateName, IContext context, TextWriter writer)
 		{
 			return
 				MergeTemplate(templateName,
@@ -333,7 +333,7 @@ namespace NVelocity.App
 		/// <param name="context"> filled context to be used in merge</param>
 		/// <param name="writer"> writer to write template into</param>
 		/// <returns>true if successful, false otherwise.  Errors logged to velocity log</returns>
-		public bool MergeTemplate(String templateName, String encoding, IContext context, TextWriter writer)
+		public bool MergeTemplate(string templateName, string encoding, IContext context, TextWriter writer)
 		{
 			Template template = runtimeInstance.GetTemplate(templateName, encoding);
 
@@ -365,7 +365,7 @@ namespace NVelocity.App
 		/// <exception cref="Exception">
 		/// if an error occurs in template initialization
 		/// </exception>
-		public Template GetTemplate(String name)
+		public Template GetTemplate(string name)
 		{
 			return runtimeInstance.GetTemplate(name);
 		}
@@ -387,7 +387,7 @@ namespace NVelocity.App
 		/// <exception cref="Exception">
 		/// if an error occurs in template initialization
 		/// </exception>
-		public Template GetTemplate(String name, String encoding)
+		public Template GetTemplate(string name, string encoding)
 		{
 			return runtimeInstance.GetTemplate(name, encoding);
 		}
@@ -408,7 +408,7 @@ namespace NVelocity.App
 		/// </param>
 		/// <returns>true if found, false otherwise
 		/// </returns>
-		public bool TemplateExists(String templateName)
+		public bool TemplateExists(string templateName)
 		{
 			return (runtimeInstance.GetLoaderNameForResource(templateName) != null);
 		}
@@ -417,7 +417,7 @@ namespace NVelocity.App
 		/// Log a warning message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public void Warn(Object message)
+		public void Warn(object message)
 		{
 			runtimeInstance.Warn(message);
 		}
@@ -427,7 +427,7 @@ namespace NVelocity.App
 		/// Log an info message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public void Info(Object message)
+		public void Info(object message)
 		{
 			runtimeInstance.Info(message);
 		}
@@ -436,7 +436,7 @@ namespace NVelocity.App
 		/// Log an error message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public void Error(Object message)
+		public void Error(object message)
 		{
 			runtimeInstance.Error(message);
 		}
@@ -445,14 +445,14 @@ namespace NVelocity.App
 		/// Log a debug message.
 		/// </summary>
 		/// <param name="message">message to log</param>
-		public void Debug(Object message)
+		public void Debug(object message)
 		{
 			runtimeInstance.Debug(message);
 		}
 
 		/// <summary>
 		/// <p>
-		/// Set the an ApplicationAttribute, which is an Object
+		/// Set the an ApplicationAttribute, which is an object
 		/// set by the application which is accessible from
 		/// any component of the system that gets a RuntimeServices.
 		/// This allows communication between the application
@@ -469,7 +469,7 @@ namespace NVelocity.App
 		/// </summary>
 		/// <param name="key">object 'name' under which the object is stored</param>
 		/// <param name="value">object to store under this key</param>
-		public void SetApplicationAttribute(Object key, Object value)
+		public void SetApplicationAttribute(object key, object value)
 		{
 			runtimeInstance.SetApplicationAttribute(key, value);
 		}

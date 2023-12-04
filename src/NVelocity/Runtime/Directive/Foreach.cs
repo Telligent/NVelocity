@@ -19,13 +19,15 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Util.Introspection;
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
+				using System.Linq;
 
-	/// <summary>
-	/// Foreach directive used for moving through arrays,
-	/// or objects that provide an Iterator.
-	/// </summary>
-	public class Foreach : Directive
+				/// <summary>
+				/// Foreach directive used for moving through arrays,
+				/// or objects that provide an Iterator.
+				/// </summary>
+				public class Foreach : Directive
 	{
 		private static readonly string[] SectionNames;
 
@@ -57,7 +59,7 @@ namespace NVelocity.Runtime.Directive
 		/// the counter value into the context. Right
 		/// now the default is $velocityCount.
 		/// </summary>
-		private String counterName;
+		private string counterName;
 
 		/// <summary>
 		/// What value to start the loop counter at.
@@ -74,13 +76,13 @@ namespace NVelocity.Runtime.Directive
 		/// This can be used class wide because
 		/// it is immutable.
 		/// </summary>
-		private String elementKey;
+		private string elementKey;
 
 
 		/// <summary>
 		/// Return name of this directive.
 		/// </summary>
-		public override String Name
+		public override string Name
 		{
 			get { return "foreach"; }
 			set { throw new NotSupportedException(); }
@@ -94,14 +96,14 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.BLOCK; }
 		}
 
-		public override bool SupportsNestedDirective(String name)
+		public override bool SupportsNestedDirective(string name)
 		{
 			int index = Array.BinarySearch(SectionNames, name.ToLower());
 
 			return index >= 0;
 		}
 
-		public override Directive CreateNestedDirective(String name)
+		public override Directive CreateNestedDirective(string name)
 		{
 			name = name.ToLower();
 
@@ -170,13 +172,13 @@ namespace NVelocity.Runtime.Directive
 		private IEnumerator GetIterator(IInternalContextAdapter context, INode node)
 		{
 			// get our list object, and punt if it's null.
-			Object listObject = node.GetChild(2).Value(context);
+			object listObject = node.GetChild(2).Value(context);
 
 			// if we have an event cartridge, get a new value object
 			NVelocity.App.Events.EventCartridge eventCartridge = context.EventCartridge;
 			if (eventCartridge != null)
 			{
-				listObject = eventCartridge.ReferenceInsert(new Stack(), node.GetChild(2).Literal, listObject);
+				listObject = eventCartridge.ReferenceInsert(new Stack<object>(), node.GetChild(2).Literal, listObject);
 			}
 
 			if (listObject == null)
@@ -277,7 +279,7 @@ namespace NVelocity.Runtime.Directive
 			IEnumerator enumerator = GetIterator(context, node);
 			INode bodyNode = node.GetChild(3);
 
-			INode[][] sections = PrepareSections(bodyNode);
+			List<INode>[] sections = PrepareSections(bodyNode);
 			bool isFancyLoop = (sections != null);
 
 			if (enumerator == null && !isFancyLoop)
@@ -289,8 +291,8 @@ namespace NVelocity.Runtime.Directive
 
 			// save the element key if there is one,
 			// and the loop counter
-			Object o = context.Get(elementKey);
-			Object ctr = context.Get(counterName);
+			object o = context.Get(elementKey);
+			object ctr = context.Get(counterName);
 
 			if (enumerator != null && enumerator.MoveNext())
 			{
@@ -381,8 +383,7 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		private void ProcessSection(ForeachSectionEnum sectionEnumType, INode[][] sections, IInternalContextAdapter context,
-																TextWriter writer)
+		private void ProcessSection(ForeachSectionEnum sectionEnumType, List<INode>[] sections, IInternalContextAdapter context, TextWriter writer)
 		{
 			int sectionIndex = (int)sectionEnumType;
 
@@ -397,13 +398,13 @@ namespace NVelocity.Runtime.Directive
 			}
 		}
 
-		private INode[][] PrepareSections(INode node)
+		private List<INode>[] PrepareSections(INode node)
 		{
 			bool isFancyLoop = false;
 
 			int curSection = (int)ForeachSectionEnum.Each;
 
-			ArrayList[] sections = new ArrayList[SectionNames.Length];
+			List<INode>[] sections = new List<INode>[SectionNames.Length];
 
 			int nodeCount = node.ChildrenCount;
 
@@ -414,15 +415,13 @@ namespace NVelocity.Runtime.Directive
 				if (childNode is ASTDirective directive && Array.BinarySearch(SectionNames, directive.DirectiveName) > -1)
 				{
 					isFancyLoop = true;
-					curSection = (int)ForeachSectionEnum.Parse(
-															typeof(ForeachSectionEnum), directive.DirectiveName, true);
+					curSection = (int)ForeachSectionEnum.Parse(typeof(ForeachSectionEnum), directive.DirectiveName, true);
 				}
 				else
 				{
 					if (sections[curSection] == null)
-					{
-						sections[curSection] = new ArrayList();
-					}
+						sections[curSection] = new();
+
 					sections[curSection].Add(childNode);
 				}
 			}
@@ -433,17 +432,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			else
 			{
-				INode[][] result = new INode[sections.Length][];
-
-				for (int i = 0; i < sections.Length; i++)
-				{
-					if (sections[i] != null)
-					{
-						result[i] = sections[i].ToArray(typeof(INode)) as INode[];
-					}
-				}
-
-				return result;
+				return sections;
 			}
 		}
 	}
@@ -468,7 +457,7 @@ namespace NVelocity.Runtime.Directive
 
 	public abstract class AbstractForeachSection : Directive, IForeachSection
 	{
-		public override String Name
+		public override string Name
 		{
 			get { return Section.ToString().ToLower(); }
 			set { throw new NotImplementedException(); }

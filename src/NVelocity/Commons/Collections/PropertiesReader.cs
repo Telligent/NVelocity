@@ -37,15 +37,15 @@ namespace Commons.Collections
 		/// <summary>
 		/// Read a property.
 		/// </summary>
-		/// <returns>A String.</returns>
-		public String ReadProperty()
+		/// <returns>A string.</returns>
+		public string ReadProperty()
 		{
 			StringBuilder buffer = new();
 
 
 			while (true)
 			{
-				String line = ReadLine();
+				string line = ReadLine();
 
 				if (line == null)
 				{

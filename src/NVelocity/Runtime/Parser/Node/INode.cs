@@ -52,15 +52,15 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		Object Accept(IParserVisitor visitor, Object data);
+		object Accept(IParserVisitor visitor, object data);
 
-		Object ChildrenAccept(IParserVisitor visitor, Object data);
+		object ChildrenAccept(IParserVisitor visitor, object data);
 
-		Object Init(IInternalContextAdapter context, Object data);
+		object Init(IInternalContextAdapter context, object data);
 		bool Evaluate(IInternalContextAdapter context);
-		Object Value(IInternalContextAdapter context);
+		object Value(IInternalContextAdapter context);
 		bool Render(IInternalContextAdapter context, TextWriter writer);
-		Object Execute(Object o, IInternalContextAdapter context);
+		object Execute(object o, IInternalContextAdapter context);
 		string Literal { get; }
 
 		bool IsInvalid { get; set; }

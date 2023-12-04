@@ -15,7 +15,7 @@
 namespace NVelocity.Runtime.Directive
 {
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary> Exception for #parse() problems
 	/// *
@@ -30,14 +30,14 @@ namespace NVelocity.Runtime.Directive
 	{
 		private void InitBlock()
 		{
-			filenameStack = new Stack();
+			filenameStack = new Stack<string>();
 		}
 
-		public override String Message
+		public override string Message
 		{
 			get
 			{
-				String returnStr = string.Format("#parse() exception : depth = {0} -> {1}", depthCount, msg);
+				string returnStr = string.Format("#parse() exception : depth = {0} -> {1}", depthCount, msg);
 
 				returnStr += " File stack : ";
 
@@ -45,7 +45,7 @@ namespace NVelocity.Runtime.Directive
 				{
 					while (!(filenameStack.Count == 0))
 					{
-						returnStr += (String)filenameStack.Pop();
+						returnStr += (string)filenameStack.Pop();
 						returnStr += " -> ";
 					}
 				}
@@ -58,13 +58,13 @@ namespace NVelocity.Runtime.Directive
 		}
 
 		//UPGRADE_NOTE: The initialization of  'filenameStack' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private Stack filenameStack;
-		private readonly String msg = string.Empty;
+		private Stack<string> filenameStack;
+		private readonly string msg = string.Empty;
 		private readonly int depthCount = 0;
 
 		/// <summary> Constructor
 		/// </summary>
-		internal ParseDirectiveException(String m, int i)
+		internal ParseDirectiveException(string m, int i)
 		{
 			InitBlock();
 			msg = m;
@@ -75,11 +75,9 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		/// <summary> Add a file to the filename stack
 		/// </summary>
-		public void addFile(String s)
+		public void addFile(string s)
 		{
-			Object temp_object;
-			temp_object = s;
-			filenameStack.Push(temp_object);
+			filenameStack.Push(s);
 		}
 	}
 }

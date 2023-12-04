@@ -24,7 +24,7 @@ namespace NVelocity.Runtime.Parser.Node
 	{
 		protected Introspector introspector;
 
-		public EnumValueExecutor(IRuntimeLogger r, Introspector i, Type type, String propertyName)
+		public EnumValueExecutor(IRuntimeLogger r, Introspector i, Type type, string propertyName)
 		{
 			runtimeLogger = r;
 			introspector = i;
@@ -32,7 +32,7 @@ namespace NVelocity.Runtime.Parser.Node
 			Discover(type, propertyName);
 		}
 
-		protected internal virtual void Discover(Type type, String propertyName)
+		protected internal virtual void Discover(Type type, string propertyName)
 		{
 			try
 			{
@@ -47,7 +47,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Execute property against context.
 		/// </summary>
-		public override Object Execute(Object o)
+		public override object Execute(object o)
 		{
 			return value;
 		}

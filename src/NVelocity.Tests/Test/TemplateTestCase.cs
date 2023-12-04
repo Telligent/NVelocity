@@ -97,8 +97,8 @@ namespace NVelocity.Test
 			al = provider.Customers;
 			h = new Hashtable();
 
-			SupportClass.PutElement(h, "Bar", "this is from a hashtable!");
-			SupportClass.PutElement(h, "Foo", "this is from a hashtable too!");
+			h["Bar"] = "this is from a hashtable!";
+			h["Foo"] = "this is from a hashtable too!";
 
 			/*
 			*  lets set up a vector of objects to test late introspection. See ASTMethod.java
@@ -106,8 +106,8 @@ namespace NVelocity.Test
 
 			vec = new ArrayList
 			{
-					new String("string1".ToCharArray()),
-					new String("string2".ToCharArray())
+					new string("string1".ToCharArray()),
+					new string("string2".ToCharArray())
 			};
 
 			/*
@@ -130,18 +130,18 @@ namespace NVelocity.Test
 			context1.Put("searchResults", provider.RelSearches);
 			context2.Put("stringarray", provider.Array);
 			context.Put("vector", vec);
-			context.Put("mystring", new String(string.Empty.ToCharArray()));
+			context.Put("mystring", new string(string.Empty.ToCharArray()));
 			context.Put("runtime", new FieldMethodizer("NVelocity.Runtime.RuntimeSingleton"));
 			context.Put("fmprov", new FieldMethodizer(provider));
 			context.Put("Floog", "floogie woogie");
 			context.Put("boolobj", new BoolObj());
 
-			/*
-			*  we want to make sure we test all types of iterative objects
-			*  in #foreach()
-			*/
+												/*
+												*  we want to make sure we test all types of iterative objects
+												*  in #foreach()
+												*/
 
-			Object[] oarr = new Object[] { "a", "b", "c", "d" };
+												object[] oarr = new object[] { "a", "b", "c", "d" };
 			int[] intarr = new int[] { 10, 20, 30, 40, 50 };
 
 			context.Put("collection", vec);
@@ -189,9 +189,9 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_Run()
 		{
-			String template;
-			Boolean allpass = true;
-			Int32 failures = 0;
+												string template;
+												bool allpass = true;
+												int failures = 0;
 			for (int i = 1; ; i++)
 			{
 				template = testProperties.GetString(getTemplateTestKey(i));
@@ -225,7 +225,7 @@ namespace NVelocity.Test
 		/// </summary>
 		/// <param name="nbr">The template test number to return a property key for.</param>
 		/// <returns>The property key.</returns>
-		private static String getTemplateTestKey(int nbr)
+		private static string getTemplateTestKey(int nbr)
 		{
 			return ("test.template." + nbr);
 		}
@@ -233,7 +233,7 @@ namespace NVelocity.Test
 		/// <summary>
 		/// Runs the test.
 		/// </summary>
-		private Boolean RunTest(String baseFileName)
+		private bool RunTest(string baseFileName)
 		{
 			// run setup before each test so that the context is clean
 			SetUp();

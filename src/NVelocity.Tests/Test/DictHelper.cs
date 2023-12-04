@@ -20,13 +20,13 @@ namespace NVelocity.Test
 
 	public class DictHelper
 	{
-		public IDictionary CreateDict(params String[] args)
+		public IDictionary CreateDict(params string[] args)
 		{
 			IDictionary dictionary = new HybridDictionary();
 
-			foreach (String arg in args)
+			foreach (string arg in args)
 			{
-				String[] parts = arg.Split('=');
+																string[] parts = arg.Split('=');
 
 				if (parts.Length == 1)
 				{
@@ -34,7 +34,7 @@ namespace NVelocity.Test
 				}
 				else
 				{
-					dictionary[parts[0]] = String.Join("=", parts, 1, parts.Length - 1);
+					dictionary[parts[0]] = string.Join("=", parts, 1, parts.Length - 1);
 				}
 			}
 

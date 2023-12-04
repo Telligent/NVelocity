@@ -21,22 +21,22 @@ namespace NVelocity.Util.Introspection
 	/// <summary>
 	/// This basic function of this class is to return a Method
 	/// object for a particular class given the name of a method
-	/// and the parameters to the method in the form of an Object[]
+	/// and the parameters to the method in the form of an object[]
 	///
 	/// The first time the Introspector sees a
 	/// class it creates a class method map for the
 	/// class in question. Basically the class method map
-	/// is a Hashtable where Method objects are keyed by a
+	/// is a dictionary where Method objects are keyed by a
 	/// concatenation of the method name and the names of
 	/// classes that make up the parameters.
 	///
 	/// For example, a method with the following signature:
 	///
-	/// public void method(String a, StringBuffer b)
+	/// public void method(string a, StringBuffer b)
 	///
 	/// would be mapped by the key:
 	///
-	/// "method" + "java.lang.String" + "java.lang.StringBuffer"
+	/// "method" + "java.lang.string" + "java.lang.StringBuffer"
 	///
 	/// This mapping is performed for all the methods in a class
 	/// and stored for
@@ -62,7 +62,7 @@ namespace NVelocity.Util.Introspection
 		/// <param name="name">Name of the method being searched for</param>
 		/// <param name="parameters">An array of Objects (not Classes) that describe the the parameters</param>
 		/// <returns>The desired Method object.</returns>
-		public override MethodInfo GetMethod(Type c, String name, Object[] parameters)
+		public override MethodInfo GetMethod(Type c, string name, object[] parameters)
 		{
 			// Just delegate to the base class
 			try
@@ -72,7 +72,7 @@ namespace NVelocity.Util.Introspection
 			catch (AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
-				String msg = string.Format("Introspection Error : Ambiguous method invocation {0}( ", name);
+				string msg = string.Format("Introspection Error : Ambiguous method invocation {0}( ", name);
 
 				for (int i = 0; i < parameters.Length; i++)
 				{
@@ -105,7 +105,7 @@ namespace NVelocity.Util.Introspection
 		/// <param name="c">Class in which the method search is taking place</param>
 		/// <param name="name">Name of the method being searched for</param>
 		/// <returns>The desired <see cref="PropertyInfo"/> object.</returns>
-		public override PropertyInfo GetProperty(Type c, String name)
+		public override PropertyInfo GetProperty(Type c, string name)
 		{
 			// Just delegate to the base class
 			try
@@ -115,7 +115,7 @@ namespace NVelocity.Util.Introspection
 			catch (AmbiguousException)
 			{
 				// whoops.  Ambiguous.  Make a nice log message and return null...
-				String msg = string.Format("Introspection Error : Ambiguous property invocation {0} for class {1}", name, c);
+				string msg = string.Format("Introspection Error : Ambiguous property invocation {0} for class {1}", name, c);
 				rlog.Error(msg);
 			}
 			return null;

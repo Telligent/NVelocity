@@ -35,7 +35,7 @@ namespace NVelocity.Util
 	{
 		/// <summary> Line separator for the OS we are operating on.
 		/// </summary>
-		private static readonly String EOL = Environment.NewLine;
+		private static readonly string EOL = Environment.NewLine;
 
 		/// <summary> <p>
 		/// Makes the first letter caps and the rest lowercase.
@@ -48,13 +48,13 @@ namespace NVelocity.Util
 		/// </summary>
 		/// <param name="data">capitalize this
 		/// </param>
-		/// <returns>String
+		/// <returns>string
 		///
 		/// </returns>
-		public static String FirstLetterCaps(String data)
+		public static string FirstLetterCaps(string data)
 		{
-			String firstLetter = data[..1].ToUpper();
-			String restLetters = data[1..].ToLower();
+			string firstLetter = data[..1].ToUpper();
+			string restLetters = data[1..].ToLower();
 			return firstLetter + restLetters;
 		}
 
@@ -64,12 +64,12 @@ namespace NVelocity.Util
 		/// </summary>
 		/// <param name="file">path to file.
 		/// </param>
-		/// <returns>String contents of the file.
+		/// <returns>string contents of the file.
 		///
 		/// </returns>
-		public static String FileContentsToString(String file)
+		public static string FileContentsToString(string file)
 		{
-			String contents = string.Empty;
+			string contents = string.Empty;
 
 			FileInfo f = new(file);
 
@@ -88,8 +88,8 @@ namespace NVelocity.Util
 				{
 					StreamReader fr = new(f.FullName);
 					char[] template = new char[(int)SupportClass.FileLength(f)];
-					fr.Read((Char[])template, 0, template.Length);
-					contents = new String(template);
+					fr.Read((char[])template, 0, template.Length);
+					contents = new string(template);
 					fr.Close();
 				}
 				catch (Exception e)
@@ -111,10 +111,10 @@ namespace NVelocity.Util
 		/// </summary>
 		/// <param name="path">Path to be normalized
 		/// </param>
-		/// <returns>String normalized path
+		/// <returns>string normalized path
 		///
 		/// </returns>
-		public static String NormalizePath(String path)
+		public static string NormalizePath(string path)
 		{
 			// Normalize the slashes and add leading slash if necessary
 			string normalized = path;
@@ -168,7 +168,7 @@ namespace NVelocity.Util
 					return (null);
 				}
 				// Trying to go outside our context
-				int index2 = normalized.LastIndexOf((Char)'/', index - 1);
+				int index2 = normalized.LastIndexOf((char)'/', index - 1);
 				normalized = normalized[..index2] + normalized[(index + 3)..];
 			}
 

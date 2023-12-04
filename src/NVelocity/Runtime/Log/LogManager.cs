@@ -16,38 +16,39 @@ namespace NVelocity.Runtime.Log
 {
 	using System;
 	using System.Collections;
+				using System.Collections.Generic;
 
-	/// <summary>
-	/// <p>
-	/// This class is responsible for instantiating the correct LoggingSystem
-	/// </p>
-	/// <p>
-	/// The approach is :
-	/// </p>
-	/// <ul>
-	/// <li>
-	/// First try to see if the user is passing in a living object
-	/// that is a LogSystem, allowing the app to give is living
-	/// custom loggers.
-	/// </li>
-	/// <li>
-	/// Next, run through the (possible) list of classes specified
-	/// specified as loggers, taking the first one that appears to
-	/// work.  This is how we support finding either log4j or
-	/// logkit, whichever is in the classpath, as both are
-	/// listed as defaults.
-	/// </li>
-	/// <li>
-	/// Finally, we turn to 'faith-based' logging, and hope that
-	/// logkit is in the classpath, and try for an AvalonLogSystem
-	/// as a final gasp.  After that, there is nothing we can do.
-	/// </li>
-	/// </ul>
-	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
-	/// <author> <a href="mailto:jon@latchkey.com">Jon S. Stevens</a></author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-	public class LogManager
+				/// <summary>
+				/// <p>
+				/// This class is responsible for instantiating the correct LoggingSystem
+				/// </p>
+				/// <p>
+				/// The approach is :
+				/// </p>
+				/// <ul>
+				/// <li>
+				/// First try to see if the user is passing in a living object
+				/// that is a LogSystem, allowing the app to give is living
+				/// custom loggers.
+				/// </li>
+				/// <li>
+				/// Next, run through the (possible) list of classes specified
+				/// specified as loggers, taking the first one that appears to
+				/// work.  This is how we support finding either log4j or
+				/// logkit, whichever is in the classpath, as both are
+				/// listed as defaults.
+				/// </li>
+				/// <li>
+				/// Finally, we turn to 'faith-based' logging, and hope that
+				/// logkit is in the classpath, and try for an AvalonLogSystem
+				/// as a final gasp.  After that, there is nothing we can do.
+				/// </li>
+				/// </ul>
+				/// </summary>
+				/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
+				/// <author> <a href="mailto:jon@latchkey.com">Jon S. Stevens</a></author>
+				/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
+				public class LogManager
 	{
 		/// <summary>  Creates a new logging system or returns an existing one
 		/// specified by the application.
@@ -57,7 +58,7 @@ namespace NVelocity.Runtime.Log
 			ILogSystem logSystem;
 			// if a logSystem was set as a configuration value, use that.
 			// This is any class the user specifies.
-			Object o = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
+			object o = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
 			logSystem = o as ILogSystem;
 			if (logSystem != null)
 			{
@@ -72,23 +73,25 @@ namespace NVelocity.Runtime.Log
 			// Note that the default value of this property contains both the
 			// AvalonLogSystem and the SimpleLog4JLogSystem for convenience -
 			// so we use whichever we find.
-			IList classes = new ArrayList();
-			Object obj = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS);
+			List<string> classes;
+			object obj = runtimeServices.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS);
 
 			// we might have a list, or not - so check
-			if (obj is IList)
+			if (obj is IEnumerable<string> es)
 			{
-				classes = (IList)obj;
+				classes = new List<string>(es);
 			}
-			else if (obj is String)
+			else if (obj is string s)
 			{
-				classes.Add(obj);
+				classes = new(1) { s };
 			}
+			else
+				classes = new();
 
 			// now run through the list, trying each.  It's ok to
 			// fail with a class not found, as we do this to also
 			// search out a default simple file logger
-			foreach (String className in classes)
+			foreach (string className in classes)
 			{
 				if (className != null && className.Length > 0)
 				{
@@ -135,7 +138,7 @@ namespace NVelocity.Runtime.Log
 			}
 			catch (ApplicationException applicationException)
 			{
-				String error =
+				string error =
 					string.Format(
 						"PANIC : NVelocity cannot find any of the specified or default logging systems in the classpath, or the classpath doesn't contain the necessary classes to support them. Please consult the documentation regarding logging. Exception : {0}",
 						applicationException);

@@ -81,7 +81,7 @@ leq
 		[Test]
 		public void Equivalence()
 		{
-			String eqTest = "#set($int = 1)\r\n" +
+												string eqTest = "#set($int = 1)\r\n" +
 											"#set($str = \"str\")\r\n" +
 											"#set($bool = true)\r\n" +
 											"#if( $int == $str)\r\n" +

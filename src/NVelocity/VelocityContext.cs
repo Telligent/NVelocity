@@ -17,6 +17,7 @@ namespace NVelocity
 	using Context;
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// General purpose implementation of the application Context
@@ -34,7 +35,7 @@ namespace NVelocity
 		/// <summary>
 		/// Storage for key/value pairs.
 		/// </summary>
-		private readonly Hashtable context = null;
+		private readonly Dictionary<string, object> context = null;
 
 		/// <summary>
 		/// Creates a new instance (with no inner context).
@@ -47,7 +48,7 @@ namespace NVelocity
 		/// <summary>
 		/// Creates a new instance with the provided storage (and no inner context).
 		/// </summary>
-		public VelocityContext(Hashtable context) : this(context, null)
+		public VelocityContext(Dictionary<string, object> context) : this(context, null)
 		{
 		}
 
@@ -73,9 +74,9 @@ namespace NVelocity
 		/// <param name="innerContext">Inner context.
 		///
 		/// </param>
-		public VelocityContext(Hashtable context, IContext innerContext) : base(innerContext)
+		public VelocityContext(Dictionary<string, object> context, IContext innerContext) : base(innerContext)
 		{
-			this.context = (context == null ? new Hashtable() : context);
+			this.context = (context == null ? new Dictionary<string, object>() : context);
 		}
 
 		/// <summary>
@@ -84,9 +85,12 @@ namespace NVelocity
 		/// </summary>
 		/// <param name="key">name of value to get</param>
 		/// <returns>value as object</returns>
-		public override Object InternalGet(String key)
+		public override object InternalGet(string key)
 		{
-			return context[key];
+			if (context.TryGetValue(key, out object value))
+				return value;
+			else
+				return null;
 		}
 
 		/// <summary>
@@ -95,8 +99,8 @@ namespace NVelocity
 		/// </summary>
 		/// <param name="key">name of value to store</param>
 		/// <param name="value">value to store</param>
-		/// <returns>previous value of key as Object</returns>
-		public override Object InternalPut(String key, Object value)
+		/// <returns>previous value of key as object</returns>
+		public override object InternalPut(string key, object value)
 		{
 			return context[key] = value;
 		}
@@ -107,7 +111,7 @@ namespace NVelocity
 		/// </summary>
 		/// <param name="key">name of value to check</param>
 		/// <returns>true if non-null value in store</returns>
-		public override bool InternalContainsKey(Object key)
+		public override bool InternalContainsKey(string key)
 		{
 			return context.ContainsKey(key);
 		}
@@ -116,9 +120,9 @@ namespace NVelocity
 		/// returns array of keys
 		/// </summary>
 		/// <returns>keys as []</returns>
-		public override Object[] InternalGetKeys()
+		public override string[] InternalGetKeys()
 		{
-			Object[] keys = new object[context.Keys.Count];
+			string[] keys = new string[context.Keys.Count];
 			context.Keys.CopyTo(keys, 0);
 			return keys;
 		}
@@ -129,9 +133,11 @@ namespace NVelocity
 		/// </summary>
 		/// <param name="key">name of value to remove</param>
 		/// <returns>value removed</returns>
-		public override Object InternalRemove(Object key)
+		public override object InternalRemove(string key)
 		{
-			Object o = context[key];
+			object o;
+			if (!context.TryGetValue(key, out o))
+				o = null;
 			context.Remove(key);
 			return o;
 		}

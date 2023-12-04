@@ -49,7 +49,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary> Get the InputStream that the Runtime will parse
 		/// to create a template.
 		/// </summary>
-		public override Stream GetResourceStream(String templateName)
+		public override Stream GetResourceStream(string templateName)
 		{
 			// Make sure we have a valid templateName.
 			if (string.IsNullOrEmpty(templateName))
@@ -61,7 +61,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				throw new ResourceNotFoundException("Need to specify a file name or file path!");
 			}
 
-			String template = StringUtils.NormalizePath(templateName);
+			string template = StringUtils.NormalizePath(templateName);
 
 			if (template.StartsWith("\\"))
 			{
@@ -70,7 +70,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			if (string.IsNullOrEmpty(template))
 			{
-				String msg =
+				string msg =
 					string.Format(
 						"File resource error : argument {0} contains .. and may be trying to access content outside of template root.  Rejected.",
 						template);
@@ -86,7 +86,7 @@ namespace NVelocity.Runtime.Resource.Loader
 			template = template.Replace('\\', '.');
 			template = template.Replace('/', '.');
 
-			foreach (String assemblyName in assemblyNames)
+			foreach (string assemblyName in assemblyNames)
 			{
 				Assembly assembly;
 

@@ -37,12 +37,12 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// returns the method name used to return this 'property'
 		/// </summary>
-		String MethodName { get; }
+		string MethodName { get; }
 
 		/// <summary>
 		/// invocation method - called when the 'get action' should be
 		/// performed and a value returned
 		/// </summary>
-		Object Invoke(Object o);
+		object Invoke(object o);
 	}
 }

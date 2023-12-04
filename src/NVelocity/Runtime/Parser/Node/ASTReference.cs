@@ -9,6 +9,7 @@ namespace NVelocity.Runtime.Parser.Node
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Reference types
@@ -36,17 +37,17 @@ namespace NVelocity.Runtime.Parser.Node
 	public class ASTReference : SimpleNode
 	{
 		private ReferenceType referenceType;
-		private String nullString;
-		private String rootString;
+		private string nullString;
+		private string rootString;
 		private bool escaped = false;
 		private bool computableReference = true;
-		private String escPrefix = string.Empty;
-		private String morePrefix = string.Empty;
-		private String identifier = string.Empty;
+		private string escPrefix = string.Empty;
+		private string morePrefix = string.Empty;
+		private string identifier = string.Empty;
 
-		private String literal = null;
+		private string literal = null;
 
-		private Stack referenceStack;
+		private Stack<object> referenceStack;
 
 		private int numChildren = 0;
 
@@ -61,18 +62,18 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Returns the 'root string', the reference key
 		/// </summary>
-		public String RootString
+		public string RootString
 		{
 			get { return rootString; }
 		}
 
 
-		public void SetLiteral(String value)
+		public void SetLiteral(string value)
 		{
 			literal ??= value;
 		}
 
-		public override String Literal
+		public override string Literal
 		{
 			get
 			{
@@ -86,12 +87,12 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 		/// <summary>Accept the visitor.</summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			// init our children
 			base.Init(context, data);
@@ -113,19 +114,19 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 		/// <summary>
-		/// gets an Object that 'is' the value of the reference
+		/// gets an object that 'is' the value of the reference
 		/// </summary>
-		public override Object Execute(Object o, IInternalContextAdapter context)
+		public override object Execute(object o, IInternalContextAdapter context)
 		{
 			if (referenceType == ReferenceType.Runt)
 				return null;
 
 			// get the root object from the context
-			Object result = GetVariableValue(context, rootString);
+			object result = GetVariableValue(context, rootString);
 
 			if (context.EventCartridge != null)
 			{
-				referenceStack = new Stack();
+				referenceStack = new Stack<object>();
 				referenceStack.Push(result);
 			}
 
@@ -186,7 +187,7 @@ namespace NVelocity.Runtime.Parser.Node
 				return true;
 			}
 
-			Object value = Execute(null, context);
+			object value = Execute(null, context);
 
 			// if this reference is escaped (\$foo) then we want to do one of two things :
 			// 1) if this is a reference in the context, then we want to print $foo
@@ -250,13 +251,13 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <param name="context">context to compute value with</param>
 		public override bool Evaluate(IInternalContextAdapter context)
 		{
-			Object value = Execute(null, context);
+			object value = Execute(null, context);
 
 			if (value == null)
 			{
 				return false;
 			}
-			else if (value is Boolean)
+			else if (value is bool)
 			{
 				return (bool)value;
 			}
@@ -266,7 +267,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		public override Object Value(IInternalContextAdapter context)
+		public override object Value(IInternalContextAdapter context)
 		{
 			return (computableReference ? Execute(null, context) : null);
 		}
@@ -277,14 +278,14 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		/// <seealso cref=" ASTSetDirective"/>
 		/// <param name="context">context object containing this reference</param>
-		/// <param name="value">Object to set as value</param>
+		/// <param name="value">object to set as value</param>
 		/// <returns>true if successful, false otherwise</returns>
-		public bool SetValue(IInternalContextAdapter context, Object value)
+		public bool SetValue(IInternalContextAdapter context, object value)
 		{
 			// The rootOfIntrospection is the object we will
 			// retrieve from the Context. This is the base
 			// object we will apply reflection to.
-			Object result = GetVariableValue(context, rootString);
+			object result = GetVariableValue(context, rootString);
 
 			if (result == null)
 			{
@@ -331,13 +332,13 @@ namespace NVelocity.Runtime.Parser.Node
 						StringBuilder sb = new();
 						sb.Append(identifier);
 
-						if (Char.IsLower(sb[0]))
+						if (char.IsLower(sb[0]))
 						{
-							sb[0] = Char.ToUpper(sb[0]);
+							sb[0] = char.ToUpper(sb[0]);
 						}
 						else
 						{
-							sb[0] = Char.ToLower(sb[0]);
+							sb[0] = char.ToLower(sb[0]);
 						}
 
 						p = runtimeServices.Introspector.GetProperty(c, sb.ToString());
@@ -349,7 +350,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 
 					// and if we get here, getMethod() didn't chuck an exception...
-					Object[] args = Array.Empty<object>();
+					object[] args = Array.Empty<object>();
 					p.SetValue(result, value, args);
 				}
 				else
@@ -401,12 +402,12 @@ namespace NVelocity.Runtime.Parser.Node
 			return true;
 		}
 
-		public static Object GetVariableValue(IContext context, String variable)
+		public static object GetVariableValue(IContext context, string variable)
 		{
 			return context.Get(variable);
 		}
 
-		private String Root
+		private string Root
 		{
 			get
 			{

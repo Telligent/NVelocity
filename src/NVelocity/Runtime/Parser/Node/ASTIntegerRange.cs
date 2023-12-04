@@ -17,8 +17,9 @@ namespace NVelocity.Runtime.Parser.Node
 	using Context;
 	using System;
 	using System.Collections;
+				using System.Collections.Generic;
 
-	public class ASTIntegerRange : SimpleNode
+				public class ASTIntegerRange : SimpleNode
 	{
 		public ASTIntegerRange(int id) : base(id)
 		{
@@ -31,7 +32,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -41,12 +42,12 @@ namespace NVelocity.Runtime.Parser.Node
 		/// right value range
 		/// </summary>
 		/// <param name="context">app context used if Left or Right of .. is a ref</param>
-		/// <returns>Object array of Integers</returns>
-		public override Object Value(IInternalContextAdapter context)
+		/// <returns>object array of Integers</returns>
+		public override object Value(IInternalContextAdapter context)
 		{
 			// get the two range ends
-			Object left = GetChild(0).Value(context);
-			Object right = GetChild(1).Value(context);
+			object left = GetChild(0).Value(context);
+			object right = GetChild(1).Value(context);
 
 			// if either is null, lets log and bail
 			if (left == null || right == null)
@@ -59,19 +60,19 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			// if not an Integer, not much we can do either
-			if (left is not Int32 || right is not Int32)
+			if (left is not int || right is not int)
 			{
 				runtimeServices.Error(
 					string.Format(
 						"{0} side of range operator is not a valid type. Currently only integers (1,2,3...) and Integer type is supported. {1} [line {2}, column {3}]",
-						(left is not Int32 ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
+						(left is not int ? "Left" : "Right"), context.CurrentTemplateName, Line, Column));
 
 				return null;
 			}
 
 			// get the two integer values of the ends of the range
-			int l = ((Int32)left);
-			int r = ((Int32)right);
+			int l = ((int)left);
+			int r = ((int)right);
 
 			// find out how many there are
 			int num = Math.Abs(l - r);
@@ -81,7 +82,7 @@ namespace NVelocity.Runtime.Parser.Node
 			int delta = (l >= r) ? -1 : 1;
 
 			// make the vector and fill it
-			ArrayList foo = new(num);
+			List<object> foo = new(num);
 			int val = l;
 
 			for (int i = 0; i < num; i++)

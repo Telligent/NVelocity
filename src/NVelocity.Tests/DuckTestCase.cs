@@ -36,7 +36,7 @@ namespace NVelocity
 
 		public object Invoke(string method, params object[] args)
 		{
-			String arguments = string.Empty;
+												string arguments = string.Empty;
 
 			foreach (object arg in args)
 			{

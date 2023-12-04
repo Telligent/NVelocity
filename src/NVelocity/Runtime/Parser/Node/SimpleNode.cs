@@ -118,14 +118,14 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public virtual Object Accept(IParserVisitor visitor, Object data)
+		public virtual object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public Object ChildrenAccept(IParserVisitor visitor, Object data)
+		public object ChildrenAccept(IParserVisitor visitor, object data)
 		{
 			if (children != null)
 			{
@@ -140,14 +140,14 @@ namespace NVelocity.Runtime.Parser.Node
 		/* You can override these two methods in subclasses of SimpleNode to
 			customize the way the node appears when the tree is dumped.  If
 			your output uses more than one line you should override
-			toString(String), otherwise overriding toString() is probably all
+			toString(string), otherwise overriding toString() is probably all
 			you need to do. */
 
-		//    public String toString()
+		//    public string toString()
 		// {
 		//    return ParserTreeConstants.jjtNodeName[id];
 		// }
-		public String ToString(String prefix)
+		public string ToString(string prefix)
 		{
 			return prefix + ToString();
 		}
@@ -155,7 +155,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/* Override this method if you want to customize how the node dumps
 		out its children. */
 
-		public void Dump(String prefix)
+		public void Dump(string prefix)
 		{
 			Console.Out.WriteLine(ToString(prefix));
 			if (children != null)
@@ -187,7 +187,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		public virtual Object Init(IInternalContextAdapter context, Object data)
+		public virtual object Init(IInternalContextAdapter context, object data)
 		{
 			/*
 			* hold onto the RuntimeServices
@@ -217,7 +217,7 @@ namespace NVelocity.Runtime.Parser.Node
 			return false;
 		}
 
-		public virtual Object Value(IInternalContextAdapter context)
+		public virtual object Value(IInternalContextAdapter context)
 		{
 			return null;
 		}
@@ -234,7 +234,7 @@ namespace NVelocity.Runtime.Parser.Node
 			return true;
 		}
 
-		public virtual Object Execute(Object o, IInternalContextAdapter context)
+		public virtual object Execute(object o, IInternalContextAdapter context)
 		{
 			return null;
 		}

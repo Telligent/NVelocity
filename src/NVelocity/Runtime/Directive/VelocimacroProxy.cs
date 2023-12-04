@@ -19,7 +19,7 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Runtime.Parser.Node;
 	using Parser;
 	using System;
-	using System.Collections;
+	using System.Collections.Generic;
 	using System.IO;
 	using Visitor;
 
@@ -31,21 +31,21 @@ namespace NVelocity.Runtime.Directive
 	/// <version> $Id: VelocimacroProxy.cs,v 1.4 2003/10/27 13:54:10 corts Exp $ </version>
 	public class VelocimacroProxy : Directive
 	{
-		private String macroName = string.Empty;
-		private String macroBody = string.Empty;
-		private String[] argArray = null;
+		private string macroName = string.Empty;
+		private string macroBody = string.Empty;
+		private string[] argArray = null;
 		private SimpleNode nodeTree = null;
 		private int numMacroArgs = 0;
-		private String ns = string.Empty;
+		private string ns = string.Empty;
 
 		private bool init = false;
-		private String[] callingArgs;
+		private string[] callingArgs;
 		private int[] callingArgTypes;
-		private readonly Hashtable proxyArgHash;
+		private readonly Dictionary<string, VMProxyArg> proxyArgHash;
 
 		public VelocimacroProxy()
 		{
-			proxyArgHash = new Hashtable();
+			proxyArgHash = new();
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace NVelocity.Runtime.Directive
 					{
 						// we can do this as VMProxyArgs don't change state. They change
 						// the context.
-						VMProxyArg arg = (VMProxyArg)proxyArgHash[argArray[i]];
+						VMProxyArg arg = proxyArgHash[argArray[i]];
 						vmContext.AddVMProxyArg(arg);
 					}
 
@@ -133,7 +133,7 @@ namespace NVelocity.Runtime.Directive
 		/// basic VM setup.  Sets up the proxy args for this
 		/// use, and parses the tree
 		/// </summary>
-		public bool setupMacro(String[] callArgs, int[] callArgTypes)
+		public bool setupMacro(string[] callArgs, int[] callArgTypes)
 		{
 			setupProxyArgs(callArgs, callArgTypes);
 
@@ -146,7 +146,7 @@ namespace NVelocity.Runtime.Directive
 		/// parses the macro.  We need to do this here, at init time, or else
 		/// the local-scope template feature is hard to get to work :)
 		/// </summary>
-		private void parseTree(String[] callArgs)
+		private void parseTree(string[] callArgs)
 		{
 			try
 			{
@@ -161,11 +161,11 @@ namespace NVelocity.Runtime.Directive
 
 				// we only do this at init time, so it's the overhead
 				// is irrelevant
-				Hashtable hm = new();
+				Dictionary<string, string> hm = new();
 
 				for (int i = 1; i < argArray.Length; i++)
 				{
-					String arg = callArgs[i - 1];
+					string arg = callArgs[i - 1];
 
 					// if the calling arg is indeed a reference
 					// then we add to the map.  We ignore other
@@ -187,7 +187,7 @@ namespace NVelocity.Runtime.Directive
 			}
 		}
 
-		private void setupProxyArgs(String[] callArgs, int[] callArgTypes)
+		private void setupProxyArgs(string[] callArgs, int[] callArgTypes)
 		{
 			// for each of the args, make a ProxyArg
 			for (int i = 1; i < argArray.Length; i++)
@@ -200,11 +200,11 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// Gets the args to the VM from the instance-use AST
 		/// </summary>
-		private String[] getArgArray(INode node)
+		private string[] getArgArray(INode node)
 		{
 			int numArgs = node.ChildrenCount;
 
-			String[] args = new String[numArgs];
+			string[] args = new string[numArgs];
 			callingArgTypes = new int[numArgs];
 
 			// eat the args
@@ -247,7 +247,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// The name of this Velocimacro.
 		/// </summary>
-		public override String Name
+		public override string Name
 		{
 			get { return macroName; }
 			set { macroName = value; }
@@ -265,7 +265,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// Sets the array of arguments specified in the macro definition
 		/// </summary>
-		public String[] ArgArray
+		public string[] ArgArray
 		{
 			set
 			{
@@ -297,12 +297,12 @@ namespace NVelocity.Runtime.Directive
 		/// 
 		/// Note : it must not be modified.
 		/// </summary>
-		public String MacroBody
+		public string MacroBody
 		{
 			set { macroBody = value; }
 		}
 
-		public String Namespace
+		public string Namespace
 		{
 			set { ns = value; }
 		}

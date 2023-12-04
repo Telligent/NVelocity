@@ -40,18 +40,18 @@ namespace NVelocity.Util.Introspection
 
 		/// <summary>  returns the method name used to set this 'property'
 		/// </summary>
-		String MethodName { get; }
+		string MethodName { get; }
 
 		/// <summary>  method used to set the value in the object
 		/// *
 		/// </summary>
-		/// <param name="o">Object on which the method will be called with the arg
+		/// <param name="o">object on which the method will be called with the arg
 		/// </param>
 		/// <param name="arg">value to be set
 		/// </param>
 		/// <returns> the value returned from the set operation (impl specific)
 		/// 
 		/// </returns>
-		Object Invoke(Object o, Object arg);
+		object Invoke(object o, object arg);
 	}
 }

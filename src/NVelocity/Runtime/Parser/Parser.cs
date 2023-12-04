@@ -20,7 +20,8 @@ namespace NVelocity.Runtime.Parser
 	using Node;
 	using System;
 	using System.Collections;
-	using System.Diagnostics;
+				using System.Collections.Generic;
+				using System.Diagnostics;
 	using System.IO;
 
 	/// <summary> This class is responsible for parsing a Velocity
@@ -72,7 +73,7 @@ namespace NVelocity.Runtime.Parser
 		private int jj_gc = 0;
 
 		//UPGRADE_NOTE: The initialization of  'expEntries' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private ArrayList expEntries;
+		private List<int[]> expEntries;
 		private int[] jj_expEntry;
 		private int jj_kind = -1;
 		//UPGRADE_NOTE: The initialization of  'lastTokens' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
@@ -81,20 +82,20 @@ namespace NVelocity.Runtime.Parser
 
 		internal ParserState nodeTree;
 
-		/// <summary>  This Hashtable contains a list of all of the dynamic directives.
+		/// <summary>  This collection contains a list of all of the dynamic directives.
 		/// </summary>
 		//UPGRADE_NOTE: The initialization of  'directives' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private IDirectiveManager directives;
 
 		/// <summary>  Name of current template we are parsing.  Passed to us in parse()
 		/// </summary>
-		internal String currentTemplateName = string.Empty;
+		internal string currentTemplateName = string.Empty;
 
 		internal VelocityCharStream velcharstream = null;
 
 		private readonly IRuntimeServices runtimeServices = null;
 
-		protected Stack directiveStack = new();
+		protected Stack<Directive> directiveStack = new();
 
 		/// <summary> 
 		/// This constructor was added to allow the re-use of parsers.
@@ -125,7 +126,7 @@ namespace NVelocity.Runtime.Parser
 			directives = null;
 			jj_la1 = new int[53];
 			callsArray = new Calls[12];
-			expEntries = new ArrayList();
+			expEntries = new List<int[]>();
 			lastTokens = new int[100];
 		}
 
@@ -161,7 +162,7 @@ namespace NVelocity.Runtime.Parser
 		/// method and re-initializing the lexer with
 		/// the new stream that we want parsed.
 		/// </summary>
-		public SimpleNode Parse(TextReader reader, String templateName)
+		public SimpleNode Parse(TextReader reader, string templateName)
 		{
 			SimpleNode sn = null;
 
@@ -204,9 +205,8 @@ namespace NVelocity.Runtime.Parser
 		}
 
 		/// <summary>  This method finds out of the directive exists in the directives
-		/// Hashtable.
 		/// </summary>
-		public bool IsDirective(String directive)
+		public bool IsDirective(string directive)
 		{
 			return (directives.Contains(directive));
 		}
@@ -214,11 +214,11 @@ namespace NVelocity.Runtime.Parser
 		/// <summary> Produces a processed output for an escaped control or
 		/// pluggable directive
 		/// </summary>
-		private String EscapedDirective(String strImage)
+		private string EscapedDirective(string strImage)
 		{
 			int iLast = strImage.LastIndexOf("\\");
 
-			String strDirective = strImage[(iLast + 1)..];
+			string strDirective = strImage[(iLast + 1)..];
 
 			bool bRecognizedDirective = false;
 			string name = strDirective[1..];
@@ -711,7 +711,7 @@ namespace NVelocity.Runtime.Parser
 				* EscapedDirective()
 				*/
 				token = ConsumeToken(ParserConstants.WORD);
-				String directiveName = token.Image[1..];
+				string directiveName = token.Image[1..];
 
 				directive = directives.Create(directiveName, directiveStack);
 
@@ -3975,7 +3975,7 @@ namespace NVelocity.Runtime.Parser
 
 		public ParseException GenerateParseException()
 		{
-			ArrayList temp_arraylist;
+			List<int[]> temp_arraylist;
 			temp_arraylist = expEntries;
 			temp_arraylist.RemoveRange(0, temp_arraylist.Count);
 			bool[] la1tokens = new bool[62];

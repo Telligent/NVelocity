@@ -21,14 +21,14 @@ namespace NVelocity.Context
 		/// <summary>
 		/// get the current template name
 		/// </summary>
-		/// <returns>String current template name</returns>
-		String CurrentTemplateName { get; }
+		/// <returns>string current template name</returns>
+		string CurrentTemplateName { get; }
 
 		/// <summary>
 		/// Returns the template name stack in form of an array.
 		/// </summary>
-		/// <returns>Object[] with the template name stack contents.</returns>
-		Object[] TemplateNameStack { get; }
+		/// <returns>object[] with the template name stack contents.</returns>
+		object[] TemplateNameStack { get; }
 
 		/// <summary>
 		/// temporary fix to enable #include() to figure out
@@ -40,7 +40,7 @@ namespace NVelocity.Context
 		/// set the current template name on top of stack
 		/// </summary>
 		/// <param name="s">current template name</param>
-		void PushCurrentTemplateName(String s);
+		void PushCurrentTemplateName(string s);
 
 		/// <summary>
 		/// remove the current template name from stack
@@ -53,7 +53,7 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key">key to find in cache</param>
 		/// <returns>cache object</returns>
-		IntrospectionCacheData ICacheGet(Object key);
+		IntrospectionCacheData ICacheGet(object key);
 
 		/// <summary>
 		/// Sets the <see cref="IntrospectionCacheData"/> object 
@@ -61,6 +61,6 @@ namespace NVelocity.Context
 		/// </summary>
 		/// <param name="key"> key </param>
 		/// <param name="o"> IntrospectionCacheData object to place in cache</param>
-		void ICachePut(Object key, IntrospectionCacheData o);
+		void ICachePut(object key, IntrospectionCacheData o);
 	}
 }

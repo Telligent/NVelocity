@@ -24,9 +24,9 @@ namespace NVelocity.Runtime.Parser.Node
 		/// special tokens, this is simply a way to
 		/// extract them.
 		/// </summary>
-		public static String specialText(Token t)
+		public static string specialText(Token t)
 		{
-			String specialText = string.Empty;
+			string specialText = string.Empty;
 
 			if (t.SpecialToken == null || t.SpecialToken.Image.StartsWith("##"))
 			{
@@ -42,7 +42,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			while (specialToken != null)
 			{
-				String st = specialToken.Image;
+				string st = specialToken.Image;
 
 				StringBuilder sb = new();
 
@@ -97,7 +97,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 						if (term)
 						{
-							String foo = st[i..j];
+							string foo = st[i..j];
 							sb.Append(foo);
 							i = j;
 						}
@@ -115,7 +115,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>  complete node literal
 		/// *
 		/// </summary>
-		public static String tokenLiteral(Token t)
+		public static string tokenLiteral(Token t)
 		{
 			return specialText(t) + t.Image;
 		}
@@ -131,7 +131,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// be transformed into "candy.jpg" before
 		/// the method is executed.
 		/// </summary>
-		public static String interpolate(String argStr, IContext vars)
+		public static string interpolate(string argStr, IContext vars)
 		{
 			StringBuilder argBuf = new();
 
@@ -146,7 +146,7 @@ namespace NVelocity.Runtime.Parser.Node
 						for (++cIdx; cIdx < argStr.Length; ++cIdx)
 						{
 							ch = argStr[cIdx];
-							if (ch == '_' || ch == '-' || Char.IsLetterOrDigit(ch))
+							if (ch == '_' || ch == '-' || char.IsLetterOrDigit(ch))
 							{
 								nameBuf.Append(ch);
 							}
@@ -162,7 +162,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 						if (nameBuf.Length > 0)
 						{
-							Object value = vars.Get(nameBuf.ToString());
+							object value = vars.Get(nameBuf.ToString());
 
 							if (value == null)
 							{
@@ -170,7 +170,7 @@ namespace NVelocity.Runtime.Parser.Node
 							}
 							else
 							{
-								//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
+								//UPGRADE_TODO: The equivalent in .NET for method 'java.object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 								argBuf.Append(value.ToString());
 							}
 						}

@@ -18,8 +18,10 @@ namespace NVelocity.Util.Introspection
 	using Runtime;
 	using System;
 	using System.Collections;
-	using System.Reflection;
-	using System.Text;
+				using System.Collections.Generic;
+				using System.Reflection;
+				using System.Runtime.InteropServices.ObjectiveC;
+				using System.Text;
 
 	/// <summary>  Implementation of Uberspect to provide the default introspective
 	/// functionality of Velocity
@@ -68,7 +70,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Method
 		/// </summary>
-		public IVelMethod GetMethod(Object obj, String methodName, Object[] args, Info i)
+		public IVelMethod GetMethod(object obj, string methodName, object[] args, Info i)
 		{
 			if (obj == null)
 			{
@@ -83,7 +85,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Property getter.
 		/// </summary>
-		public IVelPropertyGet GetPropertyGet(Object obj, String identifier, Info i)
+		public IVelPropertyGet GetPropertyGet(object obj, string identifier, Info i)
 		{
 			AbstractExecutor executor;
 
@@ -116,7 +118,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Property setter.
 		/// </summary>
-		public IVelPropertySet GetPropertySet(Object obj, String identifier, Object arg, Info i)
+		public IVelPropertySet GetPropertySet(object obj, string identifier, object arg, Info i)
 		{
 			Type type = obj.GetType();
 
@@ -128,7 +130,7 @@ namespace NVelocity.Util.Introspection
 				*  first, we introspect for the set<identifier> setter method
 				*/
 
-				Object[] parameters = new Object[] { arg };
+				object[] parameters = new object[] { arg };
 
 				try
 				{
@@ -144,13 +146,13 @@ namespace NVelocity.Util.Introspection
 					StringBuilder sb = new("set");
 					sb.Append(identifier);
 
-					if (Char.IsLower(sb[3]))
+					if (char.IsLower(sb[3]))
 					{
-						sb[3] = Char.ToUpper(sb[3]);
+						sb[3] = char.ToUpper(sb[3]);
 					}
 					else
 					{
-						sb[3] = Char.ToLower(sb[3]);
+						sb[3] = char.ToLower(sb[3]);
 					}
 
 					method = GetMethod(obj, sb.ToString(), parameters, i);
@@ -164,7 +166,7 @@ namespace NVelocity.Util.Introspection
 				// right now, we only support the IDictionary interface
 				if (typeof(IDictionary).IsAssignableFrom(type))
 				{
-					Object[] parameters = new Object[] { new(), new() };
+					object[] parameters = new object[] { new(), new() };
 
 					method = GetMethod(obj, "Add", parameters, i);
 
@@ -194,7 +196,7 @@ namespace NVelocity.Util.Introspection
 				get { return true; }
 			}
 
-			public String MethodName
+			public string MethodName
 			{
 				get { return method.Name; }
 			}
@@ -207,7 +209,7 @@ namespace NVelocity.Util.Introspection
 			MethodInfo method = null;
 			Func<object, object[], object> invoker = null;
 
-			public Object Invoke(Object o, Object[] parameters)
+			public object Invoke(object o, object[] parameters)
 			{
 				if (invoker == null)
 					return null;
@@ -233,7 +235,7 @@ namespace NVelocity.Util.Introspection
 				get { return true; }
 			}
 
-			public String MethodName
+			public string MethodName
 			{
 				get
 				{
@@ -251,7 +253,7 @@ namespace NVelocity.Util.Introspection
 				}
 			}
 
-			public Object Invoke(Object o)
+			public object Invoke(object o)
 			{
 				return abstractExecutor.Execute(o);
 			}
@@ -260,7 +262,7 @@ namespace NVelocity.Util.Introspection
 		public class VelSetterImpl : IVelPropertySet
 		{
 			internal IVelMethod velMethod = null;
-			internal String putKey = null;
+			internal string putKey = null;
 
 			public VelSetterImpl(IVelMethod velMethod)
 			{
@@ -278,14 +280,14 @@ namespace NVelocity.Util.Introspection
 				get { return true; }
 			}
 
-			public String MethodName
+			public string MethodName
 			{
 				get { return velMethod.MethodName; }
 			}
 
-			public Object Invoke(Object o, Object value)
+			public object Invoke(object o, object value)
 			{
-				ArrayList al = new();
+				List<object> al = new();
 
 				if (putKey != null)
 				{

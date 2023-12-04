@@ -37,7 +37,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// <version> $Id: ASTIdentifier.cs,v 1.5 2004/12/27 05:55:30 corts Exp $ </version>
 	public class ASTIdentifier : SimpleNode
 	{
-		private String identifier = string.Empty;
+		private string identifier = string.Empty;
 
 		// This is really immutable after the init, so keep one for this node
 		protected Info uberInfo;
@@ -53,7 +53,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -62,7 +62,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// simple init - don't do anything that is context specific.
 		/// just get what we need from the AST, which is static.
 		/// </summary>
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			base.Init(context, data);
 
@@ -75,7 +75,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// invokes the method on the object passed in
 		/// </summary>
-		public override Object Execute(Object o, IInternalContextAdapter context)
+		public override object Execute(object o, IInternalContextAdapter context)
 		{
 			var c = o.GetType();
 			bool isString = c == typeof(string);
@@ -152,7 +152,7 @@ namespace NVelocity.Runtime.Parser.Node
 				if (ec == null)
 				{
 					// no event cartridge to override. Just throw
-					String message = String.Format(
+					string message = string.Format(
 						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
 						velPropertyGet.MethodName, o != null ? c.FullName : string.Empty,
 						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
@@ -167,7 +167,7 @@ namespace NVelocity.Runtime.Parser.Node
 					}
 					catch (Exception)
 					{
-						String message = String.Format(
+						string message = string.Format(
 							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw an exception",
 							velPropertyGet.MethodName, o != null ? c.FullName : string.Empty,
 							uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);

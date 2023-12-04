@@ -19,14 +19,14 @@ namespace NVelocity.App.Events
 	/// <summary>
 	/// Lets an app approve / veto writing a log message when RHS of #set() is null.
 	/// </summary>
-	public delegate void NullSetEventHandler(Object sender, NullSetEventArgs e);
+	public delegate void NullSetEventHandler(object sender, NullSetEventArgs e);
 
 	public class NullSetEventArgs : EventArgs
 	{
-		private Boolean shouldLog = true;
-		private readonly String lhs, rhs;
+		private bool shouldLog = true;
+		private readonly string lhs, rhs;
 
-		public NullSetEventArgs(String lhs, String rhs)
+		public NullSetEventArgs(string lhs, string rhs)
 		{
 			this.lhs = lhs;
 			this.rhs = rhs;
@@ -35,7 +35,7 @@ namespace NVelocity.App.Events
 		/// <summary>
 		/// Reference literal of left-hand-side of set statement
 		/// </summary>
-		public String LHS
+		public string LHS
 		{
 			get { return lhs; }
 		}
@@ -43,12 +43,12 @@ namespace NVelocity.App.Events
 		/// <summary>
 		/// reference literal of right-hand-side of set statement
 		/// </summary>
-		public String RHS
+		public string RHS
 		{
 			get { return rhs; }
 		}
 
-		public Boolean ShouldLog
+		public bool ShouldLog
 		{
 			get { return shouldLog; }
 			set { shouldLog = value; }

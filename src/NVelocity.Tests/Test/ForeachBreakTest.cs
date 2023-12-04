@@ -84,13 +84,13 @@ $i#break
 #end~#end, #end");
 		}
 
-		protected void assertEvalEquals(String expected, String template)
+		protected void assertEvalEquals(string expected, string template)
 		{
-			String result = evaluate(template);
+												string result = evaluate(template);
 			Assert.AreEqual(expected, result);
 		}
 
-		private String evaluate(String template)
+		private string evaluate(string template)
 		{
 			StringWriter writer = new();
 			// use template as its own name, since our templates are short

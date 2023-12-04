@@ -67,7 +67,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// Return name of this directive.
 		/// </summary>
-		public override String Name
+		public override string Name
 		{
 			get { return "include"; }
 			set { throw new NotSupportedException(); }
@@ -79,8 +79,8 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.LINE; }
 		}
 
-		private String outputMsgStart = string.Empty;
-		private String outputMsgEnd = string.Empty;
+		private string outputMsgStart = string.Empty;
+		private string outputMsgEnd = string.Empty;
 
 		/// <summary>
 		/// simple init - init the tree and get the elementKey from
@@ -123,7 +123,7 @@ namespace NVelocity.Runtime.Directive
 				}
 				else
 				{
-					//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
+					//UPGRADE_TODO: The equivalent in .NET for method 'java.object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 					runtimeServices.Error(string.Format("#include() error : invalid argument type : {0}", n.ToString()));
 					OutputErrorToStream(writer, string.Format("error with arg {0} please see log.", i));
 				}
@@ -148,7 +148,7 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// does it have a value?  If you have a null reference, then no.
-			Object val = node.Value(context);
+			object val = node.Value(context);
 			if (val == null)
 			{
 				runtimeServices.Error("#include() error :  null argument");
@@ -156,7 +156,7 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// get the path
-			String arg = val.ToString();
+			string arg = val.ToString();
 
 			Resource resource = null;
 
@@ -166,11 +166,11 @@ namespace NVelocity.Runtime.Directive
 			{
 				// get the resource, and assume that we use the encoding of the current template
 				// the 'current resource' can be null if we are processing a stream....
-				String encoding;
+				string encoding;
 
 				if (current == null)
 				{
-					encoding = (String)runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
+					encoding = (string)runtimeServices.GetProperty(RuntimeConstants.INPUT_ENCODING);
 				}
 				else
 				{
@@ -199,7 +199,7 @@ namespace NVelocity.Runtime.Directive
 				return false;
 			}
 
-			writer.Write((String)resource.Data);
+			writer.Write((string)resource.Data);
 			return true;
 		}
 
@@ -208,7 +208,7 @@ namespace NVelocity.Runtime.Directive
 		/// are valid property strings.  Mainly used for end-user template
 		/// debugging.
 		/// </summary>
-		private void OutputErrorToStream(TextWriter writer, String msg)
+		private void OutputErrorToStream(TextWriter writer, string msg)
 		{
 			if (outputMsgStart != null && outputMsgEnd != null)
 			{

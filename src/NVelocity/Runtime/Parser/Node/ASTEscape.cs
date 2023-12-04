@@ -13,7 +13,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class ASTEscape : SimpleNode
 	{
-		private String text = string.Empty;
+		private string text = string.Empty;
 
 		public ASTEscape(int id) : base(id)
 		{
@@ -25,12 +25,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public override Object Accept(IParserVisitor visitor, Object data)
+		public override object Accept(IParserVisitor visitor, object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override Object Init(IInternalContextAdapter context, Object data)
+		public override object Init(IInternalContextAdapter context, object data)
 		{
 			text = FirstToken.Image;
 			return data;

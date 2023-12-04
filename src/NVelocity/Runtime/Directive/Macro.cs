@@ -21,6 +21,7 @@ namespace NVelocity.Runtime.Directive
 	using System.Collections;
 	using System.IO;
 	using System.Text;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Macro implements the macro definition directive of VTL.
@@ -41,7 +42,7 @@ namespace NVelocity.Runtime.Directive
 	/// <version> $Id: Macro.cs,v 1.3 2003/10/27 13:54:10 corts Exp $</version>
 	public class Macro : Directive
 	{
-		public override String Name
+		public override string Name
 		{
 			get { return "macro"; }
 			set { throw new NotSupportedException(); }
@@ -73,7 +74,7 @@ namespace NVelocity.Runtime.Directive
 		/// VelocimacroProxy objects, and if not currently used, adds it
 		/// to the macro Factory
 		/// </summary>
-		public static void processAndRegister(IRuntimeServices rs, INode node, String sourceTemplate)
+		public static void processAndRegister(IRuntimeServices rs, INode node, string sourceTemplate)
 		{
 			// There must be at least one arg to  #macro,
 			// the name of the VM.  Note that 0 following 
@@ -92,7 +93,7 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// get the arguments to the use of the VM
-			String[] argArray = getArgArray(node);
+			string[] argArray = getArgArray(node);
 
 			// now, try and eat the code block. Pass the root.
 			IList macroArray = getASTAsStringArray(node.GetChild(numArgs - 1));
@@ -105,7 +106,7 @@ namespace NVelocity.Runtime.Directive
 				temp.Append(macroArray[i]);
 			}
 
-			String macroBody = temp.ToString();
+			string macroBody = temp.ToString();
 
 			// now, try to add it.  The Factory controls permissions, 
 			// so just give it a whack...
@@ -117,14 +118,14 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>  creates an array containing the literal
 		/// strings in the macro argument
 		/// </summary>
-		private static String[] getArgArray(INode node)
+		private static string[] getArgArray(INode node)
 		{
 			// remember : this includes the block tree
 			int numArgs = node.ChildrenCount;
 
 			numArgs--; // avoid the block tree...
 
-			String[] argArray = new String[numArgs];
+			string[] argArray = new string[numArgs];
 
 			int i = 0;
 
@@ -163,7 +164,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>  Returns an array of the literal rep of the AST
 		/// </summary>
-		private static IList getASTAsStringArray(INode rootNode)
+		private static List<string> getASTAsStringArray(INode rootNode)
 		{
 			// this assumes that we are passed in the root 
 			// node of the code block
@@ -172,7 +173,7 @@ namespace NVelocity.Runtime.Directive
 
 			// now, run down the part of the tree bounded by
 			// our first and last tokens
-			ArrayList list = new();
+			List<string> list = new();
 
 			Token t = rootNode.FirstToken;
 

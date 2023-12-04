@@ -31,8 +31,8 @@ namespace NVelocity.Test
 	public class VelocityAppTestCase : BaseTestCase
 	{
 		private readonly StringWriter compare1 = new();
-		private readonly String input1 = "My name is $name -> $Floog";
-		private readonly String result1 = "My name is jason -> floogie woogie";
+		private readonly string input1 = "My name is $name -> $Floog";
+		private readonly string result1 = "My name is jason -> floogie woogie";
 
 		public VelocityAppTestCase()
 		{

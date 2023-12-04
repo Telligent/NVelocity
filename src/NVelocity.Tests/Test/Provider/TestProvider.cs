@@ -26,14 +26,14 @@ namespace NVelocity.Test.Provider
 	/// <author><a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
 	public class TestProvider
 	{
-		public static String PUB_STAT_STRING = "Public Static String";
+		public static string PUB_STAT_STRING = "Public Static String";
 
-		internal String title = "lunatic";
+		internal string title = "lunatic";
 		//internal bool state;
-		internal Object ob;
+		internal object ob;
 		internal int stateint;
 
-		public virtual String Name
+		public virtual string Name
 		{
 			get { return "jason"; }
 		}
@@ -43,13 +43,13 @@ namespace NVelocity.Test.Provider
 			get
 			{
 				Stack stack = new();
-				Object temp_object;
+																object temp_object;
 				temp_object = "stack element 1";
 				stack.Push(temp_object);
-				Object temp_object2;
+																object temp_object2;
 				temp_object2 = "stack element 2";
 				stack.Push(temp_object2);
-				Object temp_object3;
+																object temp_object3;
 				temp_object3 = "stack element 3";
 				stack.Push(temp_object3);
 				return stack;
@@ -109,9 +109,9 @@ namespace NVelocity.Test.Provider
 			get
 			{
 				Hashtable h = new();
-				SupportClass.PutElement(h, "key0", "value0");
-				SupportClass.PutElement(h, "key1", "value1");
-				SupportClass.PutElement(h, "key2", "value2");
+				h["key0"] = "value0";
+				h["key1"] = "value1";
+				h["key2"] = "value2";
 
 				return h;
 			}
@@ -130,25 +130,25 @@ namespace NVelocity.Test.Provider
 			}
 		}
 
-		public virtual String Title
+		public virtual string Title
 		{
 			get { return title; }
 
 			set { title = value; }
 		}
 
-		public virtual Object[] Menu
+		public virtual object[] Menu
 		{
 			get
 			{
-				//ArrayList al = new ArrayList();
-				Object[] menu = new Object[3];
+																//ArrayList al = new ArrayList();
+																object[] menu = new object[3];
 				for (int i = 0; i < 3; i++)
 				{
 					Hashtable item = new();
-					SupportClass.PutElement(item, "id", "item" + Convert.ToString(i + 1));
-					SupportClass.PutElement(item, "name", "name" + Convert.ToString(i + 1));
-					SupportClass.PutElement(item, "label", "label" + Convert.ToString(i + 1));
+					item["id"] = "item" + Convert.ToString(i + 1);
+					item["name"] = "name" + Convert.ToString(i + 1);
+					item["label"] = "label" + Convert.ToString(i + 1);
 					//al.Add(item);
 					menu[i] = item;
 				}
@@ -210,11 +210,11 @@ namespace NVelocity.Test.Provider
 			}
 		}
 
-		public virtual String[] Array
+		public virtual string[] Array
 		{
 			get
 			{
-				String[] strings = new String[2];
+																string[] strings = new string[2];
 				strings[0] = "first element";
 				strings[1] = "second element";
 				return strings;
@@ -241,12 +241,12 @@ namespace NVelocity.Test.Provider
 			get { return new Child(); }
 		}
 
-		public virtual Boolean State
+		public virtual bool State
 		{
 			set { }
 		}
 
-		public virtual Int32 BangStart
+		public virtual int BangStart
 		{
 			set
 			{
@@ -255,7 +255,7 @@ namespace NVelocity.Test.Provider
 			}
 		}
 
-		public virtual String Foo
+		public virtual string Foo
 		{
 			get
 			{
@@ -264,7 +264,7 @@ namespace NVelocity.Test.Provider
 			}
 		}
 
-		public virtual String Throw
+		public virtual string Throw
 		{
 			get
 			{
@@ -273,18 +273,18 @@ namespace NVelocity.Test.Provider
 			}
 		}
 
-		public String getTitleMethod()
+		public string getTitleMethod()
 		{
 			return title;
 		}
 
 
-		public virtual Object me()
+		public virtual object me()
 		{
 			return this;
 		}
 
-		public override String ToString()
+		public override string ToString()
 		{
 			return ("test provider");
 		}
@@ -296,36 +296,36 @@ namespace NVelocity.Test.Provider
 		}
 
 
-		public virtual String objectArrayMethod(Object[] o)
+		public virtual string objectArrayMethod(object[] o)
 		{
 			return "result of objectArrayMethod";
 		}
 
-		public virtual String concat(Object[] strings)
+		public virtual string concat(object[] strings)
 		{
 			StringBuilder result = new();
 
 			for (int i = 0; i < strings.Length; i++)
 			{
-				result.Append((String)strings[i]).Append(' ');
+				result.Append((string)strings[i]).Append(' ');
 			}
 
 			return result.ToString();
 		}
 
-		public virtual String concat(IList strings)
+		public virtual string concat(IList strings)
 		{
 			StringBuilder result = new();
 
 			for (int i = 0; i < strings.Count; i++)
 			{
-				result.Append((String)strings[i]).Append(' ');
+				result.Append((string)strings[i]).Append(' ');
 			}
 
 			return result.ToString();
 		}
 
-		public virtual String objConcat(IList objects)
+		public virtual string objConcat(IList objects)
 		{
 			StringBuilder result = new();
 
@@ -337,13 +337,13 @@ namespace NVelocity.Test.Provider
 			return result.ToString();
 		}
 
-		public virtual String parse(String a, Object o, String c, String d)
+		public virtual string parse(string a, object o, string c, string d)
 		{
 			//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 			return a + o + c + d;
 		}
 
-		public virtual String concat(String a, String b)
+		public virtual string concat(string a, string b)
 		{
 			return a + b;
 		}
@@ -351,7 +351,7 @@ namespace NVelocity.Test.Provider
 		// These two are for testing subclasses.
 
 
-		public virtual String showPerson(Person person)
+		public virtual string showPerson(Person person)
 		{
 			return person.Name;
 		}
@@ -366,12 +366,12 @@ namespace NVelocity.Test.Provider
 		/// <returns>String with processed answer.
 		///
 		/// </returns>
-		public virtual String chop(String str, int i)
+		public virtual string chop(string str, int i)
 		{
 			return (str[..^i]);
 		}
 
-		public virtual bool allEmpty(Object[] list)
+		public virtual bool allEmpty(object[] list)
 		{
 			int size = list.Length;
 
@@ -402,10 +402,10 @@ namespace NVelocity.Test.Provider
 	*/
 
 
-		public virtual Int32 bang()
+		public virtual int bang()
 		{
 			Console.Out.WriteLine("Bang! : " + stateint);
-			Int32 ret = stateint;
+												int ret = stateint;
 			stateint++;
 			return ret;
 		}
@@ -414,14 +414,14 @@ namespace NVelocity.Test.Provider
 		/// method for any object type, not just one
 		/// that implements the Map interface.
 		/// </summary>
-		public virtual String get
-			(String key)
+		public virtual string get
+			(string key)
 		{
 			return key;
 		}
 
 
-		public String this[String key]
+		public string this[string key]
 		{
 			get { return key; }
 		}
@@ -431,7 +431,7 @@ namespace NVelocity.Test.Provider
 		/// method for any object type, not just one
 		/// that implements the Map interface.
 		/// </summary>
-		public virtual String put(String key, Object o)
+		public virtual string put(string key, object o)
 		{
 			ob = o;
 			return key;

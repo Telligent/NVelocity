@@ -35,11 +35,11 @@ namespace NVelocity.Util.Introspection
 		}
 
 		/// <summary>
-		/// Object to pair with class - currently either a Method or
+		/// object to pair with class - currently either a Method or
 		/// AbstractExecutor. It can be used in any way the using node
 		/// wishes.
 		/// </summary>
-		public Object Thingy;
+		public object Thingy;
 
 		/// <summary>
 		/// Class of context data object associated with the 
