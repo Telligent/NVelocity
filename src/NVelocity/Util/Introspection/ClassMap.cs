@@ -18,8 +18,11 @@ namespace NVelocity.Util.Introspection
 	using System.Collections;
 	using System.Collections.Concurrent;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
 	using System.Reflection;
 	using System.Text;
+	using System.Xml.Linq;
 
 	/// <summary>
 	/// A cache of introspection information for a specific class instance.
@@ -35,11 +38,11 @@ namespace NVelocity.Util.Introspection
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private readonly ConcurrentDictionary<string, MethodData> methodCache =
-			new ConcurrentDictionary<string, MethodData>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<MethodKey, MethodData> methodCache =
+			new ConcurrentDictionary<MethodKey, MethodData>();
 
 		private readonly ConcurrentDictionary<string, PropertyData> propertyCache =
-			new ConcurrentDictionary<string, PropertyData>(StringComparer.OrdinalIgnoreCase);
+			new ConcurrentDictionary<string, PropertyData>();
 
 		private readonly MethodMap methodMap = new();
 
@@ -82,8 +85,7 @@ namespace NVelocity.Util.Introspection
 		/// </returns>
 		public MethodData FindMethod(string name, object[] parameters)
 		{
-			string methodKey = MakeMethodKey(name, parameters);
-
+			var methodKey = MakeMethodKey(name, parameters);
 			if (!methodCache.TryGetValue(methodKey, out MethodData cacheEntry))
 			{
 				try
@@ -120,7 +122,7 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public PropertyData FindProperty(string name)
 		{
-			if (propertyCache.TryGetValue(name, out PropertyData cacheEntry))
+			if (propertyCache.TryGetValue(name.ToLower(), out PropertyData cacheEntry))
 			{
 				if (cacheEntry == PropertyData.Empty)
 				{
@@ -159,7 +161,7 @@ namespace NVelocity.Util.Introspection
 			foreach (PropertyInfo property in properties)
 			{
 				//propertyMap.add(publicProperty);
-				propertyCache[property.Name] = new PropertyData(property);
+				propertyCache[property.Name.ToLower()] = new PropertyData(property);
 			}
 		}
 
@@ -168,35 +170,14 @@ namespace NVelocity.Util.Introspection
 		/// the concatenation of the name and the
 		/// types of the method parameters.
 		/// </summary>
-		private static string MakeMethodKey(MethodInfo method)
+		private static MethodKey MakeMethodKey(MethodInfo method)
 		{
-			StringBuilder methodKey = new(method.Name);
-
-			foreach (ParameterInfo p in method.GetParameters())
-			{
-				methodKey.Append(p.ParameterType.FullName);
-			}
-
-			return methodKey.ToString();
+			return new MethodKey { Name = method.Name.ToLowerInvariant(), Parameters = method.GetParameters()?.Select(p => p.ParameterType) ?? Array.Empty<Type>() };
 		}
 
-		private static string MakeMethodKey(string method, object[] parameters)
+		private static MethodKey MakeMethodKey(string method, object[] parameters)
 		{
-			StringBuilder methodKey = new(method);
-
-			if (parameters != null)
-			{
-				for (int j = 0; j < parameters.Length; j++)
-				{
-					object arg = parameters[j];
-
-					arg ??= OBJECT;
-
-					methodKey.Append(arg.GetType().FullName);
-				}
-			}
-
-			return methodKey.ToString();
+			return new MethodKey { Name = method.ToLowerInvariant(), Parameters = parameters?.Select(p => p?.GetType() ?? typeof(object)) ?? Array.Empty<Type>() };
 		}
 
 		/// <summary>
@@ -228,6 +209,36 @@ namespace NVelocity.Util.Introspection
 			props.AddRange(type.GetProperties());
 
 			return props.ToArray();
+		}
+
+		struct MethodKey : IEquatable<MethodKey>
+		{
+			public string Name { get; set; }
+			public IEnumerable<Type> Parameters { get; set; }
+
+			public override int GetHashCode()
+			{
+				var hash = new HashCode();
+
+				hash.Add(Name);
+				foreach (var t in Parameters)
+					hash.Add(t);
+
+				return hash.ToHashCode();
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (obj is MethodKey mk)
+					return Equals(mk);
+
+				return false;
+			}
+
+			public bool Equals(MethodKey mk)
+			{
+				return mk.Name == Name && mk.Parameters.SequenceEqual(Parameters);
+			}
 		}
 	}
 }
