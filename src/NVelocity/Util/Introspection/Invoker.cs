@@ -36,6 +36,18 @@ namespace NVelocity.Util.Introspection
 			return GetFunc(getter);
 		}
 
+		public static Func<object, object[], object> SetFunc(PropertyInfo propertyInfo)
+		{
+			if (propertyInfo == null)
+				throw new ArgumentNullException(nameof(propertyInfo));
+
+			var getter = propertyInfo.GetSetMethod(false);
+			if (getter == null)
+				throw new ArgumentNullException("propertyInfo.SetMethod");
+
+			return GetFunc(getter);
+		}
+
 		private static Func<object, object[], object> CreateMethodWrapper(MethodInfo method)
 		{
 			CreateParamsExpressions(method, out ParameterExpression argsExp, out Expression[] paramsExps);
@@ -73,7 +85,11 @@ namespace NVelocity.Util.Introspection
 			{
 				var constExp = Expression.Constant(i, typeof(int));
 				var argExp = Expression.ArrayIndex(argsExp, constExp);
-				paramsExps[i] = Expression.Convert(argExp, parameters[i].ParameterType);
+
+				if (parameters[i].ParameterType.IsByRef)
+					paramsExps[i] = Expression.TypeAs(argExp, parameters[i].ParameterType);
+				else
+					paramsExps[i] = Expression.Convert(argExp, parameters[i].ParameterType);
 			}
 		}
 	}

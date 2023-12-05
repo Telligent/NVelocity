@@ -82,7 +82,7 @@ namespace NVelocity.Util.Introspection
 		/// <param name="args">the actual arguments with which the method is called</param>
 		/// <returns> the most specific applicable method, or null if no method is applicable.</returns>
 		/// <exception cref="AmbiguousException">if there is more than one maximally specific applicable method</exception>
-		public MethodInfo Find(string methodName, object[] args)
+		public MethodData Find(string methodName, object[] args)
 		{
 			var methodList = Get(methodName);
 			if (methodList == null)
@@ -105,7 +105,7 @@ namespace NVelocity.Util.Introspection
 			return GetMostSpecific(methodList, classes);
 		}
 
-		private static MethodInfo GetMostSpecific(List<MethodInfo> methods, Type[] classes)
+		private static MethodData GetMostSpecific(List<MethodInfo> methods, Type[] classes)
 		{
 			var applicables = GetApplicables(methods, classes);
 			if (applicables.Count == 0)
@@ -113,76 +113,94 @@ namespace NVelocity.Util.Introspection
 				return null;
 			}
 
+			MethodInfo selectedMethod;
 			if (applicables.Count == 1)
 			{
-				return applicables[0];
+				selectedMethod = applicables[0];
 			}
-
-			// This list will contain the maximally specific methods. Hopefully at
-			// the end of the below loop, the list will contain exactly one method,
-			// (the most specific method) otherwise we have ambiguity.
-			List<MethodInfo> maximals = new();
-
-			foreach (MethodInfo app in applicables)
+			else
 			{
-				ParameterInfo[] appArgs = app.GetParameters();
-				bool lessSpecific = false;
+				// This list will contain the maximally specific methods. Hopefully at
+				// the end of the below loop, the list will contain exactly one method,
+				// (the most specific method) otherwise we have ambiguity.
+				List<MethodInfo> maximals = new();
 
-				for (var i = 0; i < maximals.Count; i++)
+				foreach (MethodInfo app in applicables)
 				{
-					switch (IsMoreSpecific(appArgs, maximals[i].GetParameters()))
+					ParameterInfo[] appArgs = app.GetParameters();
+					bool lessSpecific = false;
+
+					for (var i = 0; i < maximals.Count; i++)
 					{
-						case MORE_SPECIFIC:
-							{
-								// This method is more specific than the previously
-								// known maximally specific, so remove the old maximum.
-								maximals.RemoveAt(i);
-								i--;
-								break;
-							}
+						switch (IsMoreSpecific(appArgs, maximals[i].GetParameters()))
+						{
+							case MORE_SPECIFIC:
+								{
+									// This method is more specific than the previously
+									// known maximally specific, so remove the old maximum.
+									maximals.RemoveAt(i);
+									i--;
+									break;
+								}
 
-						case LESS_SPECIFIC:
-							{
-								// This method is less specific than some of the
-								// currently known maximally specific methods, so we
-								// won't add it into the set of maximally specific
-								// methods
+							case LESS_SPECIFIC:
+								{
+									// This method is less specific than some of the
+									// currently known maximally specific methods, so we
+									// won't add it into the set of maximally specific
+									// methods
 
-								lessSpecific = true;
-								break;
-							}
+									lessSpecific = true;
+									break;
+								}
+						}
+					}
+
+					if (!lessSpecific)
+					{
+						maximals.Add(app);
 					}
 				}
 
-				if (!lessSpecific)
+				// In a last attempt we remove 
+				// the methods found for interfaces
+				if (maximals.Count > 1)
 				{
-					maximals.Add(app);
+					List<MethodInfo> newList = new();
+
+					foreach (MethodInfo method in maximals)
+					{
+						if (method.DeclaringType.IsInterface) continue;
+
+						newList.Add(method);
+					}
+
+					maximals = newList;
+				}
+
+				if (maximals.Count > 1)
+				{
+					// We have more than one maximally specific method
+					throw new AmbiguousException(CreateDescriptiveAmbiguousErrorMessage(maximals, classes));
+				}
+
+				selectedMethod = maximals.FirstOrDefault();
+			}
+
+			if (classes.Length == 0)
+				return new MethodData(selectedMethod, parametersAreExactType: true);
+
+			if (classes.Length > 0) 
+			{
+				var selectedParameters = selectedMethod.GetParameters();
+				for (var i = 0; i < classes.Length; i++)
+				{
+					if (selectedParameters[i].ParameterType != classes[i])
+						return new MethodData(selectedMethod);
 				}
 			}
 
-			// In a last attempt we remove 
-			// the methods found for interfaces
-			if (maximals.Count > 1)
-			{
-				List<MethodInfo> newList = new();
-
-				foreach (MethodInfo method in maximals)
-				{
-					if (method.DeclaringType.IsInterface) continue;
-
-					newList.Add(method);
-				}
-
-				maximals = newList;
-			}
-
-			if (maximals.Count > 1)
-			{
-				// We have more than one maximally specific method
-				throw new AmbiguousException(CreateDescriptiveAmbiguousErrorMessage(maximals, classes));
-			}
-
-			return maximals.FirstOrDefault();
+			return new MethodData(selectedMethod, parametersAreExactType: true);
 		}
 
 		/// <summary> Determines which method signature (represented by a class array) is more

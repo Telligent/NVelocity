@@ -27,53 +27,35 @@ namespace NVelocity.Runtime.Parser.Node
 				propertyUsed = propertyName;
 				property = introspector.GetProperty(type, propertyUsed);
 				if (property != null)
-				{
-					invoker = Invoker.GetFunc(property);
 					return;
-				}
 
 				// now the convenience, flip the 1st character
 				propertyUsed = propertyName[..1].ToUpper() + propertyName[1..];
 				property = introspector.GetProperty(type, propertyUsed);
 				if (property != null)
-				{
-					invoker = Invoker.GetFunc(property);
 					return;
-				}
 
 				propertyUsed = propertyName[..1].ToLower() + propertyName[1..];
 				property = introspector.GetProperty(type, propertyUsed);
 				if (property != null)
-				{
-					invoker = Invoker.GetFunc(property);
 					return;
-				}
 
 				// check for a method that takes no arguments
 				propertyUsed = propertyName;
 				method = introspector.GetMethod(type, propertyUsed, Array.Empty<object>());
 				if (method != null)
-				{
-					invoker = Invoker.GetFunc(method);
 					return;
-				}
 
 				// check for a method that takes no arguments, flipping 1st character
 				propertyUsed = propertyName[..1].ToUpper() + propertyName[1..];
 				method = introspector.GetMethod(type, propertyUsed, Array.Empty<object>());
 				if (method != null)
-				{
-					invoker = Invoker.GetFunc(method);
 					return;
-				}
 
 				propertyUsed = propertyName[..1].ToLower() + propertyName[1..];
 				method = introspector.GetMethod(type, propertyUsed, Array.Empty<object>());
 				if (method != null)
-				{
-					invoker = Invoker.GetFunc(method);
 					return;
-				}
 			}
 			catch (Exception e)
 			{
@@ -86,10 +68,13 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override object Execute(object o)
 		{
-			if (invoker == null)
-				return null;
+			if (property != null)
+				return property.ExecuteGet(o, null);
 
-			return invoker(o, null);
+			if (method != null)
+				return method.Execute(o, null);
+
+			return null;
 		}
 	}
 }

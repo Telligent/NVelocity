@@ -77,7 +77,7 @@ namespace NVelocity.Util.Introspection
 				return null;
 			}
 
-			MethodInfo m = introspector.GetMethod(obj.GetType(), methodName, args);
+			MethodData m = introspector.GetMethod(obj.GetType(), methodName, args);
 
 			return (m != null) ? new VelMethodImpl(m) : null;
 		}
@@ -185,10 +185,9 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public class VelMethodImpl : IVelMethod
 		{
-			public VelMethodImpl(MethodInfo methodInfo)
+			public VelMethodImpl(MethodData methodInfo)
 			{
 				method = methodInfo;
-				invoker = Invoker.GetFunc(method);
 			}
 
 			public bool Cacheable
@@ -198,24 +197,20 @@ namespace NVelocity.Util.Introspection
 
 			public string MethodName
 			{
-				get { return method.Name; }
+				get { return method?.Info.Name; }
 			}
 
 			public Type ReturnType
 			{
-				get { return method.ReturnType; }
+				get { return method?.Info.ReturnType; }
 			}
 
-			MethodInfo method = null;
-			Func<object, object[], object> invoker = null;
-
-			public object Invoke(object o, object[] parameters)
+			public object Invoke(object o, object[] paramsRenamed)
 			{
-				if (invoker == null)
-					return null;
-
-				return invoker(o, parameters);
+				return method.Execute(o, paramsRenamed);
 			}
+
+			MethodData method = null;
 		}
 
 		/// <summary>

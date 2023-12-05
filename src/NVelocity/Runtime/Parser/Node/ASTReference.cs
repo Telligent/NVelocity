@@ -10,6 +10,7 @@ namespace NVelocity.Runtime.Parser.Node
 	using System.Reflection;
 	using System.Text;
 	using System.Collections.Generic;
+	using NVelocity.Util.Introspection;
 
 	/// <summary>
 	/// Reference types
@@ -316,7 +317,7 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					// first, we introspect for the set<identifier> setter method
 					Type c = result.GetType();
-					PropertyInfo p;
+					PropertyData p;
 
 					try
 					{
@@ -349,9 +350,7 @@ namespace NVelocity.Runtime.Parser.Node
 						}
 					}
 
-					// and if we get here, getMethod() didn't chuck an exception...
-					object[] args = Array.Empty<object>();
-					p.SetValue(result, value, args);
+					p.ExecuteSet(result, [value]);
 				}
 				else
 				{

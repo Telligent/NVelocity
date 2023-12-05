@@ -16,6 +16,7 @@ namespace NVelocity.Runtime.Parser.Node
 {
 	using System;
 	using System.Reflection;
+	using NVelocity.Util.Introspection;
 
 	/// <summary>
 	/// Abstract class that is used to execute an arbitrary
@@ -29,9 +30,8 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Method to be executed.
 		/// </summary>
-		protected Func<object, object[], object> invoker = null;
-		protected MethodInfo method;
-		protected PropertyInfo property;
+		protected MethodData method;
+		protected PropertyData property;
 
 		/// <summary>
 		/// Value (probably from enum).
@@ -45,17 +45,17 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public bool IsAlive
 		{
-			get { return (invoker != null || value != null); }
+			get { return (method != null || property != null || value != null); }
 		}
 
 		public MethodInfo Method
 		{
-			get { return method; }
+			get { return method?.Info; }
 		}
 
 		public PropertyInfo Property
 		{
-			get { return property; }
+			get { return property?.Info; }
 		}
 
 		public object Value

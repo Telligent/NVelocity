@@ -62,7 +62,7 @@ namespace NVelocity.Util.Introspection
 		/// <param name="name">Name of the method being searched for</param>
 		/// <param name="parameters">An array of Objects (not Classes) that describe the the parameters</param>
 		/// <returns>The desired Method object.</returns>
-		public override MethodInfo GetMethod(Type c, string name, object[] parameters)
+		public override MethodData GetMethod(Type c, string name, object[] parameters)
 		{
 			// Just delegate to the base class
 			try
@@ -105,7 +105,7 @@ namespace NVelocity.Util.Introspection
 		/// <param name="c">Class in which the method search is taking place</param>
 		/// <param name="name">Name of the method being searched for</param>
 		/// <returns>The desired <see cref="PropertyInfo"/> object.</returns>
-		public override PropertyInfo GetProperty(Type c, string name)
+		public override PropertyData GetProperty(Type c, string name)
 		{
 			// Just delegate to the base class
 			try

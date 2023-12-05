@@ -41,9 +41,6 @@ namespace NVelocity.Runtime.Parser.Node
 					method = i.GetMethod(c, "get", arguments);
 				}
 			}
-
-			if (method != null)
-				invoker = Invoker.GetFunc(method);
 		}
 
 		/// <summary>
@@ -51,10 +48,10 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override object Execute(object o)
 		{
-			if (invoker == null)
+			if (method == null)
 				return null;
 
-			return invoker(o, arguments);
+			return method.Execute(o, arguments);
 		}
 	}
 }

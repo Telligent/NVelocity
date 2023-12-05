@@ -90,8 +90,8 @@ namespace NVelocity.Runtime.Parser.Node
 			*  but if we are careful, we can do it in the context.
 			*/
 
-			MethodInfo method = null;
-			PropertyInfo property = null;
+			MethodData method = null;
+			PropertyData property = null;
 			bool preparedAlready = false;
 			object[] methodArguments = new object[paramCount];
 			Type c = o.GetType();
@@ -119,13 +119,13 @@ namespace NVelocity.Runtime.Parser.Node
 					/*
 					* and get the method from the cache
 					*/
-					if (introspectionCacheData.Thingy is MethodInfo methodInfo)
+					if (introspectionCacheData.Thingy is MethodData methodInfo)
 					{
 						method = methodInfo;
 
-						methodArguments = BuildMethodArgs(method, parameters, paramArrayIndex);
+						methodArguments = BuildMethodArgs(method.Info, parameters, paramArrayIndex);
 					}
-					if (introspectionCacheData.Thingy is PropertyInfo propertyInfo)
+					if (introspectionCacheData.Thingy is PropertyData propertyInfo)
 					{
 						property = propertyInfo;
 					}
@@ -139,11 +139,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 					object obj = PerformIntrospection(c, parameters);
 
-					if (obj is MethodInfo methodInfo)
+					if (obj is MethodData methodInfo)
 					{
 						method = methodInfo;
 					}
-					if (obj is PropertyInfo propertyInfo)
+					if (obj is PropertyData propertyInfo)
 					{
 						property = propertyInfo;
 					}
@@ -195,18 +195,18 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (method == null)
 				{
-					obj = property.GetValue(o, null);
+					obj = property.ExecuteGet(o, null);
 				}
 				else
 				{
 					if (!preparedAlready)
 					{
-						methodArguments = BuildMethodArgs(method, parameters);
+						methodArguments = BuildMethodArgs(method.Info, parameters);
 					}
 
-					obj = method.Invoke(o, methodArguments);
+					obj = method.Execute(o, methodArguments);
 
-					if (obj == null && method.ReturnType == typeof(void))
+					if (obj == null && method.Info.ReturnType == typeof(void))
 					{
 						obj = string.Empty;
 					}
@@ -284,9 +284,9 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			string methodNameUsed = methodName;
 
-			MethodInfo m = runtimeServices.Introspector.GetMethod(data, methodNameUsed, parameters);
+			MethodData m = runtimeServices.Introspector.GetMethod(data, methodNameUsed, parameters);
 
-			PropertyInfo p = null;
+			PropertyData p = null;
 
 			if (m == null)
 			{

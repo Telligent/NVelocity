@@ -28,9 +28,6 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	public class ClassMap : NVelocity.Util.Introspection.IClassMap
 	{
-		private static readonly MethodInfo CACHE_MISS =
-			typeof(ClassMap).GetMethod("MethodMiss", BindingFlags.Static | BindingFlags.NonPublic);
-
 		private static readonly object OBJECT = new();
 
 		private readonly Type type;
@@ -38,11 +35,11 @@ namespace NVelocity.Util.Introspection
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private readonly ConcurrentDictionary<string, MethodInfo> methodCache =
-			new ConcurrentDictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<string, MethodData> methodCache =
+			new ConcurrentDictionary<string, MethodData>(StringComparer.OrdinalIgnoreCase);
 
-		private readonly ConcurrentDictionary<string, MemberInfo> propertyCache =
-			new ConcurrentDictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<string, PropertyData> propertyCache =
+			new ConcurrentDictionary<string, PropertyData>(StringComparer.OrdinalIgnoreCase);
 
 		private readonly MethodMap methodMap = new();
 
@@ -83,34 +80,28 @@ namespace NVelocity.Util.Introspection
 		/// <returns>
 		/// the class object whose methods are cached by this map.
 		/// </returns>
-		public MethodInfo FindMethod(string name, object[] parameters)
+		public MethodData FindMethod(string name, object[] parameters)
 		{
 			string methodKey = MakeMethodKey(name, parameters);
 
-			if (methodCache.TryGetValue(methodKey, out MethodInfo cacheEntry))
-			{
-				if (cacheEntry == CACHE_MISS)
-				{
-					return null;
-				}
-			}
-			else
+			if (!methodCache.TryGetValue(methodKey, out MethodData cacheEntry))
 			{
 				try
 				{
-					cacheEntry = methodMap.Find(name, parameters);
+					var m = methodMap.Find(name, parameters);
+					cacheEntry = m ?? MethodData.Empty;
+					methodCache[methodKey] = cacheEntry;
 				}
 				catch (AmbiguousException)
 				{
 					// that's a miss :)
-					methodCache[methodKey] = CACHE_MISS;
+					methodCache[methodKey] = MethodData.Empty;
 					throw;
 				}
-
-				methodCache[methodKey] = cacheEntry ?? CACHE_MISS;
 			}
 
-			// Yes, this might just be null.
+			if (cacheEntry == MethodData.Empty)
+				return null;
 
 			return cacheEntry;
 		}
@@ -127,19 +118,18 @@ namespace NVelocity.Util.Introspection
 		/// If nothing is found, then we must actually go
 		/// and introspect the method from the MethodMap.
 		/// </summary>
-		public PropertyInfo FindProperty(string name)
+		public PropertyData FindProperty(string name)
 		{
-
-			if (propertyCache.TryGetValue(name, out MemberInfo cacheEntry))
+			if (propertyCache.TryGetValue(name, out PropertyData cacheEntry))
 			{
-				if (cacheEntry == CACHE_MISS)
+				if (cacheEntry == PropertyData.Empty)
 				{
 					return null;
 				}
 			}
 
 			// Yes, this might just be null.
-			return (PropertyInfo)cacheEntry;
+			return cacheEntry;
 		}
 
 		/// <summary>
@@ -156,7 +146,7 @@ namespace NVelocity.Util.Introspection
 			foreach (MethodInfo method in methods)
 			{
 				methodMap.Add(method);
-				methodCache[MakeMethodKey(method)] = method;
+				methodCache[MakeMethodKey(method)] = new MethodData(method, parametersAreExactType: true);
 			}
 		}
 
@@ -169,7 +159,7 @@ namespace NVelocity.Util.Introspection
 			foreach (PropertyInfo property in properties)
 			{
 				//propertyMap.add(publicProperty);
-				propertyCache[property.Name] = property;
+				propertyCache[property.Name] = new PropertyData(property);
 			}
 		}
 

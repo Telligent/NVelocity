@@ -16,20 +16,20 @@ namespace NVelocity.Util.Introspection
 
 		#region IClassMap Members
 
-		public System.Reflection.MethodInfo FindMethod(string name, object[] parameters)
+		public MethodData FindMethod(string name, object[] parameters)
 		{
 			var methodInfo = _classMap.FindMethod(name, parameters);
 			if (methodInfo == null)
-				return new DynamicMethodInfo(_type, name);
+				return new MethodData(new DynamicMethodInfo(_type, name), true);
 			else
 				return methodInfo;
 		}
 
-		public System.Reflection.PropertyInfo FindProperty(string name)
+		public PropertyData FindProperty(string name)
 		{
 			var propertyInfo = _classMap.FindProperty(name);
 			if (propertyInfo == null)
-				return new DynamicPropertyInfo(_type, name);
+				return new PropertyData(new DynamicPropertyInfo(_type, name), true);
 			else
 				return propertyInfo;
 		}

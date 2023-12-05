@@ -24,7 +24,7 @@ namespace NVelocity.Runtime.Parser.Node
 			try
 			{
 				property = introspector.GetProperty(type, propertyName);
-				if (property != null && property.PropertyType.Equals(typeof(bool)))
+				if (property != null && property.Info.PropertyType.Equals(typeof(bool)))
 				{
 					return;
 				}
@@ -32,7 +32,7 @@ namespace NVelocity.Runtime.Parser.Node
 				// now the convenience, flip the 1st character
 				propertyName = propertyName[..1].ToUpper() + propertyName[1..];
 				property = introspector.GetProperty(type, propertyName);
-				if (property != null && property.PropertyType.Equals(typeof(bool)))
+				if (property != null && property.Info.PropertyType.Equals(typeof(bool)))
 				{
 					return;
 				}

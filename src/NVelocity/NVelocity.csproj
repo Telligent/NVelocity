@@ -461,10 +461,12 @@
     <Compile Include="Util\Introspection\IVelMethod.cs" />
     <Compile Include="Util\Introspection\IVelPropertyGet.cs" />
     <Compile Include="Util\Introspection\IVelPropertySet.cs" />
+    <Compile Include="Util\Introspection\MethodData.cs" />
     <Compile Include="Util\Introspection\MethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commons\Collections\SegmentedLruCache.cs" />
+    <Compile Include="Util\Introspection\PropertyData.cs" />
     <Compile Include="Util\Introspection\UberspectImpl.cs">
       <SubType>Code</SubType>
     </Compile>

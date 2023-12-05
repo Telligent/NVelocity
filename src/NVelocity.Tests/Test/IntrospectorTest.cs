@@ -32,13 +32,13 @@ namespace NVelocity.Test
 		{
 			IRuntimeServices rs = RuntimeSingleton.RuntimeServices;
 			Introspector i = new(rs);
-			MethodInfo mi = i.GetMethod(typeof(VelocityTest), "Test_Evaluate", null);
+			MethodData mi = i.GetMethod(typeof(VelocityTest), "Test_Evaluate", null);
 			Assert.IsNotNull(mi, "Expected to find VelocityTest.Test_Evaluate");
-			Assert.IsTrue(mi.ToString().Equals("Void Test_Evaluate()"), "method not found");
+			Assert.IsTrue(mi.Info.ToString().Equals("Void Test_Evaluate()"), "method not found");
 
 			mi = i.GetMethod(typeof(ExtendedProperties), "GetString", new object[] { "parm1", "parm2" });
 			Assert.IsNotNull(mi, "Expected to find ExtendedProperties.GetString(String, String)");
-			Assert.IsTrue(mi.ToString().Equals("System.String GetString(System.String, System.String)"), "method not found");
+			Assert.IsTrue(mi.Info.ToString().Equals("System.String GetString(System.String, System.String)"), "method not found");
 		}
 	}
 }

@@ -84,6 +84,21 @@ namespace NVelocity.Test
 		}
 
 		[Test]
+		public void DictionaryEditableTest()
+		{
+			int num = 99;
+			c.Put("num", num);
+
+			Eval(@"
+				#set($d = ""%{}"")
+				$d.Add('int', 123)
+			");
+
+			var d = (IDictionary) c.Get("d");
+			Assert.AreEqual(123, d["int"]);
+		}
+
+		[Test]
 		public void CorrectExceptionThrownOnInvocationException()
 		{
 			try

@@ -61,8 +61,8 @@ namespace NVelocity.Util.Introspection
 		/// <param name="c">Class in which the method search is taking place</param>
 		/// <param name="name">Name of the method being searched for</param>
 		/// <param name="parameters">An array of Objects (not Classes) that describe the the parameters</param>
-		/// <returns>The desired <see cref="MethodInfo"/> object.</returns>
-		public virtual MethodInfo GetMethod(Type c, string name, object[] parameters)
+		/// <returns>The desired <see cref="MethodData"/> object.</returns>
+		public virtual MethodData GetMethod(Type c, string name, object[] parameters)
 		{
 			if (c == null)
 			{
@@ -79,8 +79,8 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		/// <param name="c">Class in which the method search is taking place</param>
 		/// <param name="name">Name of the method being searched for</param>
-		/// <returns>The desired <see cref="PropertyInfo"/> object.</returns>
-		public virtual PropertyInfo GetProperty(Type c, string name)
+		/// <returns>The desired <see cref="PropertyData"/> object.</returns>
+		public virtual PropertyData GetProperty(Type c, string name)
 		{
 			if (c == null)
 			{
