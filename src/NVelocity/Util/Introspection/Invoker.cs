@@ -7,21 +7,12 @@ namespace NVelocity.Util.Introspection
 {
 	public sealed class Invoker
 	{
-		private static readonly SegmentedLruCache<MethodInfo, Func<object, object[], object>> WrapperByMethodInfo = new SegmentedLruCache<MethodInfo, Func<object, object[], object>>(10000);
-
 		public static Func<object, object[], object> GetFunc(MethodInfo methodInfo)
 		{
 			if (methodInfo == null)
 				throw new ArgumentNullException(nameof(methodInfo));
 
-			var f = WrapperByMethodInfo.Get(methodInfo);
-			if (f == null)
-			{
-				f = CreateMethodWrapper(methodInfo);
-				WrapperByMethodInfo.Put(methodInfo, f);
-			}
-
-			return f;
+			return CreateMethodWrapper(methodInfo);
 		}
 
 		public static Func<object, object[], object> GetFunc(PropertyInfo propertyInfo)
