@@ -151,9 +151,9 @@ namespace NVelocity.Runtime.Directive
 			{
 				StringBuilder path = new();
 
-				for (int i = 0; i < templateStack.Length; ++i)
+				foreach (var templateName in templateStack)
 				{
-					path.AppendFormat(" > {0}", (object[])templateStack[i]);
+					path.Append(" > ").Append(templateName);
 				}
 
 				runtimeServices.Error(string.Format("Max recursion depth reached ({0}) File stack:{1}", templateStack.Length, path));

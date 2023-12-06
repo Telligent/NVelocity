@@ -148,17 +148,18 @@ namespace NVelocity.Runtime.Parser.Node
 			// so the error gets logged.
 			try
 			{
-				for (int i = 0; i < numChildren; i++)
-				{
-					result = GetChild(i).Execute(result, context);
-
-					referenceStack?.Push(result);
-
-					if (result == null)
+				if (children != null)
+					foreach (var node in children)
 					{
-						return null;
+						result = node.Execute(result, context);
+
+						referenceStack?.Push(result);
+
+						if (result == null)
+						{
+							return null;
+						}
 					}
-				}
 
 				return result;
 			}

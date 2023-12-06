@@ -116,6 +116,14 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
+		public INode[] Children
+		{
+			get
+			{
+				return children ?? Array.Empty<INode>();
+			}
+		}
+
 		/// <summary>Accept the visitor. *
 		/// </summary>
 		public virtual object Accept(IParserVisitor visitor, object data)
@@ -129,9 +137,9 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			if (children != null)
 			{
-				for (int i = 0; i < children.Length; ++i)
+				foreach (var child in children)
 				{
-					children[i].Accept(visitor, data);
+					child.Accept(visitor, data);
 				}
 			}
 			return data;
@@ -160,10 +168,10 @@ namespace NVelocity.Runtime.Parser.Node
 			Console.Out.WriteLine(ToString(prefix));
 			if (children != null)
 			{
-				for (int i = 0; i < children.Length; ++i)
+				var dumpPrefix = string.Format("{0} ", prefix);
+				foreach (SimpleNode n in children)
 				{
-					SimpleNode n = (SimpleNode)children[i];
-					n?.Dump(string.Format("{0} ", prefix));
+					n?.Dump(dumpPrefix);
 				}
 			}
 		}
@@ -195,13 +203,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 			runtimeServices = (IRuntimeServices)data;
 
-			int i, k = ChildrenCount;
-
-			for (i = 0; i < k; i++)
+			foreach (var child in Children)
 			{
 				try
 				{
-					GetChild(i).Init(context, data);
+					child.Init(context, data);
 				}
 				catch (ReferenceException re)
 				{
@@ -224,11 +230,9 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public virtual bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
-			int i, k = ChildrenCount;
-
-			for (i = 0; i < k; i++)
+			foreach (var child in Children)
 			{
-				GetChild(i).Render(context, writer);
+				child.Render(context, writer);
 			}
 
 			return true;

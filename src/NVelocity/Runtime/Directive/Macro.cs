@@ -96,14 +96,14 @@ namespace NVelocity.Runtime.Directive
 			string[] argArray = getArgArray(node);
 
 			// now, try and eat the code block. Pass the root.
-			IList macroArray = getASTAsStringArray(node.GetChild(numArgs - 1));
+			var macroArray = getASTAsStringArray(node.GetChild(numArgs - 1));
 
 			// make a big string out of our macro
 			StringBuilder temp = new();
 
-			for (int i = 0; i < macroArray.Count; i++)
+			foreach (var v in macroArray)
 			{
-				temp.Append(macroArray[i]);
+				temp.Append(v);
 			}
 
 			string macroBody = temp.ToString();

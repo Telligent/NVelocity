@@ -268,10 +268,10 @@ namespace NVelocity.App
 			construct.Append(vmName);
 			construct.Append('(');
 
-			for (int i = 0; i < parameters.Length; i++)
+			foreach (var p in parameters)
 			{
 				construct.Append(" $");
-				construct.Append(parameters[i]);
+				construct.Append(p);
 			}
 
 			construct.Append(" )");

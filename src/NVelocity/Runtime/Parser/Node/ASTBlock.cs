@@ -24,10 +24,9 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
-			int i, k = ChildrenCount;
-
-			for (i = 0; i < k; i++)
-				GetChild(i).Render(context, writer);
+			if (children != null)
+				foreach (var node in children)
+					node.Render(context, writer);
 
 			return true;
 		}

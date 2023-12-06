@@ -49,6 +49,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 		int ChildrenCount { get; }
 
+		INode[] Children { get; }
+
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>

@@ -204,6 +204,7 @@ namespace NVelocity.Test
 						Console.Out.Write("Adding TemplateTestCase : " + template + "...");
 						Console.Out.WriteLine("FAIL!");
 						allpass = false;
+						failures++;
 					}
 				}
 				else

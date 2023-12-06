@@ -148,13 +148,13 @@ namespace NVelocity.App
 		private void Inspect(Type type)
 		{
 			FieldInfo[] fields = type.GetFields();
-			for (int i = 0; i < fields.Length; i++)
+			foreach(var field in fields)
 			{
 				// only if public and static
-				if (fields[i].IsPublic && fields[i].IsStatic)
+				if (field.IsPublic && field.IsStatic)
 				{
-					fieldHash[fields[i].Name] = fields[i];
-					classHash[fields[i].Name] = type;
+					fieldHash[field.Name] = field;
+					classHash[field.Name] = type;
 				}
 			}
 		}

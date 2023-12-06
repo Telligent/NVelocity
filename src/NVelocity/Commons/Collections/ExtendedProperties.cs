@@ -21,88 +21,88 @@ namespace Commons.Collections
 	using System.Text;
 	using System.Linq;
 
-	/// <summary>
-	/// This class extends normal Java properties by adding the possibility
-	/// to use the same key many times concatenating the value strings
-	/// instead of overwriting them.
-	///
-	/// <para>The Extended Properties syntax is explained here:
-	///
-	/// <ul>
-	/// <li>
-	/// Each property has the syntax <code>key = value</code>
-	/// </li>
-	/// <li>
-	/// The <i>key</i> may use any character but the equal sign '='.
-	/// </li>
-	/// <li>
-	/// <i>value</i> may be separated on different lines if a backslash
-	/// is placed at the end of the line that continues below.
-	/// </li>
-	/// <li>
-	/// If <i>value</i> is a list of strings, each token is separated
-	/// by a comma ','.
-	/// </li>
-	/// <li>
-	/// Commas in each token are escaped placing a backslash right before
-	/// the comma.
-	/// </li>
-	/// <li>
-	/// If a <i>key</i> is used more than once, the values are appended
-	/// like if they were on the same line separated with commas.
-	/// </li>
-	/// <li>
-	/// Blank lines and lines starting with character '#' are skipped.
-	/// </li>
-	/// <li>
-	/// If a property is named "include" (or whatever is defined by
-	/// setInclude() and getInclude() and the value of that property is
-	/// the full path to a file on disk, that file will be included into
-	/// the ConfigurationsRepository. You can also pull in files relative
-	/// to the parent configuration file. So if you have something
-	/// like the following:
-	///
-	/// include = additional.properties
-	///
-	/// Then "additional.properties" is expected to be in the same
-	/// directory as the parent configuration file.
-	///
-	/// Duplicate name values will be replaced, so be careful.
-	///
-	/// </li>
-	/// </ul>
-	/// </para>
-	/// <para>Here is an example of a valid extended properties file:
-	/// </para>
-	/// <para><pre>
-	/// # lines starting with # are comments
-	///
-	/// # This is the simplest property
-	/// key = value
-	///
-	/// # A long property may be separated on multiple lines
-	/// longvalue = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
-	/// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	///
-	/// # This is a property with many tokens
-	/// tokens_on_a_line = first token, second token
-	///
-	/// # This sequence generates exactly the same result
-	/// tokens_on_multiple_lines = first token
-	/// tokens_on_multiple_lines = second token
-	///
-	/// # commas may be escaped in tokens
-	/// commas.excaped = Hi\, what'up?
-	/// </pre>
-	/// </para>
-	/// <para><b>NOTE</b>: this class has <b>not</b> been written for
-	/// performance nor low memory usage.  In fact, it's way slower than it
-	/// could be and generates too much memory garbage.  But since
-	/// performance is not an issue during intialization (and there is not
-	/// much time to improve it), I wrote it this way.  If you don't like
-	/// it, go ahead and tune it up!</para>
-	/// </summary>
-	public class ExtendedProperties : Dictionary<string, object>
+		/// <summary>
+		/// This class extends normal Java properties by adding the possibility
+		/// to use the same key many times concatenating the value strings
+		/// instead of overwriting them.
+		///
+		/// <para>The Extended Properties syntax is explained here:
+		///
+		/// <ul>
+		/// <li>
+		/// Each property has the syntax <code>key = value</code>
+		/// </li>
+		/// <li>
+		/// The <i>key</i> may use any character but the equal sign '='.
+		/// </li>
+		/// <li>
+		/// <i>value</i> may be separated on different lines if a backslash
+		/// is placed at the end of the line that continues below.
+		/// </li>
+		/// <li>
+		/// If <i>value</i> is a list of strings, each token is separated
+		/// by a comma ','.
+		/// </li>
+		/// <li>
+		/// Commas in each token are escaped placing a backslash right before
+		/// the comma.
+		/// </li>
+		/// <li>
+		/// If a <i>key</i> is used more than once, the values are appended
+		/// like if they were on the same line separated with commas.
+		/// </li>
+		/// <li>
+		/// Blank lines and lines starting with character '#' are skipped.
+		/// </li>
+		/// <li>
+		/// If a property is named "include" (or whatever is defined by
+		/// setInclude() and getInclude() and the value of that property is
+		/// the full path to a file on disk, that file will be included into
+		/// the ConfigurationsRepository. You can also pull in files relative
+		/// to the parent configuration file. So if you have something
+		/// like the following:
+		///
+		/// include = additional.properties
+		///
+		/// Then "additional.properties" is expected to be in the same
+		/// directory as the parent configuration file.
+		///
+		/// Duplicate name values will be replaced, so be careful.
+		///
+		/// </li>
+		/// </ul>
+		/// </para>
+		/// <para>Here is an example of a valid extended properties file:
+		/// </para>
+		/// <para><pre>
+		/// # lines starting with # are comments
+		///
+		/// # This is the simplest property
+		/// key = value
+		///
+		/// # A long property may be separated on multiple lines
+		/// longvalue = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
+		/// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		///
+		/// # This is a property with many tokens
+		/// tokens_on_a_line = first token, second token
+		///
+		/// # This sequence generates exactly the same result
+		/// tokens_on_multiple_lines = first token
+		/// tokens_on_multiple_lines = second token
+		///
+		/// # commas may be escaped in tokens
+		/// commas.excaped = Hi\, what'up?
+		/// </pre>
+		/// </para>
+		/// <para><b>NOTE</b>: this class has <b>not</b> been written for
+		/// performance nor low memory usage.  In fact, it's way slower than it
+		/// could be and generates too much memory garbage.  But since
+		/// performance is not an issue during intialization (and there is not
+		/// much time to improve it), I wrote it this way.  If you don't like
+		/// it, go ahead and tune it up!</para>
+		/// </summary>
+		public class ExtendedProperties : Dictionary<string, object>
 	{
 		private static readonly byte DEFAULT_BYTE = 0;
 		private static readonly bool DEFAULT_BOOLEAN = false;
@@ -650,16 +650,7 @@ namespace Commons.Collections
 				* we also need to rebuild the keysAsListed or else
 				* things get *very* confusing
 				*/
-
-				for (int i = 0; i < keysAsListed.Count; i++)
-				{
-					if (((string)keysAsListed[i]).Equals(key))
-					{
-						keysAsListed.RemoveAt(i);
-						break;
-					}
-				}
-
+				keysAsListed.Remove(key);
 				Remove(key);
 			}
 		}
@@ -889,9 +880,8 @@ namespace Commons.Collections
 			* Each token is of the form 'key=value'.
 			*/
 			Dictionary<string, string> props = new(defaultProps);
-			for (int i = 0; i < tokens.Count; i++)
+			foreach (var token in tokens)
 			{
-				string token = tokens[i];
 				int equalSign = token.IndexOf('=');
 				if (equalSign > 0)
 				{

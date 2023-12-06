@@ -102,7 +102,7 @@ namespace NVelocity.Context
 			get { return innerContext.CurrentTemplateName; }
 		}
 
-		public object[] TemplateNameStack
+		public string[] TemplateNameStack
 		{
 			get { return innerContext.TemplateNameStack; }
 		}

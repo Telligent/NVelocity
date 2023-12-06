@@ -3,9 +3,9 @@ namespace NVelocity.Runtime.Parser.Node
 	using Context;
 	using System;
 	using System.Collections;
-				using System.Collections.Generic;
+	using System.Collections.Generic;
 
-				public class ASTObjectArray : SimpleNode
+	public class ASTObjectArray : SimpleNode
 	{
 		public ASTObjectArray(int id) : base(id)
 		{
@@ -26,12 +26,11 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public override object Value(IInternalContextAdapter context)
 		{
-			int size = ChildrenCount;
+			List<object> objectArray = new(ChildrenCount);
 
-			List<object> objectArray = new(size);
-
-			for (int i = 0; i < size; i++)
-				objectArray.Add(GetChild(i).Value(context));
+			if (children != null)
+				foreach (var node in children)
+					objectArray.Add(node.Value(context));
 
 			return objectArray;
 		}

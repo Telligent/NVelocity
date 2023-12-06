@@ -83,7 +83,7 @@ namespace NVelocity.Context
 			}
 		}
 
-		public object[] TemplateNameStack
+		public string[] TemplateNameStack
 		{
 			get { return templateNameStack.ToArray(); }
 		}

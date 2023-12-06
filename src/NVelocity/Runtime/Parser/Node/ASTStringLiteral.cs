@@ -416,10 +416,8 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				StringBuilder result = new();
 
-				for (int i = 0; i < inlineNode.ChildrenCount; i++)
+				foreach (var child in inlineNode.Children)
 				{
-					INode child = inlineNode.GetChild(i);
-
 					if (child.Type == ParserTreeConstants.REFERENCE)
 					{
 						result.Append(child.Value(context));

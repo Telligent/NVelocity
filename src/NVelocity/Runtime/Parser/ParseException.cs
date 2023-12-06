@@ -43,17 +43,17 @@ namespace NVelocity.Runtime.Parser
 				}
 				string expected = string.Empty;
 				int maxSize = 0;
-				for (int i = 0; i < expectedTokenSequences.Length; i++)
+				foreach (int[] exts in expectedTokenSequences)
 				{
-					if (maxSize < expectedTokenSequences[i].Length)
+					if (maxSize < exts.Length)
 					{
-						maxSize = expectedTokenSequences[i].Length;
+						maxSize = exts.Length;
 					}
-					for (int j = 0; j < expectedTokenSequences[i].Length; j++)
+					foreach (int exts2 in exts)
 					{
-						expected += string.Format("{0} ", tokenImage[expectedTokenSequences[i][j]]);
+						expected += string.Format("{0} ", tokenImage[exts2]);
 					}
-					if (expectedTokenSequences[i][expectedTokenSequences[i].Length - 1] != 0)
+					if (exts[exts.Length - 1] != 0)
 					{
 						expected += "...";
 					}

@@ -28,7 +28,7 @@ namespace NVelocity.Context
 		/// Returns the template name stack in form of an array.
 		/// </summary>
 		/// <returns>object[] with the template name stack contents.</returns>
-		object[] TemplateNameStack { get; }
+		string[] TemplateNameStack { get; }
 
 		/// <summary>
 		/// temporary fix to enable #include() to figure out

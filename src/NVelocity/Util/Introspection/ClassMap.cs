@@ -31,8 +31,7 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	public class ClassMap : NVelocity.Util.Introspection.IClassMap
 	{
-		private static readonly object OBJECT = new();
-
+		private static readonly Type _objectType = typeof(object);
 		private readonly Type type;
 
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
@@ -42,7 +41,7 @@ namespace NVelocity.Util.Introspection
 			new ConcurrentDictionary<MethodKey, MethodData>();
 
 		private readonly ConcurrentDictionary<string, PropertyData> propertyCache =
-			new ConcurrentDictionary<string, PropertyData>();
+			new ConcurrentDictionary<string, PropertyData>(StringComparer.OrdinalIgnoreCase);
 
 		private readonly MethodMap methodMap = new();
 
@@ -122,7 +121,7 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		public PropertyData FindProperty(string name)
 		{
-			if (propertyCache.TryGetValue(name.ToLower(), out PropertyData cacheEntry))
+			if (propertyCache.TryGetValue(name, out PropertyData cacheEntry))
 			{
 				if (cacheEntry == PropertyData.Empty)
 				{
@@ -161,7 +160,7 @@ namespace NVelocity.Util.Introspection
 			foreach (PropertyInfo property in properties)
 			{
 				//propertyMap.add(publicProperty);
-				propertyCache[property.Name.ToLower()] = new PropertyData(property);
+				propertyCache[property.Name] = new PropertyData(property);
 			}
 		}
 
@@ -172,12 +171,12 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		private static MethodKey MakeMethodKey(MethodInfo method)
 		{
-			return new MethodKey { Name = method.Name.ToLowerInvariant(), Parameters = method.GetParameters()?.Select(p => p.ParameterType) ?? Array.Empty<Type>() };
+			return new MethodKey { Name = method.Name, Parameters = method.GetParameters()?.Select(p => p.ParameterType)?.ToArray() ?? Array.Empty<Type>() };
 		}
 
 		private static MethodKey MakeMethodKey(string method, object[] parameters)
 		{
-			return new MethodKey { Name = method.ToLowerInvariant(), Parameters = parameters?.Select(p => p?.GetType() ?? typeof(object)) ?? Array.Empty<Type>() };
+			return new MethodKey { Name = method, Parameters = parameters?.Select(p => p?.GetType() ?? _objectType)?.ToArray() ?? Array.Empty<Type>() };
 		}
 
 		/// <summary>
@@ -214,13 +213,13 @@ namespace NVelocity.Util.Introspection
 		struct MethodKey : IEquatable<MethodKey>
 		{
 			public string Name { get; set; }
-			public IEnumerable<Type> Parameters { get; set; }
+			public Type[] Parameters { get; set; }
 
 			public override int GetHashCode()
 			{
 				var hash = new HashCode();
 
-				hash.Add(Name);
+				hash.Add(Name, StringComparer.OrdinalIgnoreCase);
 				foreach (var t in Parameters)
 					hash.Add(t);
 
@@ -237,7 +236,7 @@ namespace NVelocity.Util.Introspection
 
 			public bool Equals(MethodKey mk)
 			{
-				return mk.Name == Name && mk.Parameters.SequenceEqual(Parameters);
+				return StringComparer.OrdinalIgnoreCase.Equals(mk.Name, Name) && mk.Parameters.SequenceEqual(Parameters);
 			}
 		}
 	}

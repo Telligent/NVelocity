@@ -341,12 +341,9 @@ namespace NVelocity.Runtime.Directive
 
 			Action<Foreach, List<INode>> complete = Sections["each"];
 			var tempNodes = new List<INode>();
-			int nodeCount = node.ChildrenCount;
 
-			for (int i = 0; i < nodeCount; i++)
+			foreach (var childNode in node.Children)
 			{
-				INode childNode = node.GetChild(i);
-
 				if (childNode is ASTDirective directive)
 				{
 					var name = directive.DirectiveName.ToLowerInvariant();
