@@ -214,7 +214,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				return obj;
 			}
-			catch (TargetInvocationException targetInvocationException)
+			catch (Exception targetInvocationException)
 			{
 				/*
 				*  In the event that the invocation of the method
@@ -256,12 +256,6 @@ namespace NVelocity.Runtime.Parser.Node
 														e.GetType(), e.Message), e, methodName);
 					}
 				}
-			}
-			catch (Exception e)
-			{
-				runtimeServices.Error(
-					string.Format("ASTMethod.execute() : exception invoking method '{0}' in {1} : {2}", methodName, c, e));
-				throw;
 			}
 		}
 
