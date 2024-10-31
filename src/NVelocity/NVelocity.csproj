@@ -41,6 +41,7 @@
     <NoWarn>1591</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <TargetFramework>net8.0</TargetFramework>
@@ -55,6 +56,7 @@
     <NoWarn>1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App\Events\EventCartridge.cs">
@@ -84,6 +86,7 @@
     <Compile Include="App\VelocityEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commons\Collections\ExtendedProperties.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -490,6 +493,6 @@
     </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
-    <Version>1.1.3</Version>
+    <Version>1.2.14.17</Version>
   </PropertyGroup>
 </Project>
