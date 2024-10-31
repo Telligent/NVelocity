@@ -50,6 +50,10 @@ namespace NVelocity.Util.Introspection
 									var parmType = parms[i].GetType();
 									if (parmType != parameterTypes[i] && typeof(IConvertible).IsAssignableFrom(parmType) && typeof(IConvertible).IsAssignableFrom(parameterTypes[i]))
 										parms[i] = Convert.ChangeType(parms[i], parameterTypes[i]);
+								} 
+								else if (parameterTypes[i].IsValueType) // cannot be null
+								{
+									return null;
 								}
 							}
 
